@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', $clientInvoice->reference)
 @section('content')
 <x-page-header :title="'Facture '.$clientInvoice->reference" />

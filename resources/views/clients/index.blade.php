@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Clients')
 @section('content')
 <x-page-header title="Clients" :action="route('clients.create')" actionLabel="Nouveau client" actionPermission="clients.create" />

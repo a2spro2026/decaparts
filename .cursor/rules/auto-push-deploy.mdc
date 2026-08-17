@@ -11,8 +11,8 @@ Quand une **mise à jour / correction / feature** est terminée (build OK), **ne
 
 1. **Commit** les fichiers concernés (pas `.env`, pas `_tmp_vps_*` avec secrets).
 2. **Push** sur `origin` (branche courante).
-3. **Déployer** sur **batixpert.a2spr.com** via la procédure VPS A2S (`_tmp_vps_deploy_batixpert.py` / paramiko), en préservant `.env`.
-4. Indiquer l’URL finale : https://batixpert.a2spr.com
+3. **Déployer** sur **decaparts.a2spr.com** via la procédure VPS A2S (`_tmp_vps_deploy_decaparts.py` / paramiko), en préservant `.env`.
+4. Indiquer l’URL finale : https://decaparts.a2spr.com
 
 ## Exceptions
 

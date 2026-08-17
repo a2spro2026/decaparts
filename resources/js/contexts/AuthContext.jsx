@@ -5,16 +5,16 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(() => {
-        const saved = localStorage.getItem('batixpert_user');
+        const saved = localStorage.getItem('decaparts_user');
         return saved ? JSON.parse(saved) : null;
     });
-    const [loading, setLoading] = useState(!!localStorage.getItem('batixpert_token'));
+    const [loading, setLoading] = useState(!!localStorage.getItem('decaparts_token'));
 
     useEffect(() => {
-        if (localStorage.getItem('batixpert_token')) {
+        if (localStorage.getItem('decaparts_token')) {
             api.get('/user')
                 .then((r) => {
-                    const savedStatut = localStorage.getItem('batixpert_statut');
+                    const savedStatut = localStorage.getItem('decaparts_statut');
                     const statutLabels = {
                         Gerant: 'Gérant',
                         Assistant: 'Assistant(e)',
@@ -30,12 +30,12 @@ export function AuthProvider({ children }) {
                         } : {}),
                     };
                     setUser(user);
-                    localStorage.setItem('batixpert_user', JSON.stringify(user));
+                    localStorage.setItem('decaparts_user', JSON.stringify(user));
                 })
                 .catch(() => {
-                    localStorage.removeItem('batixpert_token');
-                    localStorage.removeItem('batixpert_user');
-                    localStorage.removeItem('batixpert_statut');
+                    localStorage.removeItem('decaparts_token');
+                    localStorage.removeItem('decaparts_user');
+                    localStorage.removeItem('decaparts_statut');
                     setUser(null);
                 })
                 .finally(() => setLoading(false));
@@ -46,18 +46,18 @@ export function AuthProvider({ children }) {
 
     const login = async (loginValue, password, statut) => {
         const { data } = await api.post('/login', { login: loginValue, password, statut });
-        localStorage.setItem('batixpert_token', data.token);
-        localStorage.setItem('batixpert_user', JSON.stringify(data.user));
-        if (statut) localStorage.setItem('batixpert_statut', statut);
+        localStorage.setItem('decaparts_token', data.token);
+        localStorage.setItem('decaparts_user', JSON.stringify(data.user));
+        if (statut) localStorage.setItem('decaparts_statut', statut);
         setUser(data.user);
         return data.user;
     };
 
     const logout = async () => {
         try { await api.post('/logout'); } catch {}
-        localStorage.removeItem('batixpert_token');
-        localStorage.removeItem('batixpert_user');
-        localStorage.removeItem('batixpert_statut');
+        localStorage.removeItem('decaparts_token');
+        localStorage.removeItem('decaparts_user');
+        localStorage.removeItem('decaparts_statut');
         setUser(null);
     };
 

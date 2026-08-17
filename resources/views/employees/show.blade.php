@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', $employee->full_name)
 @section('content')
 <x-page-header :title="$employee->full_name" />

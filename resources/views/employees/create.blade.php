@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Nouvel employé')
 @section('content')
 <x-page-header title="Nouvel employé" />

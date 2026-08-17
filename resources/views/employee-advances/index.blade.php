@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Avances')
 @section('content')
 <div class="flex justify-between mb-6"><h1 class="text-2xl font-bold">Avances personnel</h1><a href="{{ route('employee-advances.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">Nouvelle avance</a></div>

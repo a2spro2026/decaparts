@@ -1,6 +1,6 @@
 {
-    "name": "BatiXpert ERP",
-    "short_name": "BatiXpert",
+    "name": "DecaParts ERP",
+    "short_name": "DecaParts",
     "description": "Construisons l'avenir avec une gestion intelligente",
     "start_url": "/app",
     "display": "standalone",

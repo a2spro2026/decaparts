@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Paie personnel')
 @section('content')
 <div class="flex justify-between mb-6"><h1 class="text-2xl font-bold">Paiements du personnel</h1><a href="{{ route('employee-payments.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">Nouveau paiement</a></div>

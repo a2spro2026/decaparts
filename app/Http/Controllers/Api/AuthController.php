@@ -47,7 +47,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = $user->createToken('batixpert-spa')->plainTextToken;
+        $token = $user->createToken('decaparts-spa')->plainTextToken;
         $statut = $user->statut;
         $statutLabel = self::STATUTS[$statut] ?? $statut;
 

@@ -18,7 +18,7 @@ export function getPageMeta(pathname) {
             }
         }
     }
-    return { title: 'BatiXpert', icon: null, subtitle: null };
+    return { title: 'DecaParts', icon: null, subtitle: null };
 }
 
 export function getPageTitle(pathname) {

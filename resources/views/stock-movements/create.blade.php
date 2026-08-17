@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Nouveau mouvement')
 @section('content')
 <x-page-header title="Nouveau mouvement de stock" />

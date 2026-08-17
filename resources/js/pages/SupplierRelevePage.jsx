@@ -117,7 +117,7 @@ table{width:100%;border-collapse:collapse}
 th,td{border:1px solid #e2e8f0;padding:5px 4px;text-align:center}
 th{background:#f1f5f9;font-size:9px;text-transform:uppercase}
 </style></head><body>
-<h1>BATIXPERT — Relevé de compte fournisseur</h1>
+<h1>DECAPARTS — Relevé de compte fournisseur</h1>
 <p class="sub">${filtersLabel}</p>
 <div class="cards">
 <div class="card" style="background:#dc2626">Imp : ${(Number(summary.total_imp) || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2 })}</div>

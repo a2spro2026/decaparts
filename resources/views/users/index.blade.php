@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Utilisateurs')
 @section('content')
 <x-page-header title="Gestion des utilisateurs" :action="route('users.create')" actionLabel="Nouvel utilisateur" />

@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Modifier utilisateur')
 @section('content')
 <x-page-header title="Modifier utilisateur" />

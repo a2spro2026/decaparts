@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Nouvelle facture fournisseur')
 @section('content')
 <x-page-header title="Nouvelle facture fournisseur" />

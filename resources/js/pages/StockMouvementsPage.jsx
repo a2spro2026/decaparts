@@ -39,7 +39,7 @@ th,td{border:1px solid #e2e8f0;padding:7px 6px;font-size:11px}
 th{background:#f1f5f9;font-weight:700;text-align:center}
 .badge{background:#dbeafe;color:#1e3a5f;padding:3px 8px;border-radius:999px;font-weight:700;font-size:11px}
 </style></head><body>
-<h1>BATIXPERT — Mouvement Stock</h1>
+<h1>DECAPARTS — Mouvement Stock</h1>
 <p class="sub">Année ${year} · <span class="badge">${row.reference || '—'}</span></p>
 <table>
 <tr>

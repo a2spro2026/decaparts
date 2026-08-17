@@ -90,7 +90,7 @@ function buildBonHtml(row) {
 table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid #e2e8f0;padding:8px;font-size:12px;text-align:center}
 th{background:#f8fafc;font-weight:700}.badge{background:#fff7ed;color:#ea580c;padding:4px 10px;border-radius:999px;font-weight:700}
 </style></head><body>
-<h1>BATIXPERT — Bon d'Achat <span class="badge">${row.reference}</span></h1>
+<h1>DECAPARTS — Bon d'Achat <span class="badge">${row.reference}</span></h1>
 <table>
 <tr><th>Date</th><td>${row.order_date || '—'}</td><th>Fournisseur</th><td>${row.fournisseur || '—'}</td></tr>
 <tr><th>N° Frns</th><td>${row.bc_number || '—'}</td><th>Client Livré</th><td>${row.client_livre || '—'}</td></tr>

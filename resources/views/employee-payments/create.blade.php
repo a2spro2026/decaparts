@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Nouveau paiement')
 @section('content')
 <x-page-header title="Nouveau paiement personnel" />

@@ -83,7 +83,7 @@ th,td{border:1px solid #e2e8f0;padding:10px;font-size:13px;text-align:center}
 th{background:#f8fafc;font-weight:700;width:160px}
 .badge{background:#ecfdf5;color:#059669;padding:4px 10px;border-radius:999px;font-weight:700}
 </style></head><body>
-<h1>BATIXPERT — Fiche Produit</h1>
+<h1>DECAPARTS — Fiche Produit</h1>
 <table>
 <tr><th>Réf</th><td><span class="badge">${row.reference}</span></td></tr>
 <tr><th>Désignation</th><td>${row.name || '—'}</td></tr>

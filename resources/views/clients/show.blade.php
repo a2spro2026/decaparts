@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', $client->name)
 @section('content')
 <x-page-header :title="$client->name" :action="route('clients.edit', $client)" actionLabel="Modifier" />

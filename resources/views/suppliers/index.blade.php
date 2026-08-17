@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Fournisseurs')
 @section('content')
 <x-page-header title="Achats & Fournisseurs" :action="route('suppliers.create')" actionLabel="Nouveau fournisseur" />

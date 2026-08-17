@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Règlements')
 @section('content')
 <div class="flex items-center justify-between mb-6">

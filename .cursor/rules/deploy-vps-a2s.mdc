@@ -24,7 +24,7 @@ Quand l'utilisateur demande de **pousser et déployer** (VPS, a2s.com, a2spr.com
 - SpeedyPrint → `speedyprint.a2spr.com`
 - YallahGo → `yallahgo.a2spr.com`
 - LogIN → `login.a2spr.com`
-- BatiXpert → `batixpert.a2spr.com`
+- DecaParts → `decaparts.a2spr.com`
 
 Si l'utilisateur dit « domaine a2s.com », déployer sur **`{slug}.a2spr.com`** et mentionner l'entrée DNS OVH si besoin.
 

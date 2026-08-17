@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Mouvements stock')
 @section('content')
 <x-page-header title="Mouvements de stock" :action="route('stock-movements.create')" actionLabel="Nouveau mouvement" />

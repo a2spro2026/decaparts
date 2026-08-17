@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', 'Chantiers')
 @section('content')
 <x-page-header title="Suivi de chantier" :action="route('chantiers.create')" actionLabel="Nouveau chantier" />

@@ -1,4 +1,4 @@
-@extends('layouts.batixpert')
+@extends('layouts.decaparts')
 @section('title', $chantier->name)
 @section('content')
 <div class="flex items-center justify-between mb-6">
