@@ -38,9 +38,9 @@ function Field({ label, children }) {
 }
 
 const inputClass =
-    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-2 text-xs text-center outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy transition-all';
+    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-2 text-xs text-center outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange transition-all';
 const lineInput =
-    'w-full rounded-md border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-1.5 py-1 text-[11px] text-center outline-none focus:ring-1 focus:ring-brand-navy/30';
+    'w-full rounded-md border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-1.5 py-1 text-[11px] text-center outline-none focus:ring-1 focus:ring-brand-orange/30';
 
 function formatMontant(value) {
     return (Number(value) || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -58,7 +58,7 @@ function lineTotal(line) {
 
 function ActionBtn({ title, icon: Icon, color = 'slate', onClick }) {
     const colors = {
-        blue: 'hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/30 dark:hover:text-blue-400',
+        blue: 'hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-950/30 dark:hover:text-orange-400',
         amber: 'hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-900/30 dark:hover:text-amber-400',
         red: 'hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400',
         orange: 'hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-900/30 dark:hover:text-orange-400',
@@ -73,7 +73,7 @@ function ActionBtn({ title, icon: Icon, color = 'slate', onClick }) {
 
 function DepotBadge({ label }) {
     const tones = {
-        'Ste A. BOUYAHYA': 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
+        'Ste A. BOUYAHYA': 'bg-blue-50 dark:bg-blue-900/30 text-orange-700 dark:text-orange-300',
         'Ste Fatari et Associes': 'bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300',
         'Ste Aabach Lilbinae': 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300',
     };
@@ -130,9 +130,9 @@ function ViewModal({ row, onClose }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-lg border border-slate-200 dark:border-slate-700 overflow-hidden" onClick={(e) => e.stopPropagation()}>
-                <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-brand-navy to-blue-800">
+                <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-zinc-950 to-orange-700">
                     <div>
-                        <p className="text-[10px] text-blue-200 uppercase tracking-wider">Facture Achat</p>
+                        <p className="text-[10px] text-orange-100 uppercase tracking-wider">Facture Achat</p>
                         <h3 className="text-white font-bold">{row.reference}</h3>
                     </div>
                     <button type="button" onClick={onClose} className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10"><X className="w-4 h-4" /></button>
@@ -172,7 +172,7 @@ function PhotoModal({ row, onClose }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={onClose}>
             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col max-h-[92vh]" onClick={(e) => e.stopPropagation()}>
-                <div className="flex items-center justify-between px-5 py-3 bg-gradient-to-r from-brand-navy to-blue-800">
+                <div className="flex items-center justify-between px-5 py-3 bg-gradient-to-r from-zinc-950 to-orange-700">
                     <h3 className="text-white font-bold text-sm">Photo — {row.reference}</h3>
                     <div className="flex items-center gap-1">
                         <a href={row.photo_url} target="_blank" rel="noreferrer" title="Ouvrir dans un onglet" className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10">
@@ -200,7 +200,7 @@ function FormModal({ open, form, lines, meta, editingId, saving, error, supplier
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-5xl border border-slate-200 dark:border-slate-700 overflow-hidden max-h-[95vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
-                <div className="flex items-center justify-between gap-3 px-5 py-4 bg-gradient-to-r from-brand-navy via-blue-800 to-indigo-900 shrink-0">
+                <div className="flex items-center justify-between gap-3 px-5 py-4 bg-gradient-to-r from-brand-navy via-zinc-800 to-indigo-900 shrink-0">
                     <h3 className="text-white font-bold text-sm uppercase tracking-wide min-w-0 truncate">
                         {editingId ? `Modifier ${form._ref || ''}` : 'Nouvelle Facture Achat'}
                     </h3>
@@ -265,7 +265,7 @@ function FormModal({ open, form, lines, meta, editingId, saving, error, supplier
                             </Field>
                             </div>
                             <div className="sm:col-span-2 lg:col-span-12">
-                                <label className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-brand-navy/40 dark:border-orange-400/40 text-xs font-semibold text-brand-navy dark:text-orange-400 cursor-pointer hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors">
+                                <label className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-brand-navy/40 dark:border-orange-400/40 text-xs font-semibold text-brand-navy dark:text-orange-400 cursor-pointer hover:bg-orange-50 dark:hover:bg-slate-800 transition-colors">
                                     <Upload className="w-4 h-4" />
                                     Importer Photo
                                     <input type="file" accept="image/*" className="hidden" onChange={(e) => onChange('photo', e.target.files?.[0] || null)} />
@@ -509,8 +509,8 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
         : depotFilter === 'depot_c'
             ? 'from-emerald-600 via-teal-700 to-slate-900'
             : depotFilter === 'depot_a'
-                ? 'from-blue-600 via-brand-navy to-slate-900'
-                : 'from-brand-navy via-blue-800 to-indigo-900';
+                ? 'from-zinc-900 via-zinc-950 to-orange-900'
+                : 'from-brand-navy via-zinc-800 to-indigo-900';
 
     return (
         <div className="space-y-3">
@@ -557,7 +557,7 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
                     <p className="text-[10px] font-semibold uppercase tracking-wider text-white/80">Nombre</p>
                     <p className="mt-1 text-xl font-bold tabular-nums">{summary.count}</p>
                 </div>
-                <div className="rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 p-4 text-white shadow-lg">
+                <div className="rounded-xl bg-gradient-to-br from-zinc-900 to-orange-700 p-4 text-white shadow-lg">
                     <p className="text-[10px] font-semibold uppercase tracking-wider text-white/80">Total HT</p>
                     <p className="mt-1 text-xl font-bold tabular-nums">{formatMontant(summary.total_ht)}</p>
                 </div>
@@ -590,7 +590,7 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
                                 {stockLoading ? (
                                     <tr><td colSpan={5} className="px-4 py-10 text-center text-slate-400">Chargement...</td></tr>
                                 ) : stockRows.length ? stockRows.map((stock) => (
-                                    <tr key={`${stock.reference}-${stock.designation}`} className="hover:bg-blue-50/40 dark:hover:bg-slate-800/40">
+                                    <tr key={`${stock.reference}-${stock.designation}`} className="hover:bg-orange-50/40 dark:hover:bg-slate-800/40">
                                         <td className="px-4 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">{stock.reference || '—'}</td>
                                         <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{stock.designation || '—'}</td>
                                         <td className="px-4 py-2.5 text-center tabular-nums">{formatQty(stock.stock_initial)}</td>
@@ -634,7 +634,7 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
                                 ))
                             ) : rows.length ? (
                                 rows.map((row) => (
-                                    <tr key={row.id} className="hover:bg-blue-50/40 dark:hover:bg-slate-800/40 transition-colors">
+                                    <tr key={row.id} className="hover:bg-orange-50/40 dark:hover:bg-slate-800/40 transition-colors">
                                         <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.invoice_date}</td>
                                         <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">{row.reference}</td>
                                         <td className="px-3 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.fournisseur}</td>
@@ -659,7 +659,7 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
                                         <td className="px-3 py-2.5 text-center tabular-nums font-semibold text-brand-navy dark:text-orange-400">{formatMontant(row.total_ttc)}</td>
                                         <td className="px-3 py-2.5">
                                             <div className="flex items-center justify-center gap-0.5">
-                                                <ActionBtn title="Voir" icon={Eye} color="blue" onClick={() => setViewRow(row)} />
+                                                <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
                                                 <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => openEdit(row)} />
                                                 <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />
                                                 <ActionBtn title="PDF" icon={FileText} color="orange" onClick={() => openPrintable(row)} />

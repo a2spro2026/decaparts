@@ -35,7 +35,7 @@ function Field({ label, children, className = '', compact = false }) {
 }
 
 const inputClass =
-    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-1.5 py-1 text-[11px] text-center outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy transition-all min-w-0';
+    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-1.5 py-1 text-[11px] text-center outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange transition-all min-w-0';
 
 function etatSelectClass(value) {
     const base = 'w-full rounded-lg border px-1.5 py-1 text-[11px] text-center font-semibold outline-none focus:ring-2 transition-all min-w-0 cursor-pointer appearance-none';
@@ -67,7 +67,7 @@ function EtatBadge({ value }) {
 function StatutBadge({ value }) {
     const actif = value === 'Actif' || value === 'actif';
     return (
-        <span className={`inline-flex px-2 py-0.5 rounded-md text-xs font-semibold ${actif ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}>
+        <span className={`inline-flex px-2 py-0.5 rounded-md text-xs font-semibold ${actif ? 'bg-blue-50 dark:bg-blue-900/30 text-orange-700 dark:text-orange-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}>
             {actif ? 'Actif' : 'Inactif'}
         </span>
     );
@@ -109,7 +109,7 @@ function openPrintable(row) {
 
 function ActionBtn({ title, onClick, icon: Icon, color = 'slate' }) {
     const colors = {
-        blue: 'hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/30 dark:hover:text-blue-400',
+        blue: 'hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-950/30 dark:hover:text-orange-400',
         amber: 'hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-900/30 dark:hover:text-amber-400',
         red: 'hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400',
         slate: 'hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200',
@@ -397,7 +397,7 @@ export default function FicheProduitPage() {
                                         <td className="px-4 py-2.5 text-center"><EtatBadge value={row.etat} /></td>
                                         <td className="px-4 py-2.5">
                                             <div className="flex items-center justify-center gap-0.5">
-                                                <ActionBtn title="Voir" icon={Eye} color="blue" onClick={() => setViewRow(row)} />
+                                                <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
                                                 <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => fillForm(row)} />
                                                 <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => handleDelete(row)} />
                                                 <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />

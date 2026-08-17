@@ -47,11 +47,11 @@
     .btn-secondary {
         @apply relative inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl
             text-white font-semibold text-sm tracking-wide
-            bg-gradient-to-br from-blue-600 via-brand-navy to-slate-900
+            bg-gradient-to-br from-zinc-900 via-zinc-800 to-orange-700
             border border-white/10
-            shadow-lg shadow-brand-navy/30
+            shadow-lg shadow-black/30
             transition-all duration-200
-            hover:shadow-xl hover:shadow-brand-navy/40 hover:-translate-y-0.5
+            hover:shadow-xl hover:shadow-orange-500/25 hover:-translate-y-0.5
             active:translate-y-0 active:shadow-md
             disabled:opacity-60 disabled:pointer-events-none disabled:translate-y-0;
     }
@@ -126,7 +126,7 @@
     }
 
     .input-field {
-        @apply w-full rounded-xl border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-navy focus:border-transparent text-sm;
+        @apply w-full rounded-xl border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-orange focus:border-transparent text-sm;
     }
 
     /* Labels des barres de saisie — gras + design pro */
@@ -156,9 +156,19 @@
         margin-top: 3px;
     }
 
+    /* Labels formulaires — panneau connexion (noir + orange) */
+    .login-panel .field-label-form {
+        @apply text-orange-400;
+    }
+
+    .login-panel .field-label-form::after {
+        background: linear-gradient(90deg, #f97316, #000000);
+        opacity: 0.9;
+    }
+
     /* Labels formulaires Blade (alignés à gauche) */
     .field-label-form {
-        @apply relative block text-xs font-bold uppercase tracking-[0.1em] text-brand-navy mb-1.5;
+        @apply relative block text-xs font-bold uppercase tracking-[0.1em] text-brand-orange mb-1.5;
     }
 
     .field-label-form::after {
@@ -168,7 +178,7 @@
         height: 2px;
         margin-top: 4px;
         border-radius: 999px;
-        background: linear-gradient(90deg, #f97316, #1e3a5f);
+        background: linear-gradient(90deg, #f97316, #000000);
         opacity: 0.85;
     }
 
@@ -213,9 +223,12 @@
         background: linear-gradient(
             120deg,
             #f97316,
-            #1e3a5f,
+            #000000,
+            #78350f,
+            #171717,
             #fb923c,
-            #2563eb,
+            #000000,
+            #ea580c,
             #f97316
         );
         background-size: 300% 300%;
@@ -252,16 +265,23 @@
 
     .login-card-glow {
         box-shadow:
-            0 0 40px rgba(249, 115, 22, 0.15),
-            0 0 80px rgba(30, 58, 95, 0.1),
-            0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            0 0 40px rgba(249, 115, 22, 0.2),
+            0 0 60px rgba(0, 0, 0, 0.5),
+            0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    }
+
+    .login-panel .password-field-active {
+        box-shadow:
+            0 0 0 3px rgba(249, 115, 22, 0.25),
+            0 0 20px rgba(249, 115, 22, 0.2),
+            inset 0 1px 2px rgba(0, 0, 0, 0.4);
     }
 
     .password-field-active {
         box-shadow:
             0 0 0 3px rgba(249, 115, 22, 0.2),
             0 0 20px rgba(249, 115, 22, 0.25),
-            inset 0 1px 2px rgba(30, 58, 95, 0.05);
+            inset 0 1px 2px rgba(120, 53, 15, 0.05);
     }
 
     .password-scan-line {
@@ -297,13 +317,13 @@
     .sidebar-panel {
         background: linear-gradient(
             180deg,
-            rgba(15, 23, 42, 0.98) 0%,
-            rgba(30, 58, 95, 0.95) 40%,
-            rgba(15, 23, 42, 0.98) 100%
+            rgba(0, 0, 0, 0.98) 0%,
+            rgba(24, 24, 27, 0.96) 45%,
+            rgba(0, 0, 0, 0.98) 100%
         );
         box-shadow:
-            4px 0 24px rgba(0, 0, 0, 0.2),
-            inset -1px 0 0 rgba(255, 255, 255, 0.05);
+            4px 0 24px rgba(0, 0, 0, 0.35),
+            inset -1px 0 0 rgba(249, 115, 22, 0.08);
     }
 
     .sidebar-logo-glow {
@@ -395,8 +415,8 @@
     }
 
     .dark .navbar-header {
-        background: rgba(15, 23, 42, 0.9);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        background: rgba(0, 0, 0, 0.92);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
     }
 
     .navbar-brand:hover .navbar-brand-glow {
@@ -476,7 +496,7 @@ table thead td {
     font-weight: 800 !important;
     letter-spacing: 0.075em;
     text-transform: uppercase;
-    border-bottom: 2px solid rgba(30, 58, 95, 0.2);
+    border-bottom: 2px solid rgba(249, 115, 22, 0.25);
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
@@ -489,7 +509,7 @@ table thead td::after {
     left: 18%;
     height: 2px;
     border-radius: 999px;
-    background: linear-gradient(90deg, transparent, #f97316, #1e3a5f, transparent);
+    background: linear-gradient(90deg, transparent, #f97316, #18181b, transparent);
     opacity: 0.8;
 }
 

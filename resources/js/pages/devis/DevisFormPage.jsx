@@ -28,12 +28,12 @@ function Field({ label, children, compact = false }) {
     );
 }
 
-const inputClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1.5 text-xs text-center outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy transition-all min-w-0';
+const inputClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1.5 text-xs text-center outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange transition-all min-w-0';
 const inputCompact = `${inputClass} py-1 text-[11px]`;
 const readOnlyClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 px-2 py-1.5 text-xs text-center cursor-not-allowed min-w-0';
 const readOnlyCompact = `${readOnlyClass} py-1 text-[11px]`;
-const lineInputClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1.5 text-xs text-center outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy min-w-0';
-const typeTravauxFilledClass = '!bg-yellow-100 dark:!bg-yellow-900/35 !border-yellow-300 dark:!border-yellow-600/50 !text-brand-navy dark:!text-blue-400 font-semibold';
+const lineInputClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1.5 text-xs text-center outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange min-w-0';
+const typeTravauxFilledClass = '!bg-yellow-100 dark:!bg-yellow-900/35 !border-yellow-300 dark:!border-yellow-600/50 !text-brand-navy dark:!text-orange-400 font-semibold';
 const subtotalFrameClass = 'inline-block min-w-[72px] px-2 py-1 rounded-md border border-brand-navy/35 dark:border-blue-500/40 bg-slate-50 dark:bg-slate-800/80 font-semibold tabular-nums text-brand-navy dark:text-violet-400 text-xs';
 
 export default function DevisFormPage() {
@@ -391,7 +391,7 @@ export default function DevisFormPage() {
                                                 key={h}
                                                 className={`px-2 py-2 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap text-center ${
                                                     h === 'Type Travaux'
-                                                        ? 'text-brand-navy dark:text-blue-400'
+                                                        ? 'text-brand-navy dark:text-orange-400'
                                                         : 'text-slate-500 dark:text-slate-400'
                                                 }`}
                                             >

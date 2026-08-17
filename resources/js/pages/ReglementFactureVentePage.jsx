@@ -50,9 +50,9 @@ function PaymentModal({ open, form, invoices, editingId, saving, error, onChange
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm" onClick={onClose}>
             <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900" onClick={(event) => event.stopPropagation()}>
-                <div className="flex items-center justify-between bg-gradient-to-r from-blue-700 via-brand-navy to-slate-900 px-5 py-4">
+                <div className="flex items-center justify-between bg-gradient-to-r from-zinc-900 via-brand-navy to-slate-900 px-5 py-4">
                     <div>
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-blue-200">Factures ventes</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-orange-100">Factures ventes</p>
                         <h2 className="text-sm font-extrabold uppercase tracking-wide text-white">{editingId ? 'Modifier le règlement' : 'Nouveau règlement de facture'}</h2>
                     </div>
                     <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-white/70 hover:bg-white/10 hover:text-white"><X className="h-4 w-4" /></button>
@@ -221,7 +221,7 @@ export default function ReglementFactureVentePage() {
             </div>
 
             <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
-                <SummaryCard label="Factures TTC" value={summary.invoice_total} icon={FileCheck} gradient="from-blue-600 to-brand-navy" />
+                <SummaryCard label="Factures TTC" value={summary.invoice_total} icon={FileCheck} gradient="from-zinc-900 to-brand-navy" />
                 <SummaryCard label="Total réglé" value={summary.total_paid} icon={CircleDollarSign} gradient="from-emerald-500 to-teal-800" />
                 <SummaryCard label="Solde factures" value={summary.remaining_total} icon={Banknote} gradient="from-orange-500 to-rose-700" />
                 <SummaryCard label="Nb règlements" value={summary.count || 0} icon={Banknote} gradient="from-violet-600 to-indigo-900" money={false} />
@@ -244,7 +244,7 @@ export default function ReglementFactureVentePage() {
             </div>
 
             <div className="glass-card overflow-hidden border border-slate-200/70 shadow-card dark:border-slate-700/70">
-                <div className="bg-gradient-to-r from-blue-700 via-brand-navy to-slate-900 px-5 py-3.5">
+                <div className="bg-gradient-to-r from-zinc-900 via-brand-navy to-slate-900 px-5 py-3.5">
                     <h2 className="flex items-center gap-2 text-sm font-extrabold uppercase tracking-wide text-white"><Banknote className="h-4 w-4" /> Liste des règlements de factures</h2>
                 </div>
                 <div className="overflow-x-auto">
@@ -260,12 +260,12 @@ export default function ReglementFactureVentePage() {
                             {loading ? (
                                 <tr><td colSpan={9} className="px-4 py-12 text-center text-slate-400">Chargement...</td></tr>
                             ) : rows.length ? rows.map((row) => (
-                                <tr key={row.id} className="transition-colors hover:bg-blue-50/50 dark:hover:bg-slate-800/50">
+                                <tr key={row.id} className="transition-colors hover:bg-orange-50/50 dark:hover:bg-slate-800/50">
                                     <td className="px-3 py-3 text-center">{row.payment_date}</td>
                                     <td className="px-3 py-3 text-center font-mono text-xs font-bold text-brand-navy dark:text-orange-400">{row.code}</td>
                                     <td className="px-3 py-3 text-center font-bold">{row.invoice_reference}</td>
                                     <td className="px-3 py-3 text-center">{row.client_name || '—'}</td>
-                                    <td className="px-3 py-3 text-center"><span className="rounded-full bg-blue-100 px-2 py-1 text-[10px] font-bold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">{methodLabel(row.method)}</span></td>
+                                    <td className="px-3 py-3 text-center"><span className="rounded-full bg-blue-100 px-2 py-1 text-[10px] font-bold text-orange-700 dark:bg-blue-900/40 dark:text-orange-300">{methodLabel(row.method)}</span></td>
                                     <td className="px-3 py-3 text-center text-xs">{row.reference || '—'}</td>
                                     <td className="px-3 py-3 text-center font-extrabold tabular-nums text-emerald-700 dark:text-emerald-400">{formatAmount(row.amount)}</td>
                                     <td className="px-3 py-3 text-center font-bold tabular-nums text-orange-600">{formatAmount(row.invoice_remaining)}</td>

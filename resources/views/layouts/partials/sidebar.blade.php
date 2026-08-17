@@ -18,7 +18,6 @@
             <div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-lg">DP</div>
             <div>
                 <div class="font-bold text-lg leading-tight">DecaParts</div>
-                <div class="text-[10px] text-slate-400 leading-tight">Construire aujourd'hui,<br>bâtir demain.</div>
             </div>
         </div>
     </div>

@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Package, Search } from 'lucide-react';
 
 const triggerClass =
-    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy transition-all flex items-center gap-2 min-w-0';
+    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1.5 text-xs outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange transition-all flex items-center gap-2 min-w-0';
 
 export default function DesignationPicker({ products = [], value, onSelect, placeholder = '— Sélectionner un article —' }) {
     const [open, setOpen] = useState(false);
@@ -159,7 +159,7 @@ export default function DesignationPicker({ products = [], value, onSelect, plac
                                                                     </span>
                                                                 )}
                                                                 {p.consistance && (
-                                                                    <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-md bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                                                                    <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-md bg-blue-50 text-orange-700 dark:bg-blue-900/40 dark:text-orange-300">
                                                                         {p.consistance}
                                                                     </span>
                                                                 )}

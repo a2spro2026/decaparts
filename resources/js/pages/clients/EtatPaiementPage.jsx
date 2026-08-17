@@ -35,7 +35,7 @@ function Field({ label, children, compact = false }) {
     );
 }
 
-const inputClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1.5 text-xs text-center outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy transition-all min-w-0';
+const inputClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1.5 text-xs text-center outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange transition-all min-w-0';
 const inputCompact = `${inputClass} py-1 text-[11px]`;
 const readOnlyClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 px-2 py-1.5 text-xs text-center cursor-not-allowed min-w-0';
 const readOnlyCompact = `${readOnlyClass} py-1 text-[11px]`;
@@ -47,7 +47,7 @@ function formatPlain(value) {
 
 function ActionBtn({ title, onClick, icon: Icon, color = 'slate' }) {
     const colors = {
-        blue: 'hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/30 dark:hover:text-blue-400',
+        blue: 'hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-950/30 dark:hover:text-orange-400',
         amber: 'hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-900/30 dark:hover:text-amber-400',
         red: 'hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400',
         slate: 'hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200',
@@ -301,7 +301,7 @@ export default function EtatPaiementPage() {
         if (!paymentId) return <span className="text-slate-300 dark:text-slate-600">—</span>;
         return (
             <div className="flex items-center justify-center gap-0.5">
-                <ActionBtn title="Voir" icon={Eye} color="blue" onClick={() => handleViewPayment(paymentId)} />
+                <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => handleViewPayment(paymentId)} />
                 <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => loadPaymentForEdit(paymentId)} />
                 <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => handlePrintPayment(paymentId)} />
                 <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={async () => handleDeletePayment(await fetchPayment(paymentId))} />
@@ -490,7 +490,7 @@ export default function EtatPaiementPage() {
 
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                 <div className="glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60 min-w-0">
-                    <div className="px-5 py-3.5 bg-gradient-to-r from-blue-600 via-brand-navy to-indigo-800 border-b border-white/10">
+                    <div className="px-5 py-3.5 bg-gradient-to-r from-zinc-900 via-brand-navy to-indigo-800 border-b border-white/10">
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">État d'exécution</h3>
                     </div>
 
@@ -503,7 +503,7 @@ export default function EtatPaiementPage() {
                                             type="checkbox"
                                             checked={rows.length > 0 && selectedIds.size === rows.length}
                                             onChange={toggleAll}
-                                            className="w-4 h-4 rounded border-slate-300 text-brand-navy focus:ring-brand-navy/30"
+                                            className="w-4 h-4 rounded border-slate-300 text-brand-navy focus:ring-brand-orange/30"
                                         />
                                     </th>
                                     {[
@@ -543,7 +543,7 @@ export default function EtatPaiementPage() {
                                                         type="checkbox"
                                                         checked={selectedIds.has(row.id)}
                                                         onChange={() => toggleRow(row.id)}
-                                                        className="w-4 h-4 rounded border-slate-300 text-brand-navy focus:ring-brand-navy/30"
+                                                        className="w-4 h-4 rounded border-slate-300 text-brand-navy focus:ring-brand-orange/30"
                                                     />
                                                 </td>
                                                 <td className="px-2 py-2.5 text-center text-slate-600 dark:text-slate-300 text-xs">{row.order_date}</td>
@@ -572,7 +572,7 @@ export default function EtatPaiementPage() {
                 </div>
 
                 <div className="glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60 min-w-0">
-                    <div className="px-5 py-3.5 bg-gradient-to-r from-blue-600 via-brand-navy to-indigo-800 border-b border-white/10">
+                    <div className="px-5 py-3.5 bg-gradient-to-r from-zinc-900 via-brand-navy to-indigo-800 border-b border-white/10">
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Etat Règlement</h3>
                     </div>
 

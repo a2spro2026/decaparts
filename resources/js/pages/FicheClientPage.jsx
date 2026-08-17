@@ -49,7 +49,7 @@ function Field({ label, children, className = '' }) {
 }
 
 const inputClass =
-    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-1.5 text-xs text-center outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy transition-all';
+    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-1.5 text-xs text-center outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange transition-all';
 
 const readOnlyClass =
     'w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 px-2.5 py-1.5 text-xs text-center cursor-not-allowed';
@@ -111,7 +111,7 @@ function openPrintable(row) {
 
 function ActionBtn({ title, onClick, icon: Icon, color = 'slate' }) {
     const colors = {
-        blue: 'hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/30 dark:hover:text-blue-400',
+        blue: 'hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-950/30 dark:hover:text-orange-400',
         amber: 'hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-900/30 dark:hover:text-amber-400',
         red: 'hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400',
         slate: 'hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200',
@@ -139,9 +139,9 @@ function ViewModal({ row, onClose }) {
                 className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-md border border-slate-200 dark:border-slate-700 overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-brand-navy to-blue-800">
+                <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-zinc-950 to-orange-700">
                     <div>
-                        <p className="text-[10px] text-blue-200 uppercase tracking-wider">Fiche Client</p>
+                        <p className="text-[10px] text-orange-100 uppercase tracking-wider">Fiche Client</p>
                         <h3 className="text-white font-bold">{row.code}</h3>
                     </div>
                     <button type="button" onClick={onClose} className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10">
@@ -357,7 +357,7 @@ export default function FicheClientPage() {
             </form>
 
             <div className="glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60">
-                <div className="px-5 py-3.5 bg-gradient-to-r from-brand-navy via-blue-800 to-blue-900 border-b border-white/10">
+                <div className="px-5 py-3.5 bg-gradient-to-r from-zinc-950 via-zinc-900 to-orange-800 border-b border-white/10">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Liste des clients</h3>
                 </div>
                 <div className="overflow-x-auto">
@@ -387,7 +387,7 @@ export default function FicheClientPage() {
                                 ))
                             ) : rows.length ? (
                                 rows.map((row) => (
-                                    <tr key={row.id} className={`hover:bg-blue-50/40 dark:hover:bg-slate-800/40 transition-colors ${editingId === row.id ? 'bg-amber-50/60 dark:bg-amber-900/10' : ''}`}>
+                                    <tr key={row.id} className={`hover:bg-orange-50/40 dark:hover:bg-slate-800/40 transition-colors ${editingId === row.id ? 'bg-amber-50/60 dark:bg-amber-900/10' : ''}`}>
                                         <td className="px-4 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">{row.code}</td>
                                         <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.name}</td>
                                         <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.contact || '—'}</td>
@@ -399,7 +399,7 @@ export default function FicheClientPage() {
                                         <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300 max-w-[160px] truncate mx-auto">{row.chantier_address || '—'}</td>
                                         <td className="px-4 py-2.5 text-center">
                                             <span className={`inline-flex px-2 py-0.5 rounded-md text-xs font-semibold ${
-                                                row.chantier_type === 'Rev' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                                                row.chantier_type === 'Rev' ? 'bg-blue-50 dark:bg-blue-900/30 text-orange-700 dark:text-orange-300'
                                                 : row.chantier_type === 'Entr' ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300'
                                                 : row.chantier_type === 'Pro' ? 'bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300'
                                                 : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
@@ -408,7 +408,7 @@ export default function FicheClientPage() {
                                             </span>
                                         </td>
                                         <td className="px-4 py-2.5 text-center">
-                                            <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-semibold bg-blue-50 dark:bg-blue-900/30 text-brand-navy dark:text-blue-300">
+                                            <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-semibold bg-blue-50 dark:bg-blue-900/30 text-brand-navy dark:text-orange-300">
                                                 {row.reglement || '—'}
                                             </span>
                                         </td>
@@ -422,7 +422,7 @@ export default function FicheClientPage() {
                                         </td>
                                         <td className="px-4 py-2.5">
                                             <div className="flex items-center justify-center gap-0.5">
-                                                <ActionBtn title="Voir" icon={Eye} color="blue" onClick={() => setViewRow(row)} />
+                                                <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
                                                 <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => fillForm(row)} />
                                                 <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => handleDelete(row)} />
                                                 <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />

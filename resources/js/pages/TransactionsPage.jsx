@@ -26,7 +26,7 @@ const SUMMARY_CARDS = [
     {
         key: 'total_debit',
         label: 'Total Débit',
-        gradient: 'from-blue-600 via-brand-navy to-slate-900',
+        gradient: 'from-zinc-900 via-zinc-950 to-orange-900',
         glow: 'rgba(30, 58, 95, 0.45)',
         icon: ArrowDownCircle,
     },
@@ -87,9 +87,9 @@ function Field({ label, children, compact = false }) {
     );
 }
 
-const inputClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1.5 text-xs text-center outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy transition-all min-w-0';
+const inputClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2 py-1.5 text-xs text-center outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange transition-all min-w-0';
 const inputCompact = `${inputClass} py-1 text-[11px]`;
-const filterClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy';
+const filterClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange';
 
 function formatMontant(value) {
     const n = Number(value) || 0;
@@ -133,7 +133,7 @@ function StatutBadge({ value }) {
 
 function ActionBtn({ title, onClick, icon: Icon, color = 'slate' }) {
     const colors = {
-        blue: 'hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/30 dark:hover:text-blue-400',
+        blue: 'hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-950/30 dark:hover:text-orange-400',
         amber: 'hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-900/30 dark:hover:text-amber-400',
         red: 'hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400',
         slate: 'hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200',
@@ -251,7 +251,7 @@ function ViewModal({ row, onClose }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-md border border-slate-200 dark:border-slate-700 overflow-hidden" onClick={(e) => e.stopPropagation()}>
-                <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-brand-navy to-blue-800">
+                <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-zinc-950 to-orange-700">
                     <h3 className="text-white font-bold text-sm">Détail transaction</h3>
                     <button type="button" onClick={onClose} className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10"><X className="w-4 h-4" /></button>
                 </div>
@@ -387,7 +387,7 @@ export default function TransactionsPage() {
                 {SUMMARY_CARDS.map((card) => {
                     const gradient = card.dynamic
                         ? (soldePositive
-                            ? 'from-cyan-500 via-sky-600 to-blue-800'
+                            ? 'from-orange-500 via-orange-600 to-zinc-900'
                             : 'from-fuchsia-500 via-pink-600 to-rose-800')
                         : card.gradient;
                     const glow = card.dynamic
@@ -489,7 +489,7 @@ export default function TransactionsPage() {
             </div>
 
             <div className="glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60">
-                <div className="px-5 py-3.5 bg-gradient-to-r from-brand-navy via-blue-800 to-indigo-900 border-b border-white/10 flex items-center justify-between">
+                <div className="px-5 py-3.5 bg-gradient-to-r from-brand-navy via-zinc-800 to-indigo-900 border-b border-white/10 flex items-center justify-between">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Transaction et Charges</h3>
                     <button type="button" onClick={load} disabled={loading} className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors" title="Actualiser">
                         <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -514,7 +514,7 @@ export default function TransactionsPage() {
                                 ))
                             ) : rows.length ? (
                                 rows.map((row) => (
-                                    <tr key={row.id} className={`hover:bg-blue-50/40 dark:hover:bg-slate-800/40 transition-colors ${editingId === row.id ? 'bg-amber-50/60 dark:bg-amber-900/10' : ''}`}>
+                                    <tr key={row.id} className={`hover:bg-orange-50/40 dark:hover:bg-slate-800/40 transition-colors ${editingId === row.id ? 'bg-amber-50/60 dark:bg-amber-900/10' : ''}`}>
                                         <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.transaction_date}</td>
                                         <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.beneficiary || '—'}</td>
                                         <td className={`px-4 py-2.5 text-center font-semibold tabular-nums ${isSortie(row.statut) ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
@@ -528,7 +528,7 @@ export default function TransactionsPage() {
                                         <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300 max-w-[200px] truncate" title={row.motif}>{row.motif || '—'}</td>
                                         <td className="px-4 py-2.5">
                                             <div className="flex items-center justify-center gap-0.5">
-                                                <ActionBtn title="Voir" icon={Eye} color="blue" onClick={() => setViewRow(row)} />
+                                                <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
                                                 <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => fillForm(row)} />
                                                 <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />
                                                 <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => handleDelete(row)} />

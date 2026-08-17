@@ -11,8 +11,8 @@ const cards = [
         label: 'Total Achats',
         icon: ShoppingCart,
         format: 'currency',
-        gradient: 'from-blue-700 via-brand-navy to-slate-900',
-        glow: 'rgba(30, 58, 95, 0.4)',
+        gradient: 'from-zinc-900 via-zinc-800 to-orange-700',
+        glow: 'rgba(249, 115, 22, 0.35)',
     },
     {
         key: 'total_ventes',
@@ -151,7 +151,7 @@ function SectionTitle() {
             <h2 className="text-xs font-bold tracking-[0.25em] text-slate-600 dark:text-slate-300 uppercase whitespace-nowrap">
                 Cartes Analytiques
             </h2>
-            <div className="h-px flex-1 bg-gradient-to-r from-brand-orange/60 via-brand-navy/30 to-transparent" />
+            <div className="h-px flex-1 bg-gradient-to-r from-brand-orange/60 via-zinc-800/40 to-transparent" />
         </div>
     );
 }

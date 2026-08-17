@@ -1,11 +1,11 @@
 {
     "name": "DecaParts ERP",
     "short_name": "DecaParts",
-    "description": "Construisons l'avenir avec une gestion intelligente",
+    "description": "DecaParts",
     "start_url": "/app",
     "display": "standalone",
-    "background_color": "#1E3A8A",
-    "theme_color": "#1E3A8A",
+    "background_color": "#000000",
+    "theme_color": "#F97316",
     "icons": [
         {
             "src": "/icons/icon-192.png",

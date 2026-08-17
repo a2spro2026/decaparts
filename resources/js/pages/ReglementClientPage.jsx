@@ -53,11 +53,11 @@ function Field({ label, children }) {
 }
 
 const inputClass =
-    'w-full rounded-md border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-1.5 py-1 text-[11px] text-center outline-none focus:ring-1 focus:ring-brand-navy/30 focus:border-brand-navy transition-all';
+    'w-full rounded-md border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-1.5 py-1 text-[11px] text-center outline-none focus:ring-1 focus:ring-brand-orange/30 focus:border-brand-orange transition-all';
 const readOnlyClass =
     'w-full rounded-md border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 px-1.5 py-1 text-[11px] text-center cursor-not-allowed';
 const filterClass =
-    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy';
+    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange';
 
 function formatMontant(value) {
     return (Number(value) || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -65,7 +65,7 @@ function formatMontant(value) {
 
 function ActionBtn({ title, icon: Icon, color = 'slate', onClick }) {
     const colors = {
-        blue: 'hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/30 dark:hover:text-blue-400',
+        blue: 'hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-950/30 dark:hover:text-orange-400',
         amber: 'hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-900/30 dark:hover:text-amber-400',
         red: 'hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400',
         slate: 'hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200',
@@ -91,7 +91,7 @@ const STATUT_ROW_CLASS = {
 };
 
 function statutRowClass(statut) {
-    return STATUT_ROW_CLASS[statut] || 'hover:bg-blue-50/40 dark:hover:bg-slate-800/40';
+    return STATUT_ROW_CLASS[statut] || 'hover:bg-orange-50/40 dark:hover:bg-slate-800/40';
 }
 
 function buildPrintHtml(row) {
@@ -145,7 +145,7 @@ function ViewModal({ row, onClose }) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
             <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-lg border border-slate-200 dark:border-slate-700 overflow-hidden" onClick={(e) => e.stopPropagation()}>
-                <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-blue-600 to-blue-800">
+                <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-zinc-900 to-orange-700">
                     <h3 className="text-white font-bold text-sm">Détail règlement {row.reference}</h3>
                     <button type="button" onClick={onClose} className="text-white/80 hover:text-white"><X className="w-5 h-5" /></button>
                 </div>
@@ -549,7 +549,7 @@ export default function ReglementClientPage() {
                     </button>
 
                     <div className="ml-auto flex flex-wrap items-center gap-3">
-                        <div className="relative overflow-hidden min-w-[150px] rounded-2xl bg-gradient-to-br from-blue-500 via-blue-600 to-blue-800 shadow-lg shadow-blue-500/25 border border-white/10">
+                        <div className="relative overflow-hidden min-w-[150px] rounded-2xl bg-gradient-to-br from-orange-600 via-orange-500 to-orange-800 shadow-lg shadow-orange-500/25 border border-white/10">
                             <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-white/10 blur-xl pointer-events-none" />
                             <div className="relative flex items-center gap-3 px-4 py-3">
                                 <div className="p-2 rounded-xl bg-white/20 backdrop-blur-sm text-white shrink-0">
@@ -632,7 +632,7 @@ export default function ReglementClientPage() {
                                     setFilters(emptyFilters);
                                     setAppliedFilters({ ...emptyFilters });
                                 }}
-                                className="group relative h-[38px] w-[38px] shrink-0 rounded-xl bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 text-white shadow-lg shadow-blue-500/30 border border-white/20 hover:shadow-blue-500/45 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 disabled:opacity-60 disabled:pointer-events-none"
+                                className="group relative h-[38px] w-[38px] shrink-0 rounded-xl bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 text-white shadow-lg shadow-orange-500/30 border border-white/20 hover:shadow-orange-500/45 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 disabled:opacity-60 disabled:pointer-events-none"
                             >
                                 <span className="absolute inset-0 rounded-xl bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 <RefreshCw className={`relative w-4 h-4 mx-auto ${loadingList ? 'animate-spin' : 'group-hover:rotate-180 transition-transform duration-500'}`} strokeWidth={2.4} />
@@ -642,7 +642,7 @@ export default function ReglementClientPage() {
                 </form>
 
                 <div className="flex-1 min-h-0 glass-card flex flex-col overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60">
-                    <div className="shrink-0 px-5 py-3.5 bg-gradient-to-r from-blue-600 via-blue-700 to-slate-800 border-b border-white/10">
+                    <div className="shrink-0 px-5 py-3.5 bg-gradient-to-r from-zinc-900 via-orange-700 to-slate-800 border-b border-white/10">
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Tableau de consultation</h3>
                     </div>
                     <div className="flex-1 min-h-0 overflow-auto">
@@ -664,7 +664,7 @@ export default function ReglementClientPage() {
                                 ) : payments.length ? (
                                     payments.map((row) => (
                                         <tr key={row.id} className={`transition-colors ${statutRowClass(row.statut || 'Inst')}`}>
-                                            <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-blue-400">{row.reference}</td>
+                                            <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">{row.reference}</td>
                                             <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.payment_date}</td>
                                             <td className="px-3 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.client || '—'}</td>
                                             <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.reglement || '—'}</td>
@@ -672,7 +672,7 @@ export default function ReglementClientPage() {
                                             <td className="px-3 py-2.5 text-center font-mono text-xs text-slate-600 dark:text-slate-300">{row.numero || '—'}</td>
                                             <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.banque || '—'}</td>
                                             <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.date_decaissement || '—'}</td>
-                                            <td className="px-3 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-blue-300">{formatMontant(row.montant)}</td>
+                                            <td className="px-3 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-orange-300">{formatMontant(row.montant)}</td>
                                             <td className="px-3 py-2.5 text-center font-semibold tabular-nums text-emerald-700 dark:text-emerald-300">
                                                 {row.tresorerie != null && row.tresorerie !== '' ? String(row.tresorerie) : '—'}
                                             </td>
@@ -687,7 +687,7 @@ export default function ReglementClientPage() {
                                             </td>
                                             <td className="px-3 py-2.5">
                                                 <div className="flex items-center justify-center gap-0.5">
-                                                    <ActionBtn title="Voir" icon={Eye} color="blue" onClick={() => setViewRow(row)} />
+                                                    <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
                                                     <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />
                                                     <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => openEdit(row)} />
                                                     <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => handleDelete(row)} />
@@ -875,7 +875,7 @@ export default function ReglementClientPage() {
                                                     type="checkbox"
                                                     checked={orders.length > 0 && selectedIds.length === orders.length}
                                                     onChange={toggleSelectAll}
-                                                    className="rounded border-slate-300 text-brand-navy focus:ring-brand-navy"
+                                                    className="rounded border-slate-300 text-brand-navy focus:ring-brand-orange"
                                                 />
                                             </td>
                                             <td />
@@ -899,7 +899,7 @@ export default function ReglementClientPage() {
                                                             type="checkbox"
                                                             checked={!!selected[row.id]}
                                                             onChange={() => toggleSelect(row.id)}
-                                                            className="rounded border-slate-300 text-brand-navy focus:ring-brand-navy"
+                                                            className="rounded border-slate-300 text-brand-navy focus:ring-brand-orange"
                                                         />
                                                     </td>
                                                     <td className="px-2 py-2">

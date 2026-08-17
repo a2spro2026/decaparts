@@ -4,7 +4,6 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Layout from './components/layout/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import ChantiersPage from './pages/ChantiersPage';
 import BonAchatsPage from './pages/BonAchatsPage';
 import BonVentesPage from './pages/BonVentesPage';
 import ReglementFournisseurPage from './pages/ReglementFournisseurPage';
@@ -32,7 +31,7 @@ function ProtectedRoute({ children }) {
     const { user, loading } = useAuth();
     if (loading) return (
         <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
-            <div className="w-10 h-10 border-4 border-brand-navy border-t-transparent rounded-full animate-spin" />
+            <div className="w-10 h-10 border-4 border-brand-orange border-t-transparent rounded-full animate-spin" />
         </div>
     );
     if (!user) return <Navigate to="/login" replace />;
@@ -75,9 +74,11 @@ function AppRoutes() {
                 <Route path="clients/releve-compte" element={<ModulePage />} />
 
                 {/* Facturation */}
-                <Route path="facturation/depot-a" element={<FactureAchatsPage depotFilter="depot_a" pageTitle="Ste A. BOUYAHYA" />} />
-                <Route path="facturation/depot-b" element={<FactureAchatsPage depotFilter="depot_b" pageTitle="Ste Fatari et Associes" />} />
-                <Route path="facturation/depot-c" element={<FactureAchatsPage depotFilter="depot_c" pageTitle="Ste Aabach Lilbinae" />} />
+                <Route path="facturation/factures-achats" element={<FactureAchatsPage pageTitle="Factures Achats" />} />
+                <Route path="facturation/stock-fiscal" element={<ModulePage />} />
+                <Route path="facturation/depot-a" element={<Navigate to="/facturation/factures-achats" replace />} />
+                <Route path="facturation/depot-b" element={<Navigate to="/facturation/factures-achats" replace />} />
+                <Route path="facturation/depot-c" element={<Navigate to="/facturation/factures-achats" replace />} />
                 <Route path="facturation/reglement" element={<ReglementFournisseurPage />} />
                 <Route path="facturation/factures-ventes" element={<ModulePage />} />
                 <Route path="facturation/reglements" element={<ReglementFactureVentePage />} />
@@ -87,12 +88,7 @@ function AppRoutes() {
                 {/* Stock */}
                 <Route path="stock/produits" element={<FicheProduitPage />} />
                 <Route path="stock/mouvements" element={<StockMouvementsPage />} />
-                <Route path="stock/fiscal" element={<ModulePage />} />
-
-                {/* Chantiers */}
-                <Route path="chantiers/carte" element={<ChantiersPage />} />
-                <Route path="chantiers/bons-commande" element={<ModulePage />} />
-                <Route path="chantiers/suivi-depenses" element={<ModulePage />} />
+                <Route path="stock/fiscal" element={<Navigate to="/facturation/stock-fiscal" replace />} />
 
                 {/* Personnel */}
                 <Route path="personnel/fiches" element={<GenericListPage title="Fiche Personnel" subtitle="Gestion des employés" endpoint="/employees" columns={employeeCols} />} />
@@ -109,7 +105,7 @@ function AppRoutes() {
                 <Route path="configuration/chauffeurs" element={<ChauffeursPage />} />
 
                 {/* Redirections anciennes routes */}
-                <Route path="chantiers" element={<Navigate to="/chantiers/carte" replace />} />
+                <Route path="chantiers/*" element={<Navigate to="/" replace />} />
                 <Route path="achats" element={<Navigate to="/fournisseurs/bons-achats" replace />} />
                 <Route path="stock" element={<Navigate to="/stock/produits" replace />} />
                 <Route path="fournisseurs" element={<Navigate to="/fournisseurs/fiches" replace />} />

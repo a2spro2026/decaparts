@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#1E3A8A">
+    <meta name="theme-color" content="#F97316">
     <meta name="description" content="DecaParts - ERP de gestion">
     <link rel="manifest" href="/manifest.json">
     <title>DecaParts</title>

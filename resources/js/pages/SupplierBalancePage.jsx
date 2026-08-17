@@ -18,7 +18,7 @@ function Field({ label, children }) {
 }
 
 const filterClass =
-    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy';
+    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange';
 
 function formatMontant(value) {
     return (Number(value) || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -241,7 +241,7 @@ export default function SupplierBalancePage() {
                 <SummaryCard
                     label="Total Achats"
                     value={summary.total_achats}
-                    gradient="from-brand-navy via-blue-800 to-indigo-900"
+                    gradient="from-brand-navy via-zinc-800 to-indigo-900"
                     glow="rgba(30, 58, 95, 0.45)"
                     icon={Receipt}
                 />

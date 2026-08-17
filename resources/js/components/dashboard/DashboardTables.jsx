@@ -31,9 +31,9 @@ const bonsAchatsColumns = [
 const bonsVentesColumns = [
     { key: 'date', label: 'Date' },
     { key: 'client', label: 'Client' },
-    { key: 'bn_numero', label: 'BN N°', render: (v) => <span className="font-mono text-xs font-semibold text-brand-navy dark:text-blue-400">{v || '—'}</span> },
+    { key: 'bn_numero', label: 'BN N°', render: (v) => <span className="font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">{v || '—'}</span> },
     { key: 'qte', label: 'Qte', align: 'right', render: (v) => formatQte(v) },
-    { key: 'montant_bon', label: 'Montant Bon', align: 'right', render: (v) => <span className="font-semibold tabular-nums text-brand-navy dark:text-blue-400">{formatMontant(v)}</span> },
+    { key: 'montant_bon', label: 'Montant Bon', align: 'right', render: (v) => <span className="font-semibold tabular-nums text-brand-navy dark:text-orange-400">{formatMontant(v)}</span> },
     { key: 'solde', label: 'Solde', align: 'right', render: (v) => <SoldeCell value={v} /> },
 ];
 
@@ -74,7 +74,7 @@ export default function DashboardTables({ tables, loading }) {
                     columns={bonsVentesColumns}
                     rows={tables?.derniers_bons_ventes}
                     loading={loading}
-                    accent="from-blue-600 via-blue-700 to-slate-800"
+                    accent="from-zinc-900 via-orange-700 to-slate-800"
                     headerStyle="gray"
                     showCount={false}
                 />

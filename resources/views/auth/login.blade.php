@@ -2,7 +2,6 @@
     <div class="mb-6 text-center">
         <div class="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-blue-600 text-white font-bold text-xl mb-3">DP</div>
         <h2 class="text-2xl font-bold text-slate-800">DecaParts</h2>
-        <p class="text-sm text-slate-500 mt-1">Construire aujourd'hui, bâtir demain.</p>
     </div>
 
     <x-auth-session-status class="mb-4" :status="session('status')" />

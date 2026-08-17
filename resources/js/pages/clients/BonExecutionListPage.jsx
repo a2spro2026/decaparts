@@ -20,7 +20,7 @@ function Field({ label, children }) {
     );
 }
 
-const filterClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy';
+const filterClass = 'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange';
 
 function ActionBtn({ title, onClick, icon: Icon, color = 'slate' }) {
     const colors = {
@@ -133,7 +133,7 @@ export default function BonExecutionListPage() {
                                         <td className="px-3 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.client_name || '—'}</td>
                                         <td className="px-3 py-2.5 text-center">
                                             {row.type_travaux ? (
-                                                <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-semibold bg-yellow-100 dark:bg-yellow-900/30 text-brand-navy dark:text-blue-300">
+                                                <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-semibold bg-yellow-100 dark:bg-yellow-900/30 text-brand-navy dark:text-orange-300">
                                                     {row.type_travaux}
                                                 </span>
                                             ) : '—'}

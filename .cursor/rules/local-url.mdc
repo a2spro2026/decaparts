@@ -7,8 +7,8 @@ alwaysApply: true
 
 L’application locale tourne sur :
 
-**http://127.0.0.1:6502/**
+**http://127.0.0.1:6503/**
 
-- SPA : **http://127.0.0.1:6502/app**
-- Ne pas indiquer le port 6501 (BatiXpert) ni un autre host/port.
+- SPA : **http://127.0.0.1:6503/app**
+- Ne pas indiquer le port 6502 (Autopilote), 6501 (BatiXpert) ni un autre host/port.
 - Production : https://decaparts.a2spr.com

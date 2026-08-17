@@ -9,14 +9,13 @@ import { getPageTitle } from '../../lib/pageMeta';
 import { useNavigate } from 'react-router-dom';
 
 const sectionColors = {
-    fournisseurs: 'from-amber-500/20 to-orange-600/10',
-    clients: 'from-blue-500/20 to-cyan-600/10',
-    facturation: 'from-indigo-500/20 to-blue-700/10',
-    stock: 'from-emerald-500/20 to-teal-600/10',
-    chantiers: 'from-yellow-500/20 to-amber-600/10',
-    personnel: 'from-violet-500/20 to-purple-600/10',
-    monetaire: 'from-rose-500/20 to-pink-600/10',
-    configuration: 'from-slate-400/20 to-slate-600/10',
+    fournisseurs: 'from-orange-500/20 to-amber-600/10',
+    clients: 'from-orange-500/20 to-orange-700/10',
+    facturation: 'from-amber-500/20 to-orange-600/10',
+    stock: 'from-orange-400/15 to-amber-500/10',
+    personnel: 'from-orange-500/15 to-zinc-600/10',
+    monetaire: 'from-orange-600/20 to-amber-700/10',
+    configuration: 'from-zinc-500/20 to-zinc-700/10',
 };
 
 function NavIcon({ icon: Icon, active, size = 'md' }) {
@@ -31,7 +30,7 @@ function NavIcon({ icon: Icon, active, size = 'md' }) {
                     : 'bg-white/5'
             }`}
         >
-            <Icon className={`${iconSize} ${active ? 'text-white' : 'text-blue-200'}`} strokeWidth={2} />
+            <Icon className={`${iconSize} ${active ? 'text-white' : 'text-orange-200/70'}`} strokeWidth={2} />
         </span>
     );
 }
@@ -50,7 +49,7 @@ function NavChildItem({ child, onClose, index }) {
                     `sidebar-child-item group relative flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] font-medium transition-all duration-300 ${
                         isActive
                             ? 'sidebar-child-active text-white'
-                            : 'text-blue-200/90 hover:bg-white/5 hover:text-white hover:pl-3'
+                            : 'text-orange-100/80 hover:bg-white/5 hover:text-white hover:pl-3'
                     }`
                 }
             >
@@ -93,7 +92,7 @@ function DashboardLink({ item, onClose }) {
                 `sidebar-nav-item relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     isActive
                         ? 'sidebar-nav-active text-white'
-                        : 'text-blue-100 hover:bg-white/10 hover:text-white hover:translate-x-0.5'
+                        : 'text-orange-100/90 hover:bg-white/10 hover:text-white hover:translate-x-0.5'
                 }`
             }
         >
@@ -136,7 +135,7 @@ function NavGroup({ group, onClose, index }) {
                         `sidebar-nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                             isActive
                                 ? 'sidebar-nav-active text-white'
-                                : 'text-blue-100 hover:bg-white/10 hover:text-white hover:translate-x-0.5'
+                                : 'text-orange-100/90 hover:bg-white/10 hover:text-white hover:translate-x-0.5'
                         }`
                     }
                 >
@@ -172,7 +171,7 @@ function NavGroup({ group, onClose, index }) {
                 className={`sidebar-nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                     isChildActive || open
                         ? `sidebar-section-open text-white bg-gradient-to-r ${accent}`
-                        : 'text-blue-100 hover:bg-white/10 hover:text-white'
+                        : 'text-orange-100/90 hover:bg-white/10 hover:text-white'
                 }`}
             >
                 <NavIcon icon={group.icon} active={isChildActive || open} />
@@ -231,11 +230,11 @@ export default function Sidebar({ mobile, onClose }) {
             {/* Décor fond */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-brand-orange/10 blur-3xl" />
-                <div className="absolute bottom-32 -left-10 w-32 h-32 rounded-full bg-blue-500/10 blur-3xl" />
+                <div className="absolute bottom-32 -left-10 w-32 h-32 rounded-full bg-orange-500/10 blur-3xl" />
             </div>
 
             {/* Logo + Tableau de bord — fixés en haut */}
-            <div className="relative shrink-0 z-10 border-b border-white/10 bg-slate-900/40 backdrop-blur-md">
+            <div className="relative shrink-0 z-10 border-b border-white/10 bg-black/50 backdrop-blur-md">
                 <div className="p-4 pb-3">
                     <SidebarBrand pageTitle={pageTitle} />
                 </div>
@@ -256,7 +255,7 @@ export default function Sidebar({ mobile, onClose }) {
             </nav>
 
             {/* Déconnexion — fixé en bas */}
-            <div className="relative shrink-0 p-4 border-t border-white/10 bg-slate-900/40 backdrop-blur-md z-10">
+            <div className="relative shrink-0 p-4 border-t border-white/10 bg-black/50 backdrop-blur-md z-10">
                 <motion.button
                     type="button"
                     onClick={handleLogout}

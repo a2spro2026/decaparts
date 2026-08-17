@@ -151,7 +151,7 @@ export default function StockMouvementsPage() {
                     <select
                         value={year}
                         onChange={(e) => setYear(Number(e.target.value))}
-                        className="rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-navy/30"
+                        className="rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-orange/30"
                     >
                         {yearOptions.map((y) => (
                             <option key={y} value={y}>{y}</option>
@@ -170,7 +170,7 @@ export default function StockMouvementsPage() {
             </div>
 
             <div className="flex-1 min-h-0 glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60 flex flex-col">
-                <div className="shrink-0 px-5 py-3 bg-gradient-to-r from-brand-navy via-blue-900 to-slate-800 border-b border-white/10">
+                <div className="shrink-0 px-5 py-3 bg-gradient-to-r from-brand-navy via-zinc-900 to-slate-800 border-b border-white/10">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">
                         Tableau des mouvements
                     </h3>
@@ -203,7 +203,7 @@ export default function StockMouvementsPage() {
                                                 : 'bg-slate-50 dark:bg-slate-800/70'
                                         }`}
                                     >
-                                        <span className="inline-block text-[11px] font-bold tracking-wide text-brand-navy dark:text-blue-300 border-b-2 border-brand-orange pb-0.5">
+                                        <span className="inline-block text-[11px] font-bold tracking-wide text-brand-navy dark:text-orange-300 border-b-2 border-brand-orange pb-0.5">
                                             {m.short}
                                         </span>
                                     </th>
@@ -242,11 +242,11 @@ export default function StockMouvementsPage() {
                                 rows.map((row, rowIdx) => (
                                     <tr
                                         key={row.id}
-                                        className={`border-b border-slate-100 dark:border-slate-800 hover:bg-blue-50/40 dark:hover:bg-slate-800/50 transition-colors ${
+                                        className={`border-b border-slate-100 dark:border-slate-800 hover:bg-orange-50/40 dark:hover:bg-slate-800/50 transition-colors ${
                                             rowIdx % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/60 dark:bg-slate-900/60'
                                         }`}
                                     >
-                                        <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-blue-300 sticky left-0 z-10 bg-inherit border-r border-slate-100 dark:border-slate-800" title={row.designation || ''}>
+                                        <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-300 sticky left-0 z-10 bg-inherit border-r border-slate-100 dark:border-slate-800" title={row.designation || ''}>
                                             {row.reference}
                                         </td>
                                         <td className="px-2 py-2.5 text-center tabular-nums text-xs font-semibold text-slate-700 dark:text-slate-200 border-r border-slate-100 dark:border-slate-800">

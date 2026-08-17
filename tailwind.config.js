@@ -14,14 +14,15 @@ export default {
             },
             colors: {
                 brand: {
-                    navy: '#1E3A8A',
+                    navy: '#18181b',
                     orange: '#F97316',
-                    'navy-light': '#2563EB',
+                    'navy-light': '#EA580C',
+                    charcoal: '#27272a',
                 },
             },
             boxShadow: {
-                glass: '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
-                card: '0 4px 24px -4px rgba(30, 58, 138, 0.12)',
+                glass: '0 8px 32px 0 rgba(0, 0, 0, 0.12)',
+                card: '0 4px 24px -4px rgba(249, 115, 22, 0.15)',
             },
             animation: {
                 'fade-in': 'fadeIn 0.4s ease-out',

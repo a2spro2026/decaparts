@@ -46,6 +46,9 @@ export function AuthProvider({ children }) {
 
     const login = async (loginValue, password, statut) => {
         const { data } = await api.post('/login', { login: loginValue, password, statut });
+        if (!data?.token || !data?.user) {
+            throw new Error('Réponse de connexion invalide.');
+        }
         localStorage.setItem('decaparts_token', data.token);
         localStorage.setItem('decaparts_user', JSON.stringify(data.user));
         if (statut) localStorage.setItem('decaparts_statut', statut);

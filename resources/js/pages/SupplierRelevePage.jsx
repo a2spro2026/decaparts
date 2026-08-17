@@ -42,7 +42,7 @@ function Field({ label, children }) {
 }
 
 const filterClass =
-    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-brand-navy/30 focus:border-brand-navy';
+    'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-2.5 py-2 text-xs outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange';
 
 function SummaryCard({ label, value, gradient, glow, icon: Icon, compact = false, format = 'money' }) {
     const display = format === 'qty'
@@ -278,14 +278,14 @@ export default function SupplierRelevePage() {
                     <SummaryCard
                         label="Total Encaissé"
                         value={summary.total_encaisse}
-                        gradient="from-blue-600 via-brand-navy to-slate-900"
+                        gradient="from-zinc-900 via-zinc-950 to-orange-900"
                         glow="rgba(30, 58, 95, 0.45)"
                         icon={BadgeCheck}
                     />
                     <SummaryCard
                         label="Coffre"
                         value={summary.total_coffre}
-                        gradient="from-cyan-500 via-sky-600 to-blue-800"
+                        gradient="from-orange-500 via-orange-600 to-zinc-900"
                         glow="rgba(14, 165, 233, 0.4)"
                         icon={Vault}
                     />
@@ -347,7 +347,7 @@ export default function SupplierRelevePage() {
             </div>
 
             <div className="flex-1 min-h-0 glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60 flex flex-col">
-                <div className="px-5 py-2.5 bg-gradient-to-r from-brand-navy via-blue-800 to-slate-800 border-b border-white/10 shrink-0">
+                <div className="px-5 py-2.5 bg-gradient-to-r from-zinc-950 via-zinc-900 to-orange-900 border-b border-white/10 shrink-0">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Relevé de compte</h3>
                 </div>
                 <div className="flex-1 min-h-0 overflow-auto">
@@ -374,18 +374,18 @@ export default function SupplierRelevePage() {
                                 ))
                             ) : rows.length ? (
                                 rows.map((row, idx) => (
-                                    <tr key={`${row.operation}-${row.numero_bn}-${idx}`} className="hover:bg-blue-50/40 dark:hover:bg-slate-800/40">
+                                    <tr key={`${row.operation}-${row.numero_bn}-${idx}`} className="hover:bg-orange-50/40 dark:hover:bg-slate-800/40">
                                         <td className="px-2.5 py-2 text-center">
                                             <span className={`inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
                                                 row.operation === 'Achat'
-                                                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                                                    ? 'bg-blue-50 text-orange-700 dark:bg-blue-900/30 dark:text-orange-300'
                                                     : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'
                                             }`}>
                                                 {row.operation}
                                             </span>
                                         </td>
                                         <td className="px-2.5 py-2 text-center text-slate-600 dark:text-slate-300 whitespace-nowrap">{row.date || '—'}</td>
-                                        <td className="px-2.5 py-2 text-center font-mono text-[11px] font-semibold text-brand-navy dark:text-blue-300">{row.numero_bn || '—'}</td>
+                                        <td className="px-2.5 py-2 text-center font-mono text-[11px] font-semibold text-brand-navy dark:text-orange-300">{row.numero_bn || '—'}</td>
                                         <td className="px-2.5 py-2 text-center text-slate-700 dark:text-slate-200 max-w-[140px] truncate" title={row.client_livre || ''}>{row.client_livre || '—'}</td>
                                         <td className="px-2.5 py-2 text-center text-slate-600 dark:text-slate-300">{row.ville_liv || '—'}</td>
                                         <td className="px-2.5 py-2 text-center tabular-nums text-slate-700 dark:text-slate-200">{formatQty(row.qte)}</td>
