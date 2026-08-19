@@ -39,6 +39,7 @@ export const navigation = [
         icon: LayoutDashboard,
         perm: 'dashboard.view',
         to: '/',
+        locked: true,
     },
     {
         id: 'fournisseurs',
@@ -58,6 +59,7 @@ export const navigation = [
         label: 'Stock',
         icon: Package,
         perm: 'stock.view',
+        locked: true,
         children: [
             { to: '/stock/produits', label: 'Fiche Produit', icon: Boxes },
             { to: '/stock/mouvements', label: 'Mouvement Stock', icon: ArrowLeftRight },
@@ -68,6 +70,7 @@ export const navigation = [
         label: 'Client',
         icon: Users,
         perm: 'clients.view',
+        locked: true,
         children: [
             { to: '/clients/fiches', label: 'Fiche Client', icon: ContactRound },
             { to: '/clients/bons-de-vente', label: 'Bon de Vente', icon: ClipboardList },
@@ -82,6 +85,7 @@ export const navigation = [
         label: 'Facturation',
         icon: FileText,
         perm: 'factures_clients.view',
+        locked: true,
         children: [
             { to: '/facturation/factures-achats', label: 'Factures Achats', icon: Receipt },
             { to: '/facturation/stock-fiscal', label: 'Stock Fiscale', icon: Archive },
@@ -95,6 +99,7 @@ export const navigation = [
         label: 'Suivi Monétaire',
         icon: Landmark,
         perm: 'reglements.view',
+        locked: true,
         children: [
             { to: '/monetaire/transactions', label: 'Transaction et Charges', icon: ArrowLeftRight },
             { to: '/monetaire/charges', label: 'Charge', icon: Wallet },
@@ -107,6 +112,7 @@ export const navigation = [
         label: 'Personnels',
         icon: BadgeCheck,
         perm: 'personnel.view',
+        locked: true,
         children: [
             { to: '/personnel/fiches', label: 'Fiche Personnel', icon: Contact },
             { to: '/personnel/etat-paiement', label: 'État Paiement', icon: CalendarCheck },
@@ -117,6 +123,7 @@ export const navigation = [
         label: 'Configuration',
         icon: Settings,
         perm: 'utilisateurs.view',
+        locked: true,
         children: [
             { to: '/configuration/utilisateurs', label: 'Utilisateur', icon: UserCog },
             { to: '/configuration/chauffeurs', label: 'Chauffeur', icon: CarFront },

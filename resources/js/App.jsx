@@ -51,7 +51,8 @@ function AppRoutes() {
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-                <Route index element={<Dashboard />} />
+                <Route index element={<Navigate to="/fournisseurs/fiches" replace />} />
+                <Route path="dashboard" element={<Dashboard />} />
 
                 {/* Fournisseur */}
                 <Route path="fournisseurs/fiches" element={<FicheFournisseurPage />} />

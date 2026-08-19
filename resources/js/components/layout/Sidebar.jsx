@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, LogOut } from 'lucide-react';
+import { ChevronDown, LogOut, Lock } from 'lucide-react';
 import { navigation } from '../../config/navigation';
 import { useAuth } from '../../contexts/AuthContext';
 import { SidebarBrand } from '../Logo';
@@ -82,7 +82,25 @@ function NavChildItem({ child, onClose, index }) {
     );
 }
 
+function LockedNavItem({ item }) {
+    return (
+        <div
+            title="Section à venir"
+            className="sidebar-nav-item relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-white/25 cursor-not-allowed select-none grayscale opacity-60"
+        >
+            <span className="sidebar-icon-wrap flex items-center justify-center rounded-lg shrink-0 w-8 h-8 bg-white/5">
+                <item.icon className="w-4 h-4 text-white/30" strokeWidth={2} />
+            </span>
+            <span className="flex-1 text-left truncate">{item.label}</span>
+            <Lock className="w-3.5 h-3.5 text-white/25 shrink-0" strokeWidth={2} />
+        </div>
+    );
+}
+
 function DashboardLink({ item, onClose }) {
+    if (item.locked) {
+        return <LockedNavItem item={item} />;
+    }
     return (
         <NavLink
             to={item.to}
@@ -117,8 +135,21 @@ function NavGroup({ group, onClose, index }) {
     const isChildActive = group.children?.some(
         (c) => location.pathname === c.to || location.pathname.startsWith(c.to + '/')
     );
-    const [open, setOpen] = useState(isChildActive);
+    const [open, setOpen] = useState(isChildActive && !group.locked);
     const accent = sectionColors[group.id] || 'from-white/10 to-white/5';
+
+    if (group.locked) {
+        return (
+            <motion.div
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05, duration: 0.3 }}
+                className="mb-1"
+            >
+                <LockedNavItem item={group} />
+            </motion.div>
+        );
+    }
 
     if (group.to) {
         return (
