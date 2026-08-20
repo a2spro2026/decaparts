@@ -53,6 +53,10 @@ class CatalogProductApiController extends Controller
 
     public function update(Request $request, CatalogProduct $catalog_product)
     {
+        if ($request->has('price') && $request->input('price') === '') {
+            $request->merge(['price' => null]);
+        }
+
         $validated = $request->validate([
             'product_id' => 'sometimes|exists:products,id|unique:catalog_products,product_id,'.$catalog_product->id,
             'category' => 'nullable|string|max:255',
@@ -62,15 +66,28 @@ class CatalogProductApiController extends Controller
             'photo' => 'nullable|image|max:5120',
         ]);
 
+        $data = [
+            'category' => $validated['category'] ?? null,
+            'brand' => $validated['brand'] ?? null,
+            'description' => $validated['description'] ?? null,
+        ];
+
+        if (array_key_exists('price', $validated)) {
+            $data['price'] = $validated['price'];
+        }
+
+        if (array_key_exists('product_id', $validated)) {
+            $data['product_id'] = $validated['product_id'];
+        }
+
         if ($request->hasFile('photo')) {
             if ($catalog_product->photo_path) {
                 Storage::disk('public')->delete($catalog_product->photo_path);
             }
-            $validated['photo_path'] = $request->file('photo')->store('catalog', 'public');
+            $data['photo_path'] = $request->file('photo')->store('catalog', 'public');
         }
 
-        unset($validated['photo']);
-        $catalog_product->update($validated);
+        $catalog_product->update($data);
 
         return response()->json($this->format($catalog_product->fresh('product')));
     }

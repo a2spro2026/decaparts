@@ -6,6 +6,7 @@ import {
     UserCog,
     Landmark,
     Settings,
+    SlidersHorizontal,
     CarFront,
     // Fournisseur
     Contact,
@@ -59,7 +60,10 @@ export const navigation = [
         label: 'Catalogue',
         icon: LayoutGrid,
         perm: 'stock.view',
-        to: '/catalogue',
+        children: [
+            { to: '/catalogue', label: 'Catalogue', icon: LayoutGrid },
+            { to: '/catalogue/config', label: 'Config Catalogue', icon: SlidersHorizontal },
+        ],
     },
     {
         id: 'stock',

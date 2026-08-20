@@ -11,6 +11,7 @@ import ReglementClientPage from './pages/ReglementClientPage';
 import ReglementFactureVentePage from './pages/ReglementFactureVentePage';
 import FicheProduitPage from './pages/FicheProduitPage';
 import CataloguePage from './pages/CataloguePage';
+import ConfigCataloguePage from './pages/ConfigCataloguePage';
 import StockMouvementsPage from './pages/StockMouvementsPage';
 import GenericListPage from './pages/GenericListPage';
 import ModulePage from './pages/ModulePage';
@@ -88,6 +89,7 @@ function AppRoutes() {
                 <Route path="fournisseurs/reglements-achats" element={<ReglementFournisseurPage />} />
 
                 {/* Catalogue */}
+                <Route path="catalogue/config" element={<ConfigCataloguePage />} />
                 <Route path="catalogue" element={<CataloguePage />} />
 
                 {/* Stock */}
