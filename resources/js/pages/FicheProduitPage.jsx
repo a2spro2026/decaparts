@@ -352,7 +352,7 @@ export default function FicheProduitPage() {
                         <RotateCcw className="w-4 h-4" />
                         Nouveau
                     </button>
-                    <button type="button" onClick={() => navigate('/stock/catalogue')} className="btn-secondary text-sm">
+                    <button type="button" onClick={() => navigate('/catalogue')} className="btn-secondary text-sm">
                         <LayoutGrid className="w-4 h-4" />
                         Catalogue
                     </button>

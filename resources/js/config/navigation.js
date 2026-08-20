@@ -20,6 +20,7 @@ import {
     Receipt,
     Wallet,
     // Stock
+    Boxes,
     ArrowLeftRight,
     Archive,
     LayoutGrid,
@@ -66,6 +67,7 @@ export const navigation = [
         icon: Package,
         perm: 'stock.view',
         children: [
+            { to: '/stock/produits', label: 'Fiche Produit', icon: Boxes },
             { to: '/stock/mouvements', label: 'Mouvement Stock', icon: ArrowLeftRight },
         ],
     },
