@@ -59,7 +59,6 @@ export const navigation = [
         label: 'Stock',
         icon: Package,
         perm: 'stock.view',
-        locked: true,
         children: [
             { to: '/stock/produits', label: 'Fiche Produit', icon: Boxes },
             { to: '/stock/mouvements', label: 'Mouvement Stock', icon: ArrowLeftRight },

@@ -24,11 +24,22 @@ const emptyLine = () => ({
     key: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     product_id: '',
     article_ref: '',
+    barcode: '',
+    category: '',
     description: '',
     unit: '',
     quantity: '1',
     unit_price: '',
 });
+
+function findProductByRef(ref, products) {
+    const q = ref.trim().toLowerCase();
+    if (!q) return null;
+    return products.find((p) =>
+        (p.article_id || '').toLowerCase() === q
+        || (p.reference || '').toLowerCase() === q,
+    ) || null;
+}
 
 function Field({ label, children, className = '' }) {
     return (
@@ -41,8 +52,9 @@ function Field({ label, children, className = '' }) {
 
 const inputClass =
     'w-full rounded-md border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-1.5 py-1 text-[11px] text-center outline-none focus:ring-1 focus:ring-brand-orange/30 focus:border-brand-orange transition-all';
-const readOnlyClass =
-    'w-full rounded-md border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 px-1.5 py-1 text-[11px] text-center cursor-not-allowed';
+const disabledClass =
+    'w-full rounded-md border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 text-slate-400 dark:text-slate-500 px-1.5 py-1 text-[11px] text-center cursor-not-allowed opacity-60';
+const readOnlyClass = disabledClass;
 const tableInput =
     'w-full rounded-md border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-1.5 py-1 text-[11px] text-center outline-none focus:ring-1 focus:ring-brand-orange/30 focus:border-brand-orange';
 
@@ -305,15 +317,14 @@ export default function BonAchatsPage() {
         setLines((prev) => prev.map((l) => (l.key === key ? { ...l, ...patch } : l)));
     };
 
-    const handleSelectProduct = (lineKey, productId) => {
-        const product = products.find((p) => String(p.id) === String(productId));
-        if (!product) {
-            updateLine(lineKey, { product_id: '', article_ref: '', description: '', unit: '' });
-            return;
-        }
+    const handleRefBlur = (lineKey, ref) => {
+        const product = findProductByRef(ref, products);
+        if (!product) return;
         updateLine(lineKey, {
             product_id: product.id,
-            article_ref: product.article_id || product.reference || '',
+            article_ref: product.article_id || product.reference || ref,
+            barcode: product.reference || '',
+            category: product.famille || product.category_name || '',
             description: product.name || '',
             unit: product.unit || '',
         });
@@ -377,6 +388,8 @@ export default function BonAchatsPage() {
                 key: `edit-${i.id}`,
                 product_id: i.product_id || '',
                 article_ref: i.article_ref || '',
+                barcode: i.barcode || '',
+                category: i.category || '',
                 description: i.description || '',
                 unit: i.unit || '',
                 quantity: i.quantity != null ? String(i.quantity) : '1',
@@ -423,7 +436,7 @@ export default function BonAchatsPage() {
             supplier_id: form.supplier_id,
             order_date: form.order_date || new Date().toISOString().slice(0, 10),
             city: form.city || null,
-            client_livre: form.client_livre || null,
+            client_livre: null,
             reglement: form.reglement || null,
             echeance: form.echeance || null,
             bc_number: form.bc_number || null,
@@ -433,6 +446,8 @@ export default function BonAchatsPage() {
             items: validLines.map((l) => ({
                 product_id: l.product_id || null,
                 article_ref: l.article_ref || null,
+                barcode: l.barcode || null,
+                category: l.category || null,
                 description: l.description,
                 unit: l.unit || null,
                 quantity: parseFloat(String(l.quantity).replace(',', '.')) || 1,
@@ -500,10 +515,7 @@ export default function BonAchatsPage() {
                                         <input type="text" value={form.bc_number} onChange={(e) => set('bc_number', e.target.value)} placeholder="N° Frns" className={inputClass} />
                                     </Field>
                                     <Field label="Client Livré">
-                                        <select value={form.client_livre} onChange={(e) => set('client_livre', e.target.value)} className={inputClass}>
-                                            <option value="">—</option>
-                                            {clients.map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
-                                        </select>
+                                        <input type="text" disabled value="" placeholder="—" className={disabledClass} title="Section à venir" />
                                     </Field>
                                     <Field label="Ville Livraison">
                                         <input type="text" value={form.city} onChange={(e) => set('city', e.target.value)} placeholder="Ville" className={inputClass} />
@@ -546,10 +558,10 @@ export default function BonAchatsPage() {
                                     <span className="text-[10px] text-orange-100 font-semibold tabular-nums">Total : {totalBon}</span>
                                 </div>
                                 <div className="overflow-x-auto">
-                                    <table className="w-full text-sm min-w-[860px]">
+                                    <table className="w-full text-sm min-w-[1060px]">
                                         <thead>
                                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                                                {['Réf', 'Désignation', 'U', 'Qté', 'P/U', 'S/Total', ''].map((h) => (
+                                                {['Réf', 'Code barre', 'Catégorie', 'Désignation', 'U', 'Qté', 'P/U', 'S/Total', ''].map((h) => (
                                                     <th key={h || 'act'} className="px-2 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-center whitespace-nowrap">{h}</th>
                                                 ))}
                                             </tr>
@@ -557,13 +569,37 @@ export default function BonAchatsPage() {
                                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                             {lines.map((line) => (
                                                 <tr key={line.key} className="hover:bg-orange-50/30 dark:hover:bg-slate-800/30">
-                                                    <td className="px-2 py-1.5 w-[120px]">
-                                                        <select value={line.product_id} onChange={(e) => handleSelectProduct(line.key, e.target.value)} className={tableInput} title="Liste des références">
-                                                            <option value="">— Réf —</option>
-                                                            {products.map((p) => (
-                                                                <option key={p.id} value={p.id}>{p.article_id || p.reference || p.name}</option>
-                                                            ))}
-                                                        </select>
+                                                    <td className="px-2 py-1.5 w-[110px]">
+                                                        <input
+                                                            type="text"
+                                                            list="bon-achat-refs"
+                                                            value={line.article_ref}
+                                                            onChange={(e) => updateLine(line.key, {
+                                                                article_ref: e.target.value,
+                                                                product_id: '',
+                                                            })}
+                                                            onBlur={(e) => handleRefBlur(line.key, e.target.value)}
+                                                            placeholder="Réf"
+                                                            className={tableInput}
+                                                        />
+                                                    </td>
+                                                    <td className="px-2 py-1.5 w-[110px]">
+                                                        <input
+                                                            type="text"
+                                                            value={line.barcode}
+                                                            onChange={(e) => updateLine(line.key, { barcode: e.target.value })}
+                                                            placeholder="Code barre"
+                                                            className={tableInput}
+                                                        />
+                                                    </td>
+                                                    <td className="px-2 py-1.5 w-[110px]">
+                                                        <input
+                                                            type="text"
+                                                            value={line.category}
+                                                            onChange={(e) => updateLine(line.key, { category: e.target.value })}
+                                                            placeholder="Catégorie"
+                                                            className={tableInput}
+                                                        />
                                                     </td>
                                                     <td className="px-2 py-1.5 min-w-[180px]">
                                                         <input type="text" value={line.description} onChange={(e) => updateLine(line.key, { description: e.target.value })} placeholder="Désignation" className={`${tableInput} text-left`} />
@@ -592,6 +628,11 @@ export default function BonAchatsPage() {
                                         </tbody>
                                     </table>
                                 </div>
+                                <datalist id="bon-achat-refs">
+                                    {products.map((p) => (
+                                        <option key={p.id} value={p.article_id || p.reference || ''} />
+                                    ))}
+                                </datalist>
                                 <div className="px-3 py-2 border-t border-slate-100 dark:border-slate-800 flex justify-end">
                                     <button type="button" onClick={addLine} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide text-brand-navy dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-900/40 transition-colors">
                                         <PlusCircle className="w-4 h-4" /> Ajouter article
