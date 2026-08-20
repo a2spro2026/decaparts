@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Search, Trash2, X, ImagePlus } from 'lucide-react';
+import { Plus, Search, Trash2, X, ImagePlus } from 'lucide-react';
 import api from '../lib/api';
 
 const emptyForm = {
@@ -14,7 +13,6 @@ const emptyForm = {
 };
 
 export default function CataloguePage() {
-    const navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -128,14 +126,9 @@ export default function CataloguePage() {
 
     return (
         <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-3">
-                <button type="button" onClick={() => navigate('/stock/produits')} className="btn-secondary text-sm">
-                    <ArrowLeft className="w-4 h-4" /> Fiche Produit
-                </button>
-                <div>
-                    <h2 className="text-lg font-bold text-slate-900 dark:text-white">Catalogue</h2>
-                    <p className="text-xs text-slate-500">Ajoutez un produit en important sa réf depuis la fiche produit</p>
-                </div>
+            <div>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Catalogue</h2>
+                <p className="text-xs text-slate-500">Ajoutez un produit en important sa réf depuis la fiche produit</p>
             </div>
 
             {error && !modalOpen && (
