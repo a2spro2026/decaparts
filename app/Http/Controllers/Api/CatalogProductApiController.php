@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\CatalogProduct;
 use App\Models\Product;
+use App\Services\ProductStockCalculator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CatalogProductApiController extends Controller
 {
+    public function __construct(private ProductStockCalculator $stockCalculator) {}
+
     public function index()
     {
         $items = CatalogProduct::with('product')
@@ -86,6 +89,7 @@ class CatalogProductApiController extends Controller
     {
         /** @var Product|null $product */
         $product = $item->product;
+        $stock = $product ? $this->stockCalculator->forProduct($product) : null;
 
         return [
             'id' => $item->id,
@@ -98,6 +102,10 @@ class CatalogProductApiController extends Controller
             'description' => $item->description,
             'price' => $item->price !== null ? number_format((float) $item->price, 2, '.', '') : null,
             'photo_url' => $item->photo_path ? '/storage/'.$item->photo_path : null,
+            'unit' => $product?->unit,
+            'quantity' => $stock ? $stock['stock_actuel'] : 0,
+            'stock_actuel' => $stock ? $stock['stock_actuel'] : 0,
+            'etat' => $stock['etat'] ?? null,
         ];
     }
 }

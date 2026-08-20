@@ -192,6 +192,13 @@ export default function CataloguePage() {
                                             {[item.brand, item.category].filter(Boolean).join(' · ')}
                                         </p>
                                     )}
+                                    <p className="text-xs font-semibold tabular-nums text-slate-700 dark:text-slate-200">
+                                        Qté :{' '}
+                                        <span className={Number(item.quantity) <= 0 ? 'text-red-600 dark:text-red-400' : 'text-brand-navy dark:text-orange-400'}>
+                                            {Number(item.quantity ?? 0).toLocaleString('fr-FR', { maximumFractionDigits: 3 })}
+                                        </span>
+                                        {item.unit ? ` ${item.unit}` : ''}
+                                    </p>
                                     {item.price != null && item.price !== '' && (
                                         <p className="text-sm font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
                                             {Number(item.price).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} MAD
