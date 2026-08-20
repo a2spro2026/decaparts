@@ -562,25 +562,25 @@ export default function BonVentesPage() {
                                                             })}
                                                             onBlur={(e) => handleRefBlur(line.key, e.target.value)}
                                                             placeholder="Réf"
-                                                            className={tableInput}
+                                                            className={`${tableInput} font-mono`}
                                                         />
                                                     </td>
-                                                    <td className="px-2 py-1.5 w-[110px]">
+                                                    <td className="px-2 py-1.5 w-[140px]">
                                                         <input
                                                             type="text"
                                                             value={line.barcode}
                                                             onChange={(e) => updateLine(line.key, { barcode: e.target.value })}
                                                             placeholder="Barre Code"
-                                                            className={tableInput}
+                                                            className={`${tableInput} font-mono tracking-wide`}
                                                         />
                                                     </td>
-                                                    <td className="px-2 py-1.5 min-w-[160px]">
+                                                    <td className="px-2 py-1.5 w-[130px]">
                                                         <input type="text" value={line.description} onChange={(e) => updateLine(line.key, { description: e.target.value })} placeholder="Désignation" className={`${tableInput} text-left`} />
                                                     </td>
-                                                    <td className="px-2 py-1.5 w-[100px]">
-                                                        <input type="text" value={line.category} onChange={(e) => updateLine(line.key, { category: e.target.value })} placeholder="Catégorie" className={tableInput} />
+                                                    <td className="px-2 py-1.5 w-[130px]">
+                                                        <input type="text" value={line.category} onChange={(e) => updateLine(line.key, { category: e.target.value })} placeholder="Catégorie" className={`${tableInput} font-semibold`} />
                                                     </td>
-                                                    <td className="px-2 py-1.5 w-[100px]">
+                                                    <td className="px-2 py-1.5 w-[110px]">
                                                         <input type="text" value={line.brand} onChange={(e) => updateLine(line.key, { brand: e.target.value })} placeholder="Marque" className={tableInput} />
                                                     </td>
                                                     <td className="px-2 py-1.5 w-[72px]">
