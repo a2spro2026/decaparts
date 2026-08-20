@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Plus, Eye, Pencil, RefreshCw, X, UserCog, PauseCircle, PlayCircle, Ban, Lock, User,
+    Plus, Eye, Pencil, Trash2, RefreshCw, X, UserCog, PauseCircle, PlayCircle, Ban, Lock, User,
 } from 'lucide-react';
 import api from '../lib/api';
 
@@ -311,6 +311,17 @@ export default function UsersPage() {
         }
     };
 
+    const onDelete = async (row) => {
+        if (!window.confirm(`Supprimer l'utilisateur « ${row.name} » ?`)) return;
+        try {
+            await api.delete(`/users/${row.id}`);
+            if (editingId === row.id) closeForm();
+            load();
+        } catch (err) {
+            alert(err.response?.data?.message || 'Suppression impossible');
+        }
+    };
+
     return (
         <div className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -384,6 +395,7 @@ export default function UsersPage() {
                                             <div className="inline-flex items-center justify-center gap-0.5">
                                                 <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
                                                 <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => openEdit(row)} />
+                                                <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => onDelete(row)} />
                                                 <ActionBtn
                                                     title={row.is_active ? 'Suspendre' : 'Réactiver'}
                                                     icon={row.is_active ? PauseCircle : PlayCircle}
