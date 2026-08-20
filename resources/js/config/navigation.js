@@ -23,6 +23,7 @@ import {
     Boxes,
     ArrowLeftRight,
     Archive,
+    LayoutGrid,
     // Personnel
     BadgeCheck,
     CalendarCheck,
@@ -60,6 +61,7 @@ export const navigation = [
         perm: 'stock.view',
         children: [
             { to: '/stock/produits', label: 'Fiche Produit', icon: Boxes },
+            { to: '/stock/catalogue', label: 'Catalogue', icon: LayoutGrid },
             { to: '/stock/mouvements', label: 'Mouvement Stock', icon: ArrowLeftRight },
         ],
     },
