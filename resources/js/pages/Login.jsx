@@ -13,9 +13,6 @@ const STATUT_OPTIONS = [
 ];
 
 const LOGIN_EMAIL_SUFFIX = '@decaparts.com';
-const DEFAULT_LOGIN = `yahya${LOGIN_EMAIL_SUFFIX}`;
-const DEFAULT_PASSWORD = '0661755048';
-const DEFAULT_STATUT = 'Gerant';
 
 function normalizeLogin(value) {
     const trimmed = value.trim();
@@ -74,7 +71,7 @@ function PasswordField({ value, onChange, showPassword, onToggle }) {
 
                     <input
                         id="password"
-                        name="password"
+                        name="decaparts-password"
                         type={showPassword ? 'text' : 'password'}
                         value={value}
                         onChange={onChange}
@@ -82,7 +79,12 @@ function PasswordField({ value, onChange, showPassword, onToggle }) {
                         onBlur={() => setFocused(false)}
                         placeholder="Votre mot de passe"
                         required
-                        autoComplete="new-password"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck={false}
+                        data-lpignore="true"
+                        data-1p-ignore="true"
                         className="relative z-[1] block w-full pl-11 pr-11 py-3 text-sm text-white bg-transparent outline-none placeholder:text-zinc-500"
                     />
 
@@ -142,11 +144,10 @@ function PasswordField({ value, onChange, showPassword, onToggle }) {
 }
 
 export default function Login() {
-    const [loginValue, setLoginValue] = useState(DEFAULT_LOGIN);
-    const [password, setPassword] = useState(DEFAULT_PASSWORD);
-    const [statut, setStatut] = useState(DEFAULT_STATUT);
+    const [loginValue, setLoginValue] = useState('');
+    const [password, setPassword] = useState('');
+    const [statut, setStatut] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [remember, setRemember] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [emailFocused, setEmailFocused] = useState(false);
@@ -168,7 +169,7 @@ export default function Login() {
         setLoading(true);
         try {
             await login(normalizeLogin(loginValue), password, statut);
-            navigate('/');
+            navigate('/dashboard');
         } catch (err) {
             const data = err.response?.data;
             const isHtml = typeof data === 'string' && data.includes('<!DOCTYPE html>');
@@ -241,7 +242,7 @@ export default function Login() {
                                         <div className="mx-auto mt-3 h-px w-16 bg-gradient-to-r from-transparent via-orange-500/70 to-transparent" />
                                     </motion.div>
 
-                                    <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
+                                    <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off" data-lpignore="true" data-1p-ignore="true">
                                         <AnimatePresence>
                                             {error && (
                                                 <motion.div
@@ -307,7 +308,7 @@ export default function Login() {
                                                 <User className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none transition-colors ${emailFocused ? 'text-brand-orange' : 'text-zinc-500'}`} />
                                                 <input
                                                     id="login"
-                                                    name="login"
+                                                    name="decaparts-login"
                                                     type="text"
                                                     value={loginValue}
                                                     onChange={(e) => setLoginValue(e.target.value)}
@@ -315,7 +316,12 @@ export default function Login() {
                                                     onBlur={() => setLoginValue((v) => normalizeLogin(v))}
                                                     placeholder={`identifiant${LOGIN_EMAIL_SUFFIX}`}
                                                     required
-                                                    autoComplete="username"
+                                                    autoComplete="off"
+                                                    autoCorrect="off"
+                                                    autoCapitalize="off"
+                                                    spellCheck={false}
+                                                    data-lpignore="true"
+                                                    data-1p-ignore="true"
                                                     className="block w-full pl-11 pr-3 py-3 text-sm text-white bg-transparent outline-none placeholder:text-zinc-500"
                                                 />
                                             </motion.div>
@@ -327,21 +333,6 @@ export default function Login() {
                                             showPassword={showPassword}
                                             onToggle={() => setShowPassword(!showPassword)}
                                         />
-
-                                        <div className="flex items-center justify-between text-sm pt-1">
-                                            <label className="flex items-center gap-1.5 text-zinc-400 cursor-pointer group">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={remember}
-                                                    onChange={(e) => setRemember(e.target.checked)}
-                                                    className="rounded border-zinc-600 bg-black/40 text-brand-orange focus:ring-brand-orange"
-                                                />
-                                                <span className="group-hover:text-zinc-200 transition-colors">Se souvenir de moi</span>
-                                            </label>
-                                            <button type="button" className="text-brand-orange text-sm font-medium hover:underline underline-offset-2">
-                                                Mot de passe oublié ?
-                                            </button>
-                                        </div>
 
                                         <motion.button
                                             type="submit"

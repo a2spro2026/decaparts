@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Plus, Eye, Pencil, Trash2, Ban, RefreshCw, X, UserCog, PauseCircle, PlayCircle,
+    Plus, Eye, Pencil, RefreshCw, X, UserCog, PauseCircle, PlayCircle, Ban, Lock, User,
 } from 'lucide-react';
 import api from '../lib/api';
 
@@ -20,7 +20,7 @@ const emptyForm = {
     password: '',
 };
 
-const columns = ['ID', 'Nom Complet', 'Contact', 'Statut', 'Login', 'Mot de Passe', 'Actions'];
+const columns = ['Date', 'ID', 'Nom Complet', 'Contact', 'Statut', 'Login', 'Mot de Passe', 'Actions'];
 
 function Field({ label, children, required = false }) {
     return (
@@ -57,6 +57,7 @@ function ActionBtn({ title, icon: Icon, color = 'slate', onClick }) {
 function ViewModal({ row, onClose }) {
     if (!row) return null;
     const fields = [
+        ['Date', row.date],
         ['ID', row.id],
         ['Nom Complet', row.name],
         ['Contact', row.contact || row.phone],
@@ -118,64 +119,85 @@ function FormModal({ open, form, nextId, editingId, saving, error, onChange, onC
                         </div>
                     )}
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <Field label="ID">
-                            <input type="text" readOnly value={editingId || nextId || '—'} className={readOnlyClass} />
-                        </Field>
-                        <Field label="Nom Complet" required>
-                            <input
-                                type="text"
-                                required
-                                value={form.name}
-                                onChange={(e) => onChange('name', e.target.value)}
-                                placeholder="Nom complet"
-                                className={inputClass}
-                            />
-                        </Field>
-                        <Field label="Contact">
-                            <input
-                                type="text"
-                                value={form.phone}
-                                onChange={(e) => onChange('phone', e.target.value)}
-                                placeholder="Téléphone"
-                                className={inputClass}
-                            />
-                        </Field>
-                        <Field label="Statut" required>
-                            <select
-                                required
-                                value={form.statut}
-                                onChange={(e) => onChange('statut', e.target.value)}
-                                className={inputClass}
-                            >
-                                <option value="" disabled>Sélectionner</option>
-                                {STATUT_OPTIONS.map((o) => (
-                                    <option key={o.value} value={o.value}>{o.label}</option>
-                                ))}
-                            </select>
-                        </Field>
-                        <Field label="Login" required>
-                            <input
-                                type="text"
-                                required
-                                autoComplete="off"
-                                value={form.login}
-                                onChange={(e) => onChange('login', e.target.value)}
-                                placeholder="Login"
-                                className={inputClass}
-                            />
-                        </Field>
-                        <Field label="Mot de Passe" required={!editingId}>
-                            <input
-                                type="password"
-                                required={!editingId}
-                                autoComplete="new-password"
-                                value={form.password}
-                                onChange={(e) => onChange('password', e.target.value)}
-                                placeholder={editingId ? 'Laisser vide pour conserver' : 'Mot de passe'}
-                                className={inputClass}
-                            />
-                        </Field>
+                    <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-4 space-y-3">
+                        <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Identité</p>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <Field label="ID">
+                                <input type="text" readOnly value={editingId || nextId || '—'} className={readOnlyClass} />
+                            </Field>
+                            <Field label="Nom Complet" required>
+                                <input
+                                    type="text"
+                                    required
+                                    value={form.name}
+                                    onChange={(e) => onChange('name', e.target.value)}
+                                    placeholder="Nom complet"
+                                    autoComplete="off"
+                                    className={inputClass}
+                                />
+                            </Field>
+                            <Field label="Contact">
+                                <input
+                                    type="text"
+                                    value={form.phone}
+                                    onChange={(e) => onChange('phone', e.target.value)}
+                                    placeholder="Téléphone"
+                                    autoComplete="off"
+                                    className={inputClass}
+                                />
+                            </Field>
+                            <Field label="Statut" required>
+                                <select
+                                    required
+                                    value={form.statut}
+                                    onChange={(e) => onChange('statut', e.target.value)}
+                                    className={inputClass}
+                                >
+                                    <option value="" disabled>Sélectionner</option>
+                                    {STATUT_OPTIONS.map((o) => (
+                                        <option key={o.value} value={o.value}>{o.label}</option>
+                                    ))}
+                                </select>
+                            </Field>
+                        </div>
+                    </div>
+
+                    <div className="rounded-xl border border-orange-200 dark:border-orange-900/50 bg-orange-50/40 dark:bg-orange-950/20 p-4 space-y-3">
+                        <p className="text-[11px] font-bold uppercase tracking-wider text-orange-700 dark:text-orange-300 flex items-center gap-1.5">
+                            <Lock className="w-3.5 h-3.5" /> Panneau de connexion
+                        </p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <Field label="Login" required>
+                                <div className="relative">
+                                    <User className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
+                                    <input
+                                        type="text"
+                                        required
+                                        name="user-login-new"
+                                        autoComplete="off"
+                                        value={form.login}
+                                        onChange={(e) => onChange('login', e.target.value)}
+                                        placeholder="Login"
+                                        className={`${inputClass} pl-8`}
+                                    />
+                                </div>
+                            </Field>
+                            <Field label="Mot de Passe" required={!editingId}>
+                                <div className="relative">
+                                    <Lock className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
+                                    <input
+                                        type="password"
+                                        required={!editingId}
+                                        name="user-password-new"
+                                        autoComplete="new-password"
+                                        value={form.password}
+                                        onChange={(e) => onChange('password', e.target.value)}
+                                        placeholder={editingId ? 'Laisser vide pour conserver' : 'Mot de passe'}
+                                        className={`${inputClass} pl-8`}
+                                    />
+                                </div>
+                            </Field>
+                        </div>
                     </div>
 
                     <div className="flex justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
@@ -278,16 +300,6 @@ export default function UsersPage() {
         }
     };
 
-    const onDelete = async (row) => {
-        if (!window.confirm(`Supprimer l'utilisateur « ${row.name} » ?`)) return;
-        try {
-            await api.delete(`/users/${row.id}`);
-            load();
-        } catch (err) {
-            alert(err.response?.data?.message || 'Suppression impossible');
-        }
-    };
-
     const onSuspend = async (row) => {
         const action = row.is_active ? 'suspendre' : 'réactiver';
         if (!window.confirm(`Voulez-vous ${action} « ${row.name} » ?`)) return;
@@ -312,7 +324,7 @@ export default function UsersPage() {
                     <button type="button" onClick={openCreate} className="btn-primary text-xs px-4">
                         <Plus className="w-3.5 h-3.5" /> Ajouter
                     </button>
-                    <button type="button" onClick={() => navigate('/')} className="btn-secondary text-xs px-4">
+                    <button type="button" onClick={() => navigate('/dashboard')} className="btn-secondary text-xs px-4">
                         Fermer
                     </button>
                 </div>
@@ -327,7 +339,7 @@ export default function UsersPage() {
                 </div>
 
                 <div className="overflow-x-auto">
-                    <table className="w-full text-sm min-w-[900px]">
+                    <table className="w-full text-sm min-w-[1000px]">
                         <thead>
                             <tr className="bg-gradient-to-r from-slate-100 via-slate-200/90 to-slate-100 dark:from-slate-800 dark:via-slate-700/80 dark:to-slate-800 border-b-2 border-slate-300 dark:border-slate-600">
                                 {columns.map((h) => (
@@ -357,6 +369,7 @@ export default function UsersPage() {
                                         key={row.id}
                                         className={`hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors ${!row.is_active ? 'opacity-60' : ''}`}
                                     >
+                                        <td className="px-4 py-2.5 text-center text-xs text-slate-500 dark:text-slate-400">{row.date || '—'}</td>
                                         <td className="px-4 py-2.5 text-center tabular-nums font-semibold text-slate-700 dark:text-slate-200">{row.id}</td>
                                         <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.name}</td>
                                         <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.contact || row.phone || '—'}</td>
@@ -371,7 +384,6 @@ export default function UsersPage() {
                                             <div className="inline-flex items-center justify-center gap-0.5">
                                                 <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
                                                 <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => openEdit(row)} />
-                                                <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => onDelete(row)} />
                                                 <ActionBtn
                                                     title={row.is_active ? 'Suspendre' : 'Réactiver'}
                                                     icon={row.is_active ? PauseCircle : PlayCircle}

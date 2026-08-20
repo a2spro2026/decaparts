@@ -137,6 +137,7 @@ class UserApiController extends Controller
     {
         return [
             'id' => $user->id,
+            'date' => $user->created_at?->format('d/m/Y') ?? '—',
             'name' => $user->name,
             'phone' => $user->phone,
             'contact' => $user->phone,

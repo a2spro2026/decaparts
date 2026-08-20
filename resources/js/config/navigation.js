@@ -121,7 +121,6 @@ export const navigation = [
         label: 'Configuration',
         icon: Settings,
         perm: 'utilisateurs.view',
-        locked: true,
         children: [
             { to: '/configuration/utilisateurs', label: 'Utilisateur', icon: UserCog },
             { to: '/configuration/chauffeurs', label: 'Chauffeur', icon: CarFront },
