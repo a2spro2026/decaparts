@@ -12,12 +12,29 @@ const emptyForm = {
     photo: null,
 };
 
+const emptyFilters = {
+    reference: '',
+    name: '',
+    price: '',
+    brand: '',
+    category: '',
+};
+
+const FILTER_FIELDS = [
+    { key: 'reference', label: 'Réf' },
+    { key: 'name', label: 'Désignation' },
+    { key: 'price', label: 'Prix' },
+    { key: 'brand', label: 'Marque' },
+    { key: 'category', label: 'Catégorie' },
+];
+
 export default function CataloguePage() {
     const [items, setItems] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [form, setForm] = useState(emptyForm);
+    const [filters, setFilters] = useState(emptyFilters);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
     const [preview, setPreview] = useState(null);
@@ -122,12 +139,62 @@ export default function CataloguePage() {
         }
     };
 
-    const cards = [...items, { id: 'add', isAdd: true }];
+    const filteredItems = useMemo(() => {
+        const refQ = filters.reference.trim().toLowerCase();
+        const nameQ = filters.name.trim().toLowerCase();
+        const priceQ = filters.price.trim().toLowerCase();
+        const brandQ = filters.brand.trim().toLowerCase();
+        const catQ = filters.category.trim().toLowerCase();
+
+        return items.filter((item) => {
+            if (refQ) {
+                const ref = `${item.reference || ''} ${item.article_id || ''}`.toLowerCase();
+                if (!ref.includes(refQ)) return false;
+            }
+            if (nameQ && !(item.name || '').toLowerCase().includes(nameQ)) return false;
+            if (brandQ && !(item.brand || '').toLowerCase().includes(brandQ)) return false;
+            if (catQ && !(item.category || '').toLowerCase().includes(catQ)) return false;
+            if (priceQ) {
+                const priceStr = item.price != null ? String(item.price) : '';
+                if (!priceStr.toLowerCase().includes(priceQ)) return false;
+            }
+            return true;
+        });
+    }, [items, filters]);
+
+    const cards = [...filteredItems, { id: 'add', isAdd: true }];
+    const hasActiveFilters = Object.values(filters).some((v) => String(v).trim() !== '');
 
     return (
-        <div className="space-y-4">
-            <div>
-                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Catalogue</h2>
+        <div className="space-y-3">
+            <div className="flex flex-wrap items-end justify-between gap-2">
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-none">Catalogue</h2>
+                {hasActiveFilters && (
+                    <button
+                        type="button"
+                        onClick={() => setFilters(emptyFilters)}
+                        className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 hover:text-brand-orange transition-colors"
+                    >
+                        Réinitialiser
+                    </button>
+                )}
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5">
+                {FILTER_FIELDS.map(({ key, label }) => (
+                    <label key={key} className="block min-w-0">
+                        <span className="block text-[9px] font-bold uppercase tracking-[0.1em] text-slate-400 dark:text-slate-500 mb-0.5 truncate">
+                            {label}
+                        </span>
+                        <input
+                            type="text"
+                            value={filters[key]}
+                            onChange={(e) => setFilters((f) => ({ ...f, [key]: e.target.value }))}
+                            placeholder={label}
+                            className="w-full h-7 rounded-md border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800/80 px-2 text-[11px] text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-orange/50 focus:border-brand-orange"
+                        />
+                    </label>
+                ))}
             </div>
 
             {error && !modalOpen && (
