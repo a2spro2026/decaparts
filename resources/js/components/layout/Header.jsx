@@ -1,4 +1,4 @@
-import { Bell, Menu, Moon, Sun } from 'lucide-react';
+import { Bell, Menu, Moon, PanelLeftClose, PanelLeftOpen, Sun } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
@@ -6,7 +6,37 @@ import { NavbarBrand } from '../Logo';
 import UserAvatar from '../UserAvatar';
 import { getPageTitle } from '../../lib/pageMeta';
 
-export default function Header({ onMenuClick }) {
+function SidebarToggle({ hidden, onToggle }) {
+    const Icon = hidden ? PanelLeftOpen : PanelLeftClose;
+    const label = hidden ? 'Afficher le menu latéral' : 'Masquer le menu latéral';
+
+    return (
+        <button
+            type="button"
+            onClick={onToggle}
+            title={label}
+            aria-label={label}
+            aria-pressed={!hidden}
+            className="sidebar-toggle-btn group relative hidden lg:inline-flex items-center justify-center h-10 w-10 shrink-0 rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.04] active:scale-[0.97]"
+        >
+            <span className="absolute inset-0 bg-gradient-to-br from-brand-navy via-slate-800 to-zinc-900 dark:from-zinc-800 dark:via-zinc-900 dark:to-black" />
+            <span className="absolute inset-[1px] rounded-[11px] bg-gradient-to-br from-white/10 to-transparent opacity-80" />
+            <span className="absolute -inset-px rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-brand-orange/50 via-amber-400/30 to-brand-orange/50 blur-[1px]" />
+            <span className="absolute inset-[1.5px] rounded-[10px] bg-gradient-to-br from-slate-800 to-zinc-900 dark:from-zinc-900 dark:to-black" />
+            <Icon
+                className={`relative z-10 w-[18px] h-[18px] transition-all duration-300 ${
+                    hidden
+                        ? 'text-brand-orange drop-shadow-[0_0_8px_rgba(249,115,22,0.55)]'
+                        : 'text-white/90 group-hover:text-brand-orange'
+                }`}
+                strokeWidth={2.25}
+            />
+            <span className="pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 w-3 rounded-full bg-brand-orange/70 opacity-0 group-hover:opacity-100 transition-opacity" />
+        </button>
+    );
+}
+
+export default function Header({ onMenuClick, sidebarHidden = false, onSidebarToggle }) {
     const { dark, toggle } = useTheme();
     const { user } = useAuth();
     const { pathname } = useLocation();
@@ -25,6 +55,9 @@ export default function Header({ onMenuClick }) {
                     >
                         <Menu className="w-5 h-5 text-slate-700 dark:text-slate-200" />
                     </button>
+                    {onSidebarToggle && (
+                        <SidebarToggle hidden={sidebarHidden} onToggle={onSidebarToggle} />
+                    )}
                     <NavbarBrand pageTitle={pageTitle} />
                 </div>
 

@@ -1,18 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import DashboardSection from '../dashboard/DashboardSection';
 
+const SIDEBAR_KEY = 'decaparts_sidebar_hidden';
+
 export default function Layout() {
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [sidebarHidden, setSidebarHidden] = useState(() => {
+        try {
+            return localStorage.getItem(SIDEBAR_KEY) === '1';
+        } catch {
+            return false;
+        }
+    });
     const { pathname } = useLocation();
     const isDashboard = pathname === '/' || pathname === '/dashboard';
     const isDevisForm = /^\/clients\/devis\/(nouveau|\d+)/.test(pathname);
 
+    useEffect(() => {
+        try {
+            localStorage.setItem(SIDEBAR_KEY, sidebarHidden ? '1' : '0');
+        } catch {
+            /* ignore */
+        }
+    }, [sidebarHidden]);
+
+    const toggleSidebar = () => setSidebarHidden((v) => !v);
+
     return (
         <div className="min-h-screen h-screen bg-slate-50 dark:bg-slate-950 flex overflow-hidden">
-            <Sidebar />
+            <Sidebar collapsed={sidebarHidden} />
             {mobileOpen && (
                 <>
                     <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setMobileOpen(false)} />
@@ -20,7 +39,11 @@ export default function Layout() {
                 </>
             )}
             <div className="flex-1 flex flex-col min-w-0 min-h-0">
-                <Header onMenuClick={() => setMobileOpen(true)} />
+                <Header
+                    onMenuClick={() => setMobileOpen(true)}
+                    sidebarHidden={sidebarHidden}
+                    onSidebarToggle={toggleSidebar}
+                />
 
                 {isDashboard && (
                     <div className="flex-1 flex flex-col min-h-0 bg-slate-50 dark:bg-slate-950">

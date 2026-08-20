@@ -238,7 +238,7 @@ function NavGroup({ group, onClose, index }) {
     );
 }
 
-export default function Sidebar({ mobile, onClose }) {
+export default function Sidebar({ mobile, onClose, collapsed = false }) {
     const { can, logout } = useAuth();
     const navigate = useNavigate();
     const { pathname } = useLocation();
@@ -253,10 +253,14 @@ export default function Sidebar({ mobile, onClose }) {
         navigate('/login');
     };
 
+    const desktopClass = collapsed
+        ? 'hidden lg:flex lg:w-0 lg:min-w-0 lg:opacity-0 lg:pointer-events-none lg:overflow-hidden lg:border-0'
+        : 'hidden lg:flex lg:w-72 lg:sticky lg:top-0';
+
     return (
         <aside
-            className={`sidebar-panel ${
-                mobile ? 'fixed inset-y-0 left-0 z-50 w-72' : 'hidden lg:flex lg:w-72 lg:sticky lg:top-0'
+            className={`sidebar-panel transition-[width,opacity,min-width] duration-300 ease-out ${
+                mobile ? 'fixed inset-y-0 left-0 z-50 w-72' : desktopClass
             } flex-col h-screen text-white shrink-0`}
         >
             {/* Décor fond */}
