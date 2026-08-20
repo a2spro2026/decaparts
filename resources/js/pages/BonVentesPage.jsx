@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle2, Plus, PlusCircle, XCircle, Eye, Pencil, Trash2, Printer, FileText, X, Package, Wallet, Download } from 'lucide-react';
+import { CheckCircle2, Plus, PlusCircle, XCircle, Eye, Pencil, Trash2, Printer, FileText, X, Package, Wallet } from 'lucide-react';
 import api from '../lib/api';
 import { useChauffeurs } from '../hooks/useChauffeurs';
 
@@ -23,11 +23,23 @@ const emptyLine = () => ({
     key: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     product_id: '',
     article_ref: '',
+    barcode: '',
+    category: '',
+    brand: '',
     description: '',
     unit: '',
     quantity: '1',
     unit_price: '',
 });
+
+function findProductByRef(ref, products) {
+    const q = ref.trim().toLowerCase();
+    if (!q) return null;
+    return products.find((p) =>
+        (p.article_id || '').toLowerCase() === q
+        || (p.reference || '').toLowerCase() === q,
+    ) || null;
+}
 
 function Field({ label, children, className = '' }) {
     return (
@@ -220,94 +232,6 @@ function ViewModal({ row, onClose }) {
     );
 }
 
-function ImportPurchaseModal({ open, rows, loading, onClose, onSelect }) {
-    if (!open) return null;
-
-    return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
-            <div
-                className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-5xl border border-slate-200 dark:border-slate-700 overflow-hidden max-h-[90vh] flex flex-col"
-                onClick={(e) => e.stopPropagation()}
-            >
-                <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-emerald-600 to-teal-800 shrink-0">
-                    <div>
-                        <p className="text-[10px] text-emerald-100 uppercase tracking-wider">Import</p>
-                        <h3 className="text-white font-bold text-sm">Sélectionner un Bon d&apos;Achat</h3>
-                    </div>
-                    <button type="button" onClick={onClose} className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10">
-                        <X className="w-4 h-4" />
-                    </button>
-                </div>
-
-                <p className="px-5 py-3 text-xs text-slate-500 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800 shrink-0">
-                    Date, client livré, ville et articles seront importés. Le N° bon de vente reste automatique. Les autres champs restent modifiables.
-                </p>
-
-                <div className="overflow-auto flex-1 min-h-0">
-                    <table className="w-full text-sm min-w-[900px]">
-                        <thead className="sticky top-0 z-10">
-                            <tr className="bg-slate-50 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700">
-                                {['Date', 'N° B-A', 'Fournisseur', 'Client Livré', 'Ville', 'Qté', 'Montant', ''].map((h) => (
-                                    <th key={h || 'act'} className="px-3 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap text-center">{h}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {loading ? (
-                                [...Array(4)].map((_, i) => (
-                                    <tr key={i}>
-                                        {[...Array(8)].map((__, j) => (
-                                            <td key={j} className="px-3 py-3 text-center">
-                                                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[72px]" />
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))
-                            ) : rows.length ? (
-                                rows.map((row) => (
-                                    <tr key={row.id} className="hover:bg-emerald-50/60 dark:hover:bg-emerald-900/20 transition-colors">
-                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.order_date}</td>
-                                        <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold">{row.reference}</td>
-                                        <td className="px-3 py-2.5 text-center font-medium">{row.fournisseur || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center">{row.client_livre || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center">{row.city || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center tabular-nums">
-                                            {orderTotalQuantity(row).toLocaleString('fr-FR', { maximumFractionDigits: 3 })}
-                                        </td>
-                                        <td className="px-3 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-orange-400">
-                                            {formatMontantDisplay(row.subtotal ?? row.montant)}
-                                        </td>
-                                        <td className="px-3 py-2.5 text-center">
-                                            <button
-                                                type="button"
-                                                onClick={() => onSelect(row)}
-                                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wide text-white bg-emerald-600 hover:bg-emerald-700"
-                                            >
-                                                <Download className="w-3.5 h-3.5" />
-                                                Importer
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={8} className="px-4 py-12 text-center text-slate-400">Aucun bon d&apos;achat disponible</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-
-                <div className="px-5 py-3 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 shrink-0 flex justify-end">
-                    <button type="button" onClick={onClose} className="btn-danger text-xs px-4">
-                        <XCircle className="w-3.5 h-3.5" /> Fermer
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-}
-
 export default function BonVentesPage() {
     const navigate = useNavigate();
     const [form, setForm] = useState(emptyHeader);
@@ -322,9 +246,6 @@ export default function BonVentesPage() {
     const [editingId, setEditingId] = useState(null);
     const [viewRow, setViewRow] = useState(null);
     const [formOpen, setFormOpen] = useState(false);
-    const [importOpen, setImportOpen] = useState(false);
-    const [purchaseOrders, setPurchaseOrders] = useState([]);
-    const [importLoading, setImportLoading] = useState(false);
 
     const totalBon = useMemo(
         () => lines.reduce((sum, l) => sum + (parseFloat(lineSubtotal(l)) || 0), 0).toFixed(2),
@@ -380,15 +301,15 @@ export default function BonVentesPage() {
         setLines((prev) => prev.map((l) => (l.key === key ? { ...l, ...patch } : l)));
     };
 
-    const handleSelectProduct = (lineKey, productId) => {
-        const product = products.find((p) => String(p.id) === String(productId));
-        if (!product) {
-            updateLine(lineKey, { product_id: '', article_ref: '', description: '', unit: '' });
-            return;
-        }
+    const handleRefBlur = (lineKey, ref) => {
+        const product = findProductByRef(ref, products);
+        if (!product) return;
         updateLine(lineKey, {
             product_id: product.id,
-            article_ref: product.article_id || product.reference || '',
+            article_ref: product.article_id || product.reference || ref,
+            barcode: product.reference || '',
+            category: product.famille || product.category_name || '',
+            brand: product.brand || '',
             description: product.name || '',
             unit: product.unit || '',
             unit_price: product.unit_price != null ? String(product.unit_price) : '',
@@ -433,61 +354,7 @@ export default function BonVentesPage() {
         setLines([emptyLine()]);
         setEditingId(null);
         setError('');
-        setImportOpen(false);
         setFormOpen(false);
-    };
-
-    const openImportModal = () => {
-        setImportOpen(true);
-        setImportLoading(true);
-        api.get('/purchase-orders', { params: { all: 1 } })
-            .then((r) => setPurchaseOrders(r.data.data ?? []))
-            .catch(() => setPurchaseOrders([]))
-            .finally(() => setImportLoading(false));
-    };
-
-    const applyImportPurchase = (purchase) => {
-        const clientName = String(purchase.client_livre || '').trim().toLowerCase();
-        const matchedClient = clients.find((c) => String(c.name || '').trim().toLowerCase() === clientName);
-
-        setForm((f) => ({
-            ...f,
-            order_date: purchase.order_date_raw || f.order_date || new Date().toISOString().slice(0, 10),
-            client_id: matchedClient ? String(matchedClient.id) : '',
-            city: purchase.city || '',
-            // N° B-V reste auto ; adresse / régl / échéance / chauffeur / matricule manuels
-        }));
-
-        if (purchase.items?.length) {
-            setLines(purchase.items.map((i) => ({
-                key: `imp-${purchase.id}-${i.id || Math.random().toString(36).slice(2, 7)}`,
-                product_id: i.product_id || '',
-                article_ref: i.article_ref || '',
-                description: i.description || '',
-                unit: i.unit || '',
-                quantity: i.quantity != null ? String(i.quantity) : '1',
-                unit_price: i.unit_price != null ? String(i.unit_price) : '',
-            })));
-        } else if (purchase.designation) {
-            setLines([{
-                ...emptyLine(),
-                product_id: '',
-                article_ref: purchase.article_ref || '',
-                description: purchase.designation || '',
-                unit: purchase.unit || '',
-                quantity: purchase.quantity != null ? String(purchase.quantity) : '1',
-                unit_price: purchase.unit_price != null ? String(purchase.unit_price) : '',
-            }]);
-        } else {
-            setLines([emptyLine()]);
-        }
-
-        setImportOpen(false);
-        setError(
-            matchedClient || !purchase.client_livre
-                ? ''
-                : `Client « ${purchase.client_livre} » non trouvé : sélectionnez le client manuellement.`,
-        );
     };
 
     const fillForm = (row) => {
@@ -506,6 +373,9 @@ export default function BonVentesPage() {
                 key: `edit-${i.id}`,
                 product_id: i.product_id || '',
                 article_ref: i.article_ref || '',
+                barcode: i.barcode || '',
+                category: i.category || '',
+                brand: i.brand || '',
                 description: i.description || '',
                 unit: i.unit || '',
                 quantity: i.quantity != null ? String(i.quantity) : '1',
@@ -561,6 +431,9 @@ export default function BonVentesPage() {
             items: validLines.map((l) => ({
                 product_id: l.product_id || null,
                 article_ref: l.article_ref || null,
+                barcode: l.barcode || null,
+                category: l.category || null,
+                brand: l.brand || null,
                 description: l.description,
                 unit: l.unit || null,
                 quantity: parseFloat(String(l.quantity).replace(',', '.')) || 1,
@@ -590,14 +463,6 @@ export default function BonVentesPage() {
         <div className="space-y-4">
             <ViewModal row={viewRow} onClose={() => setViewRow(null)} />
 
-            <ImportPurchaseModal
-                open={importOpen}
-                rows={purchaseOrders}
-                loading={importLoading}
-                onClose={() => setImportOpen(false)}
-                onSelect={applyImportPurchase}
-            />
-
             {formOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm" onClick={closeFormPanel}>
                     <div
@@ -608,21 +473,9 @@ export default function BonVentesPage() {
                             <h3 className="text-white font-bold text-sm uppercase tracking-wide">
                                 {editingId ? `Modifier Bon de Vente ${currentRef}` : 'Nouveau Bon de Vente'}
                             </h3>
-                            <div className="flex items-center gap-2">
-                                {!editingId && (
-                                    <button
-                                        type="button"
-                                        onClick={openImportModal}
-                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold uppercase tracking-wide text-white bg-emerald-500/90 hover:bg-emerald-500 border border-white/20"
-                                    >
-                                        <Download className="w-3.5 h-3.5" />
-                                        Importer
-                                    </button>
-                                )}
-                                <button type="button" onClick={closeFormPanel} className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10">
-                                    <X className="w-4 h-4" />
-                                </button>
-                            </div>
+                            <button type="button" onClick={closeFormPanel} className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10">
+                                <X className="w-4 h-4" />
+                            </button>
                         </div>
 
                         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-4 space-y-3">
@@ -683,15 +536,14 @@ export default function BonVentesPage() {
                             </div>
 
                             <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
-                                <div className="px-4 py-2 bg-gradient-to-r from-zinc-950 via-zinc-900 to-orange-800 flex items-center justify-between">
-                                    <h4 className="text-xs font-bold text-white uppercase tracking-wide">Tableau de saisie</h4>
+                                <div className="px-4 py-2 bg-gradient-to-r from-zinc-950 via-zinc-900 to-orange-800 flex items-center justify-end">
                                     <span className="text-[10px] text-orange-100 font-semibold tabular-nums">Total : {totalBon}</span>
                                 </div>
                                 <div className="overflow-x-auto">
-                                    <table className="w-full text-sm min-w-[860px]">
+                                    <table className="w-full text-sm min-w-[1100px]">
                                         <thead>
                                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                                                {['Réf', 'Désignation', 'U', 'Qté', 'P/U', 'S/Total', ''].map((h) => (
+                                                {['Réf', 'Barre Code', 'Désignation', 'Catégorie', 'Marque', 'U', 'Qte', 'P/U', 'S/Total', ''].map((h) => (
                                                     <th key={h || 'act'} className="px-2 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-center whitespace-nowrap">{h}</th>
                                                 ))}
                                             </tr>
@@ -699,16 +551,37 @@ export default function BonVentesPage() {
                                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                             {lines.map((line) => (
                                                 <tr key={line.key} className="hover:bg-orange-50/30 dark:hover:bg-slate-800/30">
-                                                    <td className="px-2 py-1.5 w-[120px]">
-                                                        <select value={line.product_id} onChange={(e) => handleSelectProduct(line.key, e.target.value)} className={tableInput} title="Liste des références">
-                                                            <option value="">— Réf —</option>
-                                                            {products.map((p) => (
-                                                                <option key={p.id} value={p.id}>{p.article_id || p.reference || p.name}</option>
-                                                            ))}
-                                                        </select>
+                                                    <td className="px-2 py-1.5 w-[110px]">
+                                                        <input
+                                                            type="text"
+                                                            list="bon-vente-refs"
+                                                            value={line.article_ref}
+                                                            onChange={(e) => updateLine(line.key, {
+                                                                article_ref: e.target.value,
+                                                                product_id: '',
+                                                            })}
+                                                            onBlur={(e) => handleRefBlur(line.key, e.target.value)}
+                                                            placeholder="Réf"
+                                                            className={tableInput}
+                                                        />
                                                     </td>
-                                                    <td className="px-2 py-1.5 min-w-[180px]">
+                                                    <td className="px-2 py-1.5 w-[110px]">
+                                                        <input
+                                                            type="text"
+                                                            value={line.barcode}
+                                                            onChange={(e) => updateLine(line.key, { barcode: e.target.value })}
+                                                            placeholder="Barre Code"
+                                                            className={tableInput}
+                                                        />
+                                                    </td>
+                                                    <td className="px-2 py-1.5 min-w-[160px]">
                                                         <input type="text" value={line.description} onChange={(e) => updateLine(line.key, { description: e.target.value })} placeholder="Désignation" className={`${tableInput} text-left`} />
+                                                    </td>
+                                                    <td className="px-2 py-1.5 w-[100px]">
+                                                        <input type="text" value={line.category} onChange={(e) => updateLine(line.key, { category: e.target.value })} placeholder="Catégorie" className={tableInput} />
+                                                    </td>
+                                                    <td className="px-2 py-1.5 w-[100px]">
+                                                        <input type="text" value={line.brand} onChange={(e) => updateLine(line.key, { brand: e.target.value })} placeholder="Marque" className={tableInput} />
                                                     </td>
                                                     <td className="px-2 py-1.5 w-[72px]">
                                                         <select value={line.unit} onChange={(e) => updateLine(line.key, { unit: e.target.value })} className={tableInput}>
@@ -734,6 +607,11 @@ export default function BonVentesPage() {
                                         </tbody>
                                     </table>
                                 </div>
+                                <datalist id="bon-vente-refs">
+                                    {products.map((p) => (
+                                        <option key={p.id} value={p.article_id || p.reference || ''} />
+                                    ))}
+                                </datalist>
                                 <div className="px-3 py-2 border-t border-slate-100 dark:border-slate-800 flex justify-end">
                                     <button type="button" onClick={addLine} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wide text-brand-navy dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 hover:bg-orange-100 dark:hover:bg-orange-900/40 transition-colors">
                                         <PlusCircle className="w-4 h-4" /> Ajouter article

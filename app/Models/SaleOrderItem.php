@@ -10,8 +10,8 @@ class SaleOrderItem extends Model
     protected $table = 'sales_order_items';
 
     protected $fillable = [
-        'sales_order_id', 'product_id', 'article_ref', 'description', 'unit',
-        'quantity', 'unit_price', 'tva_rate', 'total',
+        'sales_order_id', 'product_id', 'article_ref', 'barcode', 'category', 'brand',
+        'description', 'unit', 'quantity', 'unit_price', 'tva_rate', 'total',
     ];
 
     public function order(): BelongsTo
