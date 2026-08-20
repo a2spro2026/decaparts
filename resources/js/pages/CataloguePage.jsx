@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Plus, Search, Trash2, X, ImagePlus } from 'lucide-react';
+import {
+    Plus, Search, Trash2, X, ImagePlus, Hash, Type, BadgeDollarSign, Award, Layers, RotateCcw,
+} from 'lucide-react';
 import api from '../lib/api';
 
 const emptyForm = {
@@ -21,11 +23,11 @@ const emptyFilters = {
 };
 
 const FILTER_FIELDS = [
-    { key: 'reference', label: 'Réf' },
-    { key: 'name', label: 'Désignation' },
-    { key: 'price', label: 'Prix' },
-    { key: 'brand', label: 'Marque' },
-    { key: 'category', label: 'Catégorie' },
+    { key: 'reference', label: 'Réf', icon: Hash, hint: 'N° pièce' },
+    { key: 'name', label: 'Désignation', icon: Type, hint: 'Pièce' },
+    { key: 'price', label: 'Prix', icon: BadgeDollarSign, hint: 'MAD' },
+    { key: 'brand', label: 'Marque', icon: Award, hint: 'OEM / Aftermarket' },
+    { key: 'category', label: 'Catégorie', icon: Layers, hint: 'Famille' },
 ];
 
 export default function CataloguePage() {
@@ -169,32 +171,68 @@ export default function CataloguePage() {
         <div className="space-y-3">
             <div className="flex flex-wrap items-end justify-between gap-2">
                 <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-none">Catalogue</h2>
-                {hasActiveFilters && (
-                    <button
-                        type="button"
-                        onClick={() => setFilters(emptyFilters)}
-                        className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 hover:text-brand-orange transition-colors"
-                    >
-                        Réinitialiser
-                    </button>
-                )}
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5">
-                {FILTER_FIELDS.map(({ key, label }) => (
-                    <label key={key} className="block min-w-0">
-                        <span className="block text-[9px] font-bold uppercase tracking-[0.1em] text-slate-400 dark:text-slate-500 mb-0.5 truncate">
-                            {label}
+            <div className="relative overflow-hidden rounded-xl border border-zinc-800/80 dark:border-zinc-700 bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-orange/70 to-transparent" />
+                <div className="absolute -left-8 top-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-brand-orange/10 blur-2xl pointer-events-none" />
+                <div className="absolute -right-6 top-0 w-20 h-20 rounded-full bg-orange-500/10 blur-2xl pointer-events-none" />
+
+                <div className="relative flex items-center justify-between gap-2 px-2.5 pt-1.5 pb-1 border-b border-white/5">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-md bg-brand-orange/20 text-brand-orange ring-1 ring-brand-orange/30">
+                            <Search className="w-3 h-3" strokeWidth={2.5} />
                         </span>
-                        <input
-                            type="text"
-                            value={filters[key]}
-                            onChange={(e) => setFilters((f) => ({ ...f, [key]: e.target.value }))}
-                            placeholder={label}
-                            className="w-full h-7 rounded-md border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800/80 px-2 text-[11px] text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-orange/50 focus:border-brand-orange"
-                        />
-                    </label>
-                ))}
+                        <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-orange-200/90 truncate">
+                            Recherche pièces
+                        </span>
+                    </div>
+                    {hasActiveFilters && (
+                        <button
+                            type="button"
+                            onClick={() => setFilters(emptyFilters)}
+                            className="inline-flex items-center gap-1 shrink-0 rounded-md px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-zinc-400 hover:text-brand-orange hover:bg-white/5 transition-colors"
+                        >
+                            <RotateCcw className="w-3 h-3" />
+                            Reset
+                        </button>
+                    )}
+                </div>
+
+                <div className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 p-2">
+                    {FILTER_FIELDS.map(({ key, label, icon: Icon, hint }) => {
+                        const active = String(filters[key] || '').trim() !== '';
+                        return (
+                            <label
+                                key={key}
+                                className={`group relative block min-w-0 rounded-lg border transition-all duration-200 ${
+                                    active
+                                        ? 'border-brand-orange/50 bg-brand-orange/10 shadow-[inset_0_0_0_1px_rgba(249,115,22,0.15)]'
+                                        : 'border-white/10 bg-black/35 hover:border-orange-400/35 hover:bg-black/45'
+                                }`}
+                            >
+                                <span className="flex items-center gap-1 px-1.5 pt-1">
+                                    <Icon
+                                        className={`w-3 h-3 shrink-0 ${active ? 'text-brand-orange' : 'text-zinc-500 group-hover:text-orange-300'}`}
+                                        strokeWidth={2.25}
+                                    />
+                                    <span className={`text-[9px] font-bold uppercase tracking-[0.12em] truncate ${
+                                        active ? 'text-brand-orange' : 'text-zinc-400 group-hover:text-zinc-200'
+                                    }`}>
+                                        {label}
+                                    </span>
+                                </span>
+                                <input
+                                    type="text"
+                                    value={filters[key]}
+                                    onChange={(e) => setFilters((f) => ({ ...f, [key]: e.target.value }))}
+                                    placeholder={hint}
+                                    className="w-full h-6 bg-transparent border-0 px-1.5 pb-1 pt-0 text-[11px] font-semibold tracking-wide text-white placeholder:text-zinc-600 focus:outline-none focus:ring-0"
+                                />
+                            </label>
+                        );
+                    })}
+                </div>
             </div>
 
             {error && !modalOpen && (
