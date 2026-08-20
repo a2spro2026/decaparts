@@ -97,7 +97,7 @@ class CatalogProductApiController extends Controller
             'brand' => $item->brand,
             'description' => $item->description,
             'price' => $item->price !== null ? number_format((float) $item->price, 2, '.', '') : null,
-            'photo_url' => $item->photo_path ? asset('storage/'.$item->photo_path) : null,
+            'photo_url' => $item->photo_path ? '/storage/'.$item->photo_path : null,
         ];
     }
 }

@@ -252,7 +252,7 @@ class SupplierInvoiceApiController extends Controller
             'invoice_date' => $i->invoice_date?->format('d/m/Y'),
             'invoice_date_raw' => $i->invoice_date?->format('Y-m-d'),
             'payment_mode' => $i->payment_mode,
-            'photo_url' => $i->photo_path ? asset('storage/'.$i->photo_path) : null,
+            'photo_url' => $i->photo_path ? '/storage/'.$i->photo_path : null,
             'supplier_id' => $i->supplier_id,
             'fournisseur' => $i->supplier?->name ?? '—',
             'depot' => $i->depot,
