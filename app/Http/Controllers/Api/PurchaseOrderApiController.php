@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\PurchaseOrder;
 use App\Models\Supplier;
 use App\Models\SupplierPayment;
@@ -366,8 +367,9 @@ class PurchaseOrderApiController extends Controller
     {
         $order->items()->delete();
         foreach ($items as $item) {
+            $productId = $this->resolveOrCreateProduct($item);
             $order->items()->create([
-                'product_id' => $item['product_id'],
+                'product_id' => $productId,
                 'article_ref' => $item['article_ref'],
                 'barcode' => $item['barcode'] ?? null,
                 'category' => $item['category'] ?? null,
@@ -379,6 +381,60 @@ class PurchaseOrderApiController extends Controller
                 'total' => $item['total'],
             ]);
         }
+    }
+
+    private function resolveOrCreateProduct(array $item): ?int
+    {
+        if (! empty($item['product_id'])) {
+            return (int) $item['product_id'];
+        }
+
+        $ref = trim((string) ($item['article_ref'] ?? ''));
+        $name = trim((string) ($item['description'] ?? ''));
+        if ($ref === '' && $name === '') {
+            return null;
+        }
+
+        $product = null;
+        if ($ref !== '') {
+            $product = Product::query()
+                ->where(function ($q) use ($ref) {
+                    $q->where('article_id', $ref)->orWhere('reference', $ref);
+                })
+                ->first();
+        }
+
+        if ($product) {
+            return $product->id;
+        }
+
+        $allowedUnits = ['Kg', 'U', 'Sac', 'ML', 'M²', 'M³', 'Tn', 'M'];
+        $unit = trim((string) ($item['unit'] ?? ''));
+        if (! in_array($unit, $allowedUnits, true)) {
+            $unit = 'U';
+        }
+
+        $product = Product::create([
+            'reference' => $ref !== '' ? $ref : 'Réf-PENDING',
+            'article_id' => $ref !== '' ? $ref : null,
+            'name' => $name !== '' ? $name : ($ref !== '' ? $ref : 'Article'),
+            'unit' => $unit,
+            'famille' => $item['category'] ?? null,
+            'initial_stock' => 0,
+            'quantity_in_stock' => 0,
+            'min_stock_alert' => 0,
+            'status' => 'actif',
+            'etat' => 'Dispo',
+            'origin' => 'bon_achat',
+        ]);
+
+        if ($ref === '') {
+            $product->update([
+                'reference' => 'Réf-'.str_pad((string) $product->id, 4, '0', STR_PAD_LEFT),
+            ]);
+        }
+
+        return $product->id;
     }
 
     private function nextReference(): string

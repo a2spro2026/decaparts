@@ -61,6 +61,7 @@ class ProductApiController extends Controller
                 'quantity_in_stock' => $initialStock,
                 'min_stock_alert' => $validated['min_stock_alert'] ?? 0,
                 'etat' => $validated['etat'] ?? 'Rupture',
+                'origin' => 'saisie',
             ]);
 
             if ($reference === '') {
@@ -253,6 +254,7 @@ class ProductApiController extends Controller
             'consistance' => $product->consistance,
             'unit' => $product->unit,
             'famille' => $product->famille,
+            'brand' => $product->brand,
             'initial_stock' => (float) $product->initial_stock,
             'stock_initial' => (float) $product->initial_stock,
             'purchased_qty' => $purchased,
@@ -263,7 +265,19 @@ class ProductApiController extends Controller
             'status' => $product->status,
             'statut' => $product->status === 'actif' ? 'Actif' : 'Inactif',
             'etat' => $etat,
+            'origin' => $this->resolveOrigin($product, $purchased),
+            'origin_label' => $this->resolveOrigin($product, $purchased) === 'bon_achat' ? 'Bon d\'achat' : 'Saisie',
             'created_at' => $product->created_at?->format('d/m/Y'),
         ];
+    }
+
+    private function resolveOrigin(Product $product, float $purchased): string
+    {
+        $origin = (string) ($product->origin ?? '');
+        if (in_array($origin, ['bon_achat', 'saisie'], true)) {
+            return $origin;
+        }
+
+        return $purchased > 0 ? 'bon_achat' : 'saisie';
     }
 }

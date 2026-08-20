@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CatalogProductApiController;
 use App\Http\Controllers\Api\ChargeApiController;
 use App\Http\Controllers\Api\ChantierApiController;
 use App\Http\Controllers\Api\ChauffeurApiController;
@@ -54,6 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('quotes/{quote}/validate', [QuoteApiController::class, 'validateQuote']);
     Route::apiResource('suppliers', SupplierApiController::class);
     Route::apiResource('products', ProductApiController::class);
+    Route::apiResource('catalog-products', CatalogProductApiController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::get('stock-mouvements', [StockMouvementApiController::class, 'index']);
     Route::get('purchase-orders/balance', [PurchaseOrderApiController::class, 'balance']);
     Route::get('purchase-orders/balance-clients', [PurchaseOrderApiController::class, 'balanceClients']);

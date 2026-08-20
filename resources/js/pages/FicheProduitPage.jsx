@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Save, RotateCcw, Eye, Pencil, Trash2, Printer, FileText, X, RefreshCw } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Save, RotateCcw, Eye, Pencil, Trash2, Printer, FileText, X, RefreshCw, LayoutGrid } from 'lucide-react';
 import api from '../lib/api';
 
 const UNIT_OPTIONS = ['', 'Kg', 'U', 'Sac', 'ML', 'M²', 'M³', 'Tn', 'M'];
@@ -147,13 +148,14 @@ function ViewModal({ row, onClose }) {
                         ['Qté achats', row.purchased_qty ?? 0],
                         ['Qté ventes', row.sold_qty ?? 0],
                         ['Stock Actuel', row.stock_actuel ?? row.quantity_in_stock ?? 0],
+                        ['Origine', row.origin_label],
                         ['Statut', row.statut],
                         ['État', row.etat],
                     ].map(([label, val]) => (
                         <div key={label} className="flex justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-2">
                             <span className="text-slate-500 text-xs uppercase">{label}</span>
                             <span className="font-medium text-slate-800 dark:text-white text-right">
-                                {label === 'Statut' ? <StatutBadge value={val} /> : label === 'État' ? <EtatBadge value={val} /> : (val === 0 ? '0' : val || '—')}
+                                {label === 'Statut' ? <StatutBadge value={val} /> : label === 'État' ? <EtatBadge value={val} /> : label === 'Origine' ? <OriginBadge value={val} /> : (val === 0 ? '0' : val || '—')}
                             </span>
                         </div>
                     ))}
@@ -163,7 +165,21 @@ function ViewModal({ row, onClose }) {
     );
 }
 
+function OriginBadge({ value }) {
+    const isBon = value === 'Bon d\'achat' || value === 'bon_achat';
+    return (
+        <span className={`inline-flex px-2 py-0.5 rounded-md text-xs font-semibold ${
+            isBon
+                ? 'bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300'
+                : 'bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300'
+        }`}>
+            {isBon ? 'Bon d\'achat' : 'Saisie'}
+        </span>
+    );
+}
+
 export default function FicheProduitPage() {
+    const navigate = useNavigate();
     const [form, setForm] = useState(emptyForm);
     const [rows, setRows] = useState([]);
     const [familles, setFamilles] = useState([]);
@@ -338,6 +354,10 @@ export default function FicheProduitPage() {
                         <RotateCcw className="w-4 h-4" />
                         Nouveau
                     </button>
+                    <button type="button" onClick={() => navigate('/stock/catalogue')} className="btn-secondary text-sm">
+                        <LayoutGrid className="w-4 h-4" />
+                        Catalogue
+                    </button>
                     <button type="button" onClick={load} disabled={loading} className="btn-secondary text-sm" title="Actualiser">
                         <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
                         Actualiser
@@ -358,7 +378,7 @@ export default function FicheProduitPage() {
                     <table className="w-full text-sm min-w-[1100px] border-collapse">
                         <thead className="sticky top-0 z-10">
                             <tr className="border-b border-slate-200 dark:border-slate-700">
-                                {['Réf', 'Désignation', 'Unité', 'Qté', 'Stock Actuel', 'Famille', 'Statut', 'État', 'Actions'].map((h) => (
+                                {['Réf', 'Désignation', 'Unité', 'Qté', 'Stock Actuel', 'Famille', 'Origine', 'Statut', 'État', 'Actions'].map((h) => (
                                     <th
                                         key={h}
                                         className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center bg-slate-50 dark:bg-slate-800 shadow-[0_1px_0_0_rgba(226,232,240,1)] dark:shadow-[0_1px_0_0_rgba(51,65,85,1)]"
@@ -371,7 +391,7 @@ export default function FicheProduitPage() {
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {loading ? (
                                 [...Array(5)].map((_, i) => (
-                                    <tr key={i}>{[...Array(9)].map((__, j) => (
+                                    <tr key={i}>{[...Array(10)].map((__, j) => (
                                         <td key={j} className="px-4 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
                                     ))}</tr>
                                 ))
@@ -393,6 +413,7 @@ export default function FicheProduitPage() {
                                         <td className="px-4 py-2.5 text-center">
                                             <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 max-w-[160px] truncate" title={row.famille}>{row.famille || '—'}</span>
                                         </td>
+                                        <td className="px-4 py-2.5 text-center"><OriginBadge value={row.origin_label || row.origin} /></td>
                                         <td className="px-4 py-2.5 text-center"><StatutBadge value={row.statut} /></td>
                                         <td className="px-4 py-2.5 text-center"><EtatBadge value={row.etat} /></td>
                                         <td className="px-4 py-2.5">
@@ -407,7 +428,7 @@ export default function FicheProduitPage() {
                                     </tr>
                                 ))
                             ) : (
-                                <tr><td colSpan={9} className="px-4 py-12 text-center text-slate-400">Aucun produit enregistré</td></tr>
+                                <tr><td colSpan={10} className="px-4 py-12 text-center text-slate-400">Aucun produit enregistré</td></tr>
                             )}
                         </tbody>
                     </table>

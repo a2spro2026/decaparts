@@ -6,7 +6,7 @@ import { useChauffeurs } from '../hooks/useChauffeurs';
 
 const UNIT_OPTIONS = ['', 'Kg', 'U', 'Sac', 'ML', 'M²', 'M³', 'Tn', 'M'];
 const REGLEMENT_OPTIONS = ['', 'Esp', 'Chq', 'Eff', 'Vir', 'Vers'];
-const ECHEANCE_OPTIONS = ['', '45 Jrs', '60 Jrs', '90 Jrs', '120 Jrs'];
+const ECHEANCE_OPTIONS = ['', 'A vue', '45 Jrs', '60 Jrs', '90 Jrs', '120 Jrs'];
 
 const emptyHeader = {
     supplier_id: '',
@@ -105,7 +105,7 @@ th{background:#f8fafc;font-weight:700}.badge{background:#fff7ed;color:#ea580c;pa
 <h1>DECAPARTS — Bon d'Achat <span class="badge">${row.reference}</span></h1>
 <table>
 <tr><th>Date</th><td>${row.order_date || '—'}</td><th>Fournisseur</th><td>${row.fournisseur || '—'}</td></tr>
-<tr><th>N° Frns</th><td>${row.bc_number || '—'}</td><th>Client Livré</th><td>${row.client_livre || '—'}</td></tr>
+<tr><th>N° Bn Frns</th><td>${row.bc_number || '—'}</td><th>Client Livré</th><td>${row.client_livre || '—'}</td></tr>
 <tr><th>Ville Livraison</th><td>${row.city || '—'}</td><th>Type Rég / Échéance</th><td>${row.reglement || '—'} / ${row.echeance || '—'}</td></tr>
 <tr><th>Chauffeur</th><td>${row.chauffeur || '—'}</td><th>Matricule</th><td>${row.matricule || '—'}</td></tr>
 </table>
@@ -435,7 +435,7 @@ export default function BonAchatsPage() {
         const payload = {
             supplier_id: form.supplier_id,
             order_date: form.order_date || new Date().toISOString().slice(0, 10),
-            city: form.city || null,
+            city: null,
             client_livre: null,
             reglement: form.reglement || null,
             echeance: form.echeance || null,
@@ -511,14 +511,14 @@ export default function BonAchatsPage() {
                                             {suppliers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
                                         </select>
                                     </Field>
-                                    <Field label="N° Frns">
-                                        <input type="text" value={form.bc_number} onChange={(e) => set('bc_number', e.target.value)} placeholder="N° Frns" className={inputClass} />
+                                    <Field label="N° Bn Frns">
+                                        <input type="text" value={form.bc_number} onChange={(e) => set('bc_number', e.target.value)} placeholder="N° Bn Frns" className={inputClass} />
                                     </Field>
                                     <Field label="Client Livré">
                                         <input type="text" disabled value="" placeholder="—" className={disabledClass} title="Section à venir" />
                                     </Field>
                                     <Field label="Ville Livraison">
-                                        <input type="text" value={form.city} onChange={(e) => set('city', e.target.value)} placeholder="Ville" className={inputClass} />
+                                        <input type="text" disabled value="" placeholder="—" className={disabledClass} title="Section à venir" />
                                     </Field>
                                     <Field label="Type Rég">
                                         <select value={form.reglement} onChange={(e) => set('reglement', e.target.value)} className={inputClass}>
@@ -706,7 +706,7 @@ export default function BonAchatsPage() {
                     <table className="w-full text-sm min-w-[1100px]">
                         <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                                {['Date', 'N° B-A', 'Fournisseur', 'N° Frns', 'Client Livré', 'Ville', 'Qté totale', 'Total', 'Échéance', 'Actions'].map((h) => (
+                                {['Date', 'N° B-A', 'Fournisseur', 'N° Bn Frns', 'Client Livré', 'Ville', 'Qté totale', 'Total', 'Échéance', 'Actions'].map((h) => (
                                     <th key={h} className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
                                 ))}
                             </tr>

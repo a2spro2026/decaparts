@@ -10,6 +10,7 @@ import ReglementFournisseurPage from './pages/ReglementFournisseurPage';
 import ReglementClientPage from './pages/ReglementClientPage';
 import ReglementFactureVentePage from './pages/ReglementFactureVentePage';
 import FicheProduitPage from './pages/FicheProduitPage';
+import CataloguePage from './pages/CataloguePage';
 import StockMouvementsPage from './pages/StockMouvementsPage';
 import GenericListPage from './pages/GenericListPage';
 import ModulePage from './pages/ModulePage';
@@ -88,6 +89,7 @@ function AppRoutes() {
 
                 {/* Stock */}
                 <Route path="stock/produits" element={<FicheProduitPage />} />
+                <Route path="stock/catalogue" element={<CataloguePage />} />
                 <Route path="stock/mouvements" element={<StockMouvementsPage />} />
                 <Route path="stock/fiscal" element={<Navigate to="/facturation/stock-fiscal" replace />} />
 

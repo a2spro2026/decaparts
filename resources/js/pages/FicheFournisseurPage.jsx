@@ -13,6 +13,7 @@ const REGLEMENT_OPTIONS = [
 
 const ECHEANCE_OPTIONS = [
     { value: '', label: '—' },
+    { value: 'A vue', label: 'A vue' },
     { value: '45 Jrs', label: '45 Jrs' },
     { value: '60 Jrs', label: '60 Jrs' },
     { value: '90 Jrs', label: '90 Jrs' },

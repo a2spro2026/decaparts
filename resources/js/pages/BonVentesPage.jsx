@@ -6,7 +6,7 @@ import { useChauffeurs } from '../hooks/useChauffeurs';
 
 const UNIT_OPTIONS = ['', 'Kg', 'U', 'Sac', 'ML', 'M²', 'M³', 'Tn', 'M'];
 const REGLEMENT_OPTIONS = ['', 'Esp', 'Chq', 'Eff', 'Vir', 'Vers'];
-const ECHEANCE_OPTIONS = ['', '45 Jrs', '60 Jrs', '90 Jrs', '120 Jrs'];
+const ECHEANCE_OPTIONS = ['', 'A vue', '45 Jrs', '60 Jrs', '90 Jrs', '120 Jrs'];
 
 const emptyHeader = {
     client_id: '',
