@@ -193,9 +193,9 @@ export default function CataloguePage() {
                                         </p>
                                     )}
                                     <p className="text-xs font-semibold tabular-nums text-slate-700 dark:text-slate-200">
-                                        Qté :{' '}
-                                        <span className={Number(item.quantity) <= 0 ? 'text-red-600 dark:text-red-400' : 'text-brand-navy dark:text-orange-400'}>
-                                            {Number(item.quantity ?? 0).toLocaleString('fr-FR', { maximumFractionDigits: 3 })}
+                                        Stock :{' '}
+                                        <span className={Number(item.stock_actuel) <= 0 ? 'text-red-600 dark:text-red-400' : 'text-brand-navy dark:text-orange-400'}>
+                                            {Number(item.stock_actuel ?? 0).toLocaleString('fr-FR', { maximumFractionDigits: 3 })}
                                         </span>
                                         {item.unit ? ` ${item.unit}` : ''}
                                     </p>

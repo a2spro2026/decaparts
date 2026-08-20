@@ -135,8 +135,10 @@ class ProductApiController extends Controller
         $stock = $this->stockCalculator->forProduct($product, sync: true);
         $purchased = $stock['purchased'];
         $sold = $stock['sold'];
+        $quantity = $stock['quantity'];
         $stockActuel = $stock['stock_actuel'];
         $etat = $stock['etat'];
+        $origin = $stock['origin'];
 
         return [
             'id' => $product->id,
@@ -150,6 +152,7 @@ class ProductApiController extends Controller
             'brand' => $product->brand,
             'initial_stock' => (float) $product->initial_stock,
             'stock_initial' => (float) $product->initial_stock,
+            'quantity' => $quantity,
             'purchased_qty' => $purchased,
             'sold_qty' => $sold,
             'stock_actuel' => $stockActuel,
@@ -158,19 +161,9 @@ class ProductApiController extends Controller
             'status' => $product->status,
             'statut' => $product->status === 'actif' ? 'Actif' : 'Inactif',
             'etat' => $etat,
-            'origin' => $this->resolveOrigin($product, $purchased),
-            'origin_label' => $this->resolveOrigin($product, $purchased) === 'bon_achat' ? 'Bon d\'achat' : 'Saisie',
+            'origin' => $origin,
+            'origin_label' => $origin === 'bon_achat' ? 'Bon d\'achat' : 'Saisie',
             'created_at' => $product->created_at?->format('d/m/Y'),
         ];
-    }
-
-    private function resolveOrigin(Product $product, float $purchased): string
-    {
-        $origin = (string) ($product->origin ?? '');
-        if (in_array($origin, ['bon_achat', 'saisie'], true)) {
-            return $origin;
-        }
-
-        return $purchased > 0 ? 'bon_achat' : 'saisie';
     }
 }

@@ -90,10 +90,9 @@ th{background:#f8fafc;font-weight:700;width:160px}
 <tr><th>Désignation</th><td>${row.name || '—'}</td></tr>
 <tr><th>Unité</th><td>${row.unit || '—'}</td></tr>
 <tr><th>Famille</th><td>${row.famille || '—'}</td></tr>
-<tr><th>Qté saisie</th><td>${row.initial_stock ?? 0}</td></tr>
-<tr><th>Qté achats</th><td>${row.purchased_qty ?? 0}</td></tr>
-<tr><th>Qté ventes</th><td>${row.sold_qty ?? 0}</td></tr>
-<tr><th>Stock Actuel</th><td>${row.stock_actuel ?? row.quantity_in_stock ?? 0}</td></tr>
+<tr><th>Qté</th><td>${row.quantity ?? row.initial_stock ?? 0}</td></tr>
+<tr><th>Qté vendue</th><td>${row.sold_qty ?? 0}</td></tr>
+<tr><th>Stock</th><td>${row.stock_actuel ?? row.quantity_in_stock ?? 0}</td></tr>
 <tr><th>Statut</th><td>${row.statut || '—'}</td></tr>
 <tr><th>État</th><td>${row.etat || '—'}</td></tr>
 </table></body></html>`;
@@ -144,10 +143,9 @@ function ViewModal({ row, onClose }) {
                         ['Désignation', row.name],
                         ['Unité', row.unit],
                         ['Famille', row.famille],
-                        ['Qté saisie', row.initial_stock ?? 0],
-                        ['Qté achats', row.purchased_qty ?? 0],
-                        ['Qté ventes', row.sold_qty ?? 0],
-                        ['Stock Actuel', row.stock_actuel ?? row.quantity_in_stock ?? 0],
+                        ['Qté', row.quantity ?? row.initial_stock ?? 0],
+                        ['Qté vendue', row.sold_qty ?? 0],
+                        ['Stock', row.stock_actuel ?? row.quantity_in_stock ?? 0],
                         ['Origine', row.origin_label],
                         ['Statut', row.statut],
                         ['État', row.etat],
@@ -378,7 +376,7 @@ export default function FicheProduitPage() {
                     <table className="w-full text-sm min-w-[1100px] border-collapse">
                         <thead className="sticky top-0 z-10">
                             <tr className="border-b border-slate-200 dark:border-slate-700">
-                                {['Réf', 'Désignation', 'Unité', 'Qté', 'Famille', 'Origine', 'Statut', 'État', 'Actions'].map((h) => (
+                                {['Réf', 'Désignation', 'Unité', 'Qté', 'Qté Vendue', 'Stock', 'Famille', 'Origine', 'Statut', 'État', 'Actions'].map((h) => (
                                     <th
                                         key={h}
                                         className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center bg-slate-50 dark:bg-slate-800 shadow-[0_1px_0_0_rgba(226,232,240,1)] dark:shadow-[0_1px_0_0_rgba(51,65,85,1)]"
@@ -391,7 +389,7 @@ export default function FicheProduitPage() {
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {loading ? (
                                 [...Array(5)].map((_, i) => (
-                                    <tr key={i}>{[...Array(9)].map((__, j) => (
+                                    <tr key={i}>{[...Array(11)].map((__, j) => (
                                         <td key={j} className="px-4 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
                                     ))}</tr>
                                 ))
@@ -401,9 +399,15 @@ export default function FicheProduitPage() {
                                         <td className="px-4 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-emerald-400">{row.reference}</td>
                                         <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white max-w-[200px] truncate" title={row.name}>{row.name || '—'}</td>
                                         <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.unit || '—'}</td>
+                                        <td className="px-4 py-2.5 text-center tabular-nums text-slate-700 dark:text-slate-200">
+                                            {Number(row.quantity ?? row.initial_stock ?? 0).toLocaleString('fr-FR', { maximumFractionDigits: 3 })}
+                                        </td>
+                                        <td className="px-4 py-2.5 text-center tabular-nums text-slate-600 dark:text-slate-300">
+                                            {Number(row.sold_qty ?? 0).toLocaleString('fr-FR', { maximumFractionDigits: 3 })}
+                                        </td>
                                         <td
                                             className="px-4 py-2.5 text-center tabular-nums font-semibold text-brand-navy dark:text-emerald-400"
-                                            title={`Achats : ${Number(row.purchased_qty ?? 0).toLocaleString('fr-FR')} − Ventes : ${Number(row.sold_qty ?? 0).toLocaleString('fr-FR')}`}
+                                            title={`Qté − Qté vendue`}
                                         >
                                             {Number(row.stock_actuel ?? row.quantity_in_stock ?? 0).toLocaleString('fr-FR', { maximumFractionDigits: 3 })}
                                         </td>
@@ -425,7 +429,7 @@ export default function FicheProduitPage() {
                                     </tr>
                                 ))
                             ) : (
-                                <tr><td colSpan={9} className="px-4 py-12 text-center text-slate-400">Aucun produit enregistré</td></tr>
+                                <tr><td colSpan={11} className="px-4 py-12 text-center text-slate-400">Aucun produit enregistré</td></tr>
                             )}
                         </tbody>
                     </table>

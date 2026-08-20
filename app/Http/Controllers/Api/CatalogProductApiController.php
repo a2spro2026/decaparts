@@ -103,7 +103,8 @@ class CatalogProductApiController extends Controller
             'price' => $item->price !== null ? number_format((float) $item->price, 2, '.', '') : null,
             'photo_url' => $item->photo_path ? '/storage/'.$item->photo_path : null,
             'unit' => $product?->unit,
-            'quantity' => $stock ? $stock['stock_actuel'] : 0,
+            'quantity' => $stock ? $stock['quantity'] : 0,
+            'sold_qty' => $stock ? $stock['sold'] : 0,
             'stock_actuel' => $stock ? $stock['stock_actuel'] : 0,
             'etat' => $stock['etat'] ?? null,
         ];

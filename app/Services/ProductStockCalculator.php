@@ -13,13 +13,22 @@ class ProductStockCalculator
     private ?array $soldCache = null;
 
     /**
-     * @return array{purchased: float, sold: float, stock_actuel: float, etat: string}
+     * @return array{
+     *     purchased: float,
+     *     sold: float,
+     *     quantity: float,
+     *     stock_actuel: float,
+     *     etat: string,
+     *     origin: string
+     * }
      */
     public function forProduct(Product $product, bool $sync = false): array
     {
         $purchased = $this->purchasedFor($product);
         $sold = $this->soldFor($product);
-        $stockActuel = $purchased - $sold;
+        $origin = $this->resolveOrigin($product, $purchased);
+        $quantity = $origin === 'bon_achat' ? $purchased : (float) $product->initial_stock;
+        $stockActuel = $quantity - $sold;
         $etat = $product->etatLabel($stockActuel);
 
         if ($sync) {
@@ -38,9 +47,21 @@ class ProductStockCalculator
         return [
             'purchased' => $purchased,
             'sold' => $sold,
+            'quantity' => $quantity,
             'stock_actuel' => $stockActuel,
             'etat' => $etat,
+            'origin' => $origin,
         ];
+    }
+
+    private function resolveOrigin(Product $product, float $purchased): string
+    {
+        $origin = (string) ($product->origin ?? '');
+        if (in_array($origin, ['bon_achat', 'saisie'], true)) {
+            return $origin;
+        }
+
+        return $purchased > 0 ? 'bon_achat' : 'saisie';
     }
 
     private function purchasedFor(Product $product): float
