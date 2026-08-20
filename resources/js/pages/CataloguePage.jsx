@@ -169,11 +169,16 @@ export default function CataloguePage() {
                                             <ImagePlus className="w-12 h-12" />
                                         </div>
                                     )}
+                                    {item.description && (
+                                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent px-2.5 pt-8 pb-2">
+                                            <p className="text-[11px] leading-snug text-white/95 line-clamp-3">{item.description}</p>
+                                        </div>
+                                    )}
                                     <button
                                         type="button"
                                         title="Retirer"
                                         onClick={() => handleDelete(item)}
-                                        className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                                        className="absolute top-2 right-2 z-10 p-1.5 rounded-lg bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
                                     >
                                         <Trash2 className="w-3.5 h-3.5" />
                                     </button>
@@ -181,23 +186,21 @@ export default function CataloguePage() {
                                 <div className="p-3 space-y-1">
                                     <p className="text-[10px] font-mono font-semibold text-brand-orange">{item.reference || item.article_id}</p>
                                     <p className="text-sm font-bold text-slate-800 dark:text-white line-clamp-2">{item.name}</p>
-                                    {(item.brand || item.category) && (
-                                        <p className="text-[11px] text-slate-500 truncate">
-                                            {[item.brand, item.category].filter(Boolean).join(' · ')}
-                                        </p>
-                                    )}
-                                    <p className="text-xs font-semibold tabular-nums text-slate-700 dark:text-slate-200">
-                                        Stock :{' '}
-                                        <span className={Number(item.stock_actuel) <= 0 ? 'text-red-600 dark:text-red-400' : 'text-brand-navy dark:text-orange-400'}>
-                                            {Number(item.stock_actuel ?? 0).toLocaleString('fr-FR', { maximumFractionDigits: 3 })}
-                                        </span>
-                                        {item.unit ? ` ${item.unit}` : ''}
-                                    </p>
-                                    {item.price != null && item.price !== '' && (
+                                    <div className="flex items-end justify-between gap-2 pt-0.5">
                                         <p className="text-sm font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
-                                            {Number(item.price).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} MAD
+                                            {item.price != null && item.price !== ''
+                                                ? `${Number(item.price).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} MAD`
+                                                : '—'}
                                         </p>
-                                    )}
+                                        <p className={`text-[10px] font-semibold tabular-nums shrink-0 ${
+                                            Number(item.stock_actuel) <= 0
+                                                ? 'text-red-600 dark:text-red-400'
+                                                : 'text-slate-500 dark:text-slate-400'
+                                        }`}>
+                                            {Number(item.stock_actuel ?? 0).toLocaleString('fr-FR', { maximumFractionDigits: 3 })}
+                                            {item.unit ? ` ${item.unit}` : ''}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         )
