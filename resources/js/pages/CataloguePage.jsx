@@ -136,63 +136,63 @@ export default function CataloguePage() {
             )}
 
             {loading ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                    {[...Array(5)].map((_, i) => (
-                        <div key={i} className="aspect-[4/5] rounded-2xl bg-slate-200 dark:bg-slate-800 animate-pulse" />
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2.5">
+                    {[...Array(8)].map((_, i) => (
+                        <div key={i} className="aspect-[3/4] rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse" />
                     ))}
                 </div>
             ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2.5">
                     {cards.map((item) => (
                         item.isAdd ? (
                             <button
                                 key="add"
                                 type="button"
                                 onClick={openModal}
-                                className="aspect-[4/5] rounded-2xl border-2 border-dashed border-orange-300 dark:border-orange-700 bg-orange-50/50 dark:bg-orange-950/20 hover:bg-orange-100/70 dark:hover:bg-orange-900/30 transition-colors flex flex-col items-center justify-center gap-3 text-orange-600 dark:text-orange-400"
+                                className="aspect-[3/4] rounded-xl border-2 border-dashed border-orange-300 dark:border-orange-700 bg-orange-50/50 dark:bg-orange-950/20 hover:bg-orange-100/70 dark:hover:bg-orange-900/30 transition-colors flex flex-col items-center justify-center gap-2 text-orange-600 dark:text-orange-400"
                             >
-                                <span className="w-14 h-14 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-lg shadow-orange-500/30">
-                                    <Plus className="w-8 h-8" strokeWidth={2.5} />
+                                <span className="w-9 h-9 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-md shadow-orange-500/30">
+                                    <Plus className="w-5 h-5" strokeWidth={2.5} />
                                 </span>
-                                <span className="text-sm font-bold uppercase tracking-wide">Ajouter</span>
+                                <span className="text-[10px] font-bold uppercase tracking-wide">Ajouter</span>
                             </button>
                         ) : (
                             <div
                                 key={item.id}
-                                className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm flex flex-col"
+                                className="group relative aspect-[3/4] rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm flex flex-col"
                             >
                                 <div className="relative flex-1 bg-slate-100 dark:bg-slate-800">
                                     {item.photo_url ? (
                                         <img src={item.photo_url} alt={item.name} className="absolute inset-0 w-full h-full object-cover" />
                                     ) : (
                                         <div className="absolute inset-0 flex items-center justify-center text-slate-300">
-                                            <ImagePlus className="w-12 h-12" />
+                                            <ImagePlus className="w-7 h-7" />
                                         </div>
                                     )}
                                     {item.description && (
-                                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent px-2.5 pt-8 pb-2">
-                                            <p className="text-[11px] leading-snug text-white/95 line-clamp-3">{item.description}</p>
+                                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent px-1.5 pt-5 pb-1.5">
+                                            <p className="text-[9px] leading-snug text-white/95 line-clamp-2">{item.description}</p>
                                         </div>
                                     )}
                                     <button
                                         type="button"
                                         title="Retirer"
                                         onClick={() => handleDelete(item)}
-                                        className="absolute top-2 right-2 z-10 p-1.5 rounded-lg bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                                        className="absolute top-1.5 right-1.5 z-10 p-1 rounded-md bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
                                     >
-                                        <Trash2 className="w-3.5 h-3.5" />
+                                        <Trash2 className="w-3 h-3" />
                                     </button>
                                 </div>
-                                <div className="p-3 space-y-1">
-                                    <p className="text-[10px] font-mono font-semibold text-brand-orange">{item.reference || item.article_id}</p>
-                                    <p className="text-sm font-bold text-slate-800 dark:text-white line-clamp-2">{item.name}</p>
-                                    <div className="flex items-end justify-between gap-2 pt-0.5">
-                                        <p className="text-sm font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
+                                <div className="px-1.5 py-1.5 space-y-0.5">
+                                    <p className="text-[9px] font-mono font-semibold text-brand-orange truncate">{item.reference || item.article_id}</p>
+                                    <p className="text-[11px] font-bold text-slate-800 dark:text-white line-clamp-1 leading-tight">{item.name}</p>
+                                    <div className="flex items-end justify-between gap-1 pt-0.5">
+                                        <p className="text-[11px] font-bold tabular-nums text-emerald-600 dark:text-emerald-400 truncate">
                                             {item.price != null && item.price !== ''
                                                 ? `${Number(item.price).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} MAD`
                                                 : '—'}
                                         </p>
-                                        <p className={`text-[10px] font-semibold tabular-nums shrink-0 ${
+                                        <p className={`text-[9px] font-semibold tabular-nums shrink-0 ${
                                             Number(item.stock_actuel) <= 0
                                                 ? 'text-red-600 dark:text-red-400'
                                                 : 'text-slate-500 dark:text-slate-400'
