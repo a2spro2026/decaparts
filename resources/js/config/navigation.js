@@ -38,8 +38,7 @@ export const navigation = [
         label: 'Tableau de Bord',
         icon: LayoutDashboard,
         perm: 'dashboard.view',
-        to: '/',
-        locked: true,
+        to: '/dashboard',
     },
     {
         id: 'fournisseurs',
