@@ -80,7 +80,6 @@ export const navigation = [
         label: 'Client',
         icon: Users,
         perm: 'clients.view',
-        locked: true,
         children: [
             { to: '/clients/fiches', label: 'Fiche Client', icon: ContactRound },
             { to: '/clients/bons-de-vente', label: 'Bon de Vente', icon: ClipboardList },
@@ -109,7 +108,6 @@ export const navigation = [
         label: 'Suivi Monétaire',
         icon: Landmark,
         perm: 'reglements.view',
-        locked: true,
         children: [
             { to: '/monetaire/transactions', label: 'Transaction et Charges', icon: ArrowLeftRight },
             { to: '/monetaire/charges', label: 'Charge', icon: Wallet },
