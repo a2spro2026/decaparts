@@ -378,7 +378,7 @@ export default function FicheProduitPage() {
                     <table className="w-full text-sm min-w-[1100px] border-collapse">
                         <thead className="sticky top-0 z-10">
                             <tr className="border-b border-slate-200 dark:border-slate-700">
-                                {['Réf', 'Désignation', 'Unité', 'Qté', 'Stock Actuel', 'Famille', 'Origine', 'Statut', 'État', 'Actions'].map((h) => (
+                                {['Réf', 'Désignation', 'Unité', 'Qté', 'Famille', 'Origine', 'Statut', 'État', 'Actions'].map((h) => (
                                     <th
                                         key={h}
                                         className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center bg-slate-50 dark:bg-slate-800 shadow-[0_1px_0_0_rgba(226,232,240,1)] dark:shadow-[0_1px_0_0_rgba(51,65,85,1)]"
@@ -391,7 +391,7 @@ export default function FicheProduitPage() {
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {loading ? (
                                 [...Array(5)].map((_, i) => (
-                                    <tr key={i}>{[...Array(10)].map((__, j) => (
+                                    <tr key={i}>{[...Array(9)].map((__, j) => (
                                         <td key={j} className="px-4 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
                                     ))}</tr>
                                 ))
@@ -401,9 +401,6 @@ export default function FicheProduitPage() {
                                         <td className="px-4 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-emerald-400">{row.reference}</td>
                                         <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white max-w-[200px] truncate" title={row.name}>{row.name || '—'}</td>
                                         <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.unit || '—'}</td>
-                                        <td className="px-4 py-2.5 text-center tabular-nums text-slate-600 dark:text-slate-300">
-                                            {Number(row.initial_stock ?? 0).toLocaleString('fr-FR', { maximumFractionDigits: 3 })}
-                                        </td>
                                         <td
                                             className="px-4 py-2.5 text-center tabular-nums font-semibold text-brand-navy dark:text-emerald-400"
                                             title={`Achats : ${Number(row.purchased_qty ?? 0).toLocaleString('fr-FR')} − Ventes : ${Number(row.sold_qty ?? 0).toLocaleString('fr-FR')}`}
@@ -428,7 +425,7 @@ export default function FicheProduitPage() {
                                     </tr>
                                 ))
                             ) : (
-                                <tr><td colSpan={10} className="px-4 py-12 text-center text-slate-400">Aucun produit enregistré</td></tr>
+                                <tr><td colSpan={9} className="px-4 py-12 text-center text-slate-400">Aucun produit enregistré</td></tr>
                             )}
                         </tbody>
                     </table>
