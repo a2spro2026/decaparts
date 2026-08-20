@@ -128,7 +128,6 @@ export default function CataloguePage() {
         <div className="space-y-4">
             <div>
                 <h2 className="text-lg font-bold text-slate-900 dark:text-white">Catalogue</h2>
-                <p className="text-xs text-slate-500">Ajoutez un produit en important sa réf depuis la fiche produit</p>
             </div>
 
             {error && !modalOpen && (
