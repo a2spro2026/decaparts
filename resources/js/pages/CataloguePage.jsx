@@ -173,17 +173,15 @@ export default function CataloguePage() {
                 <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-none">Catalogue</h2>
             </div>
 
-            <div className="relative overflow-hidden rounded-xl border border-zinc-800/80 dark:border-zinc-700 bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-orange/70 to-transparent" />
-                <div className="absolute -left-8 top-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-brand-orange/10 blur-2xl pointer-events-none" />
-                <div className="absolute -right-6 top-0 w-20 h-20 rounded-full bg-orange-500/10 blur-2xl pointer-events-none" />
+            <div className="relative overflow-hidden rounded-xl border border-zinc-800 dark:border-zinc-700 bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-orange to-transparent" />
 
-                <div className="relative flex items-center justify-between gap-2 px-2.5 pt-1.5 pb-1 border-b border-white/5">
+                <div className="relative z-10 flex items-center justify-between gap-2 px-2.5 pt-1.5 pb-1 border-b border-white/10">
                     <div className="flex items-center gap-1.5 min-w-0">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-md bg-brand-orange/20 text-brand-orange ring-1 ring-brand-orange/30">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-md bg-brand-orange text-white">
                             <Search className="w-3 h-3" strokeWidth={2.5} />
                         </span>
-                        <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-orange-200/90 truncate">
+                        <span className="text-[11px] font-extrabold uppercase tracking-wide text-white truncate">
                             Recherche pièces
                         </span>
                     </div>
@@ -191,7 +189,7 @@ export default function CataloguePage() {
                         <button
                             type="button"
                             onClick={() => setFilters(emptyFilters)}
-                            className="inline-flex items-center gap-1 shrink-0 rounded-md px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-zinc-400 hover:text-brand-orange hover:bg-white/5 transition-colors"
+                            className="inline-flex items-center gap-1 shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-zinc-300 hover:text-brand-orange hover:bg-white/5 transition-colors"
                         >
                             <RotateCcw className="w-3 h-3" />
                             Reset
@@ -199,7 +197,7 @@ export default function CataloguePage() {
                     )}
                 </div>
 
-                <div className="relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 p-2">
+                <div className="relative z-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 p-2">
                     {FILTER_FIELDS.map(({ key, label, icon: Icon, hint }) => {
                         const active = String(filters[key] || '').trim() !== '';
                         return (
@@ -207,17 +205,17 @@ export default function CataloguePage() {
                                 key={key}
                                 className={`group relative block min-w-0 rounded-lg border transition-all duration-200 ${
                                     active
-                                        ? 'border-brand-orange/50 bg-brand-orange/10 shadow-[inset_0_0_0_1px_rgba(249,115,22,0.15)]'
-                                        : 'border-white/10 bg-black/35 hover:border-orange-400/35 hover:bg-black/45'
+                                        ? 'border-brand-orange bg-zinc-950'
+                                        : 'border-zinc-700 bg-zinc-950 hover:border-brand-orange/60'
                                 }`}
                             >
                                 <span className="flex items-center gap-1 px-1.5 pt-1">
                                     <Icon
-                                        className={`w-3 h-3 shrink-0 ${active ? 'text-brand-orange' : 'text-zinc-500 group-hover:text-orange-300'}`}
-                                        strokeWidth={2.25}
+                                        className={`w-3.5 h-3.5 shrink-0 ${active ? 'text-brand-orange' : 'text-orange-400'}`}
+                                        strokeWidth={2.5}
                                     />
-                                    <span className={`text-[9px] font-bold uppercase tracking-[0.12em] truncate ${
-                                        active ? 'text-brand-orange' : 'text-zinc-400 group-hover:text-zinc-200'
+                                    <span className={`text-[11px] font-extrabold uppercase tracking-wide truncate leading-none ${
+                                        active ? 'text-brand-orange' : 'text-white'
                                     }`}>
                                         {label}
                                     </span>
@@ -227,7 +225,7 @@ export default function CataloguePage() {
                                     value={filters[key]}
                                     onChange={(e) => setFilters((f) => ({ ...f, [key]: e.target.value }))}
                                     placeholder={hint}
-                                    className="w-full h-6 bg-transparent border-0 px-1.5 pb-1 pt-0 text-[11px] font-semibold tracking-wide text-white placeholder:text-zinc-600 focus:outline-none focus:ring-0"
+                                    className="w-full h-6 bg-transparent border-0 px-1.5 pb-1 pt-0 text-[11px] font-semibold tracking-wide text-white placeholder:text-zinc-500 focus:outline-none focus:ring-0"
                                 />
                             </label>
                         );
