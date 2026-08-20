@@ -20,7 +20,6 @@ import {
     Receipt,
     Wallet,
     // Stock
-    Boxes,
     ArrowLeftRight,
     Archive,
     LayoutGrid,
@@ -55,13 +54,18 @@ export const navigation = [
         ],
     },
     {
+        id: 'catalogue',
+        label: 'Catalogue',
+        icon: LayoutGrid,
+        perm: 'stock.view',
+        to: '/catalogue',
+    },
+    {
         id: 'stock',
         label: 'Stock',
         icon: Package,
         perm: 'stock.view',
         children: [
-            { to: '/stock/produits', label: 'Fiche Produit', icon: Boxes },
-            { to: '/stock/catalogue', label: 'Catalogue', icon: LayoutGrid },
             { to: '/stock/mouvements', label: 'Mouvement Stock', icon: ArrowLeftRight },
         ],
     },

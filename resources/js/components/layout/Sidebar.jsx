@@ -13,6 +13,7 @@ const sectionColors = {
     clients: 'from-orange-500/20 to-orange-700/10',
     facturation: 'from-amber-500/20 to-orange-600/10',
     stock: 'from-orange-400/15 to-amber-500/10',
+    catalogue: 'from-orange-500/20 to-amber-600/10',
     personnel: 'from-orange-500/15 to-zinc-600/10',
     monetaire: 'from-orange-600/20 to-amber-700/10',
     configuration: 'from-zinc-500/20 to-zinc-700/10',

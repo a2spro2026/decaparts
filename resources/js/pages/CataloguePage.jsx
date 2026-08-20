@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Search, Trash2, X, ImagePlus } from 'lucide-react';
+import { Plus, Search, Trash2, X, ImagePlus } from 'lucide-react';
 import api from '../lib/api';
 
 const emptyForm = {
@@ -14,7 +13,6 @@ const emptyForm = {
 };
 
 export default function CataloguePage() {
-    const navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -42,6 +40,35 @@ export default function CataloguePage() {
     }, []);
 
     useEffect(() => { load(); }, [load]);
+
+    const catalogByProductId = useMemo(() => {
+        const map = new Map();
+        items.forEach((item) => map.set(String(item.product_id), item));
+        return map;
+    }, [items]);
+
+    /** Tous les produits (fiche / bon d'achat) + infos catalogue si présentes */
+    const displayCards = useMemo(() => {
+        return products.map((p) => {
+            const cat = catalogByProductId.get(String(p.id));
+            return {
+                key: `product-${p.id}`,
+                product_id: p.id,
+                catalog_id: cat?.id ?? null,
+                reference: p.reference,
+                article_id: p.article_id,
+                name: p.name,
+                unit: p.unit || cat?.unit,
+                stock_actuel: p.stock_actuel ?? p.quantity_in_stock ?? cat?.stock_actuel ?? 0,
+                brand: cat?.brand || p.brand || null,
+                category: cat?.category || p.famille || null,
+                description: cat?.description || null,
+                price: cat?.price ?? null,
+                photo_url: cat?.photo_url || null,
+                origin_label: p.origin_label || null,
+            };
+        });
+    }, [products, catalogByProductId]);
 
     const catalogedIds = useMemo(
         () => new Set(items.map((i) => String(i.product_id))),
@@ -114,27 +141,26 @@ export default function CataloguePage() {
     };
 
     const handleDelete = async (item) => {
-        if (!window.confirm(`Retirer « ${item.name} » du catalogue ?`)) return;
+        if (!item.catalog_id) {
+            setError('Ce produit n\'a pas encore de fiche catalogue (photo / infos commerciales).');
+            return;
+        }
+        if (!window.confirm(`Retirer les infos catalogue de « ${item.name} » ?`)) return;
         try {
-            await api.delete(`/catalog-products/${item.id}`);
+            await api.delete(`/catalog-products/${item.catalog_id}`);
             load();
         } catch {
             setError('Suppression impossible');
         }
     };
 
-    const cards = [...items, { id: 'add', isAdd: true }];
+    const cards = [...displayCards, { key: 'add', isAdd: true }];
 
     return (
         <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-3">
-                <button type="button" onClick={() => navigate('/stock/produits')} className="btn-secondary text-sm">
-                    <ArrowLeft className="w-4 h-4" /> Fiche Produit
-                </button>
-                <div>
-                    <h2 className="text-lg font-bold text-slate-900 dark:text-white">Catalogue produits</h2>
-                    <p className="text-xs text-slate-500">Commercialisation des produits déjà en stock</p>
-                </div>
+            <div>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Catalogue</h2>
+                <p className="text-xs text-slate-500">Tous les produits (saisie / bon d&apos;achat) — enrichissez avec photo, marque et prix</p>
             </div>
 
             {error && !modalOpen && (
@@ -164,7 +190,7 @@ export default function CataloguePage() {
                             </button>
                         ) : (
                             <div
-                                key={item.id}
+                                key={item.key}
                                 className="group relative aspect-[4/5] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm flex flex-col"
                             >
                                 <div className="relative flex-1 bg-slate-100 dark:bg-slate-800">
@@ -175,21 +201,23 @@ export default function CataloguePage() {
                                             <ImagePlus className="w-12 h-12" />
                                         </div>
                                     )}
-                                    <button
-                                        type="button"
-                                        title="Retirer"
-                                        onClick={() => handleDelete(item)}
-                                        className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-                                    >
-                                        <Trash2 className="w-3.5 h-3.5" />
-                                    </button>
+                                    {item.catalog_id && (
+                                        <button
+                                            type="button"
+                                            title="Retirer les infos catalogue"
+                                            onClick={() => handleDelete(item)}
+                                            className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                                        >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                        </button>
+                                    )}
                                 </div>
                                 <div className="p-3 space-y-1">
                                     <p className="text-[10px] font-mono font-semibold text-brand-orange">{item.reference || item.article_id}</p>
                                     <p className="text-sm font-bold text-slate-800 dark:text-white line-clamp-2">{item.name}</p>
-                                    {(item.brand || item.category) && (
+                                    {(item.brand || item.category || item.origin_label) && (
                                         <p className="text-[11px] text-slate-500 truncate">
-                                            {[item.brand, item.category].filter(Boolean).join(' · ')}
+                                            {[item.brand, item.category, item.origin_label].filter(Boolean).join(' · ')}
                                         </p>
                                     )}
                                     <p className="text-xs font-semibold tabular-nums text-slate-700 dark:text-slate-200">
@@ -218,7 +246,7 @@ export default function CataloguePage() {
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="flex items-center justify-between px-5 py-3.5 bg-gradient-to-r from-zinc-950 to-orange-700 shrink-0">
-                            <h3 className="text-white font-bold text-sm uppercase tracking-wide">Ajouter au catalogue</h3>
+                            <h3 className="text-white font-bold text-sm uppercase tracking-wide">Enrichir le catalogue</h3>
                             <button type="button" onClick={closeModal} className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10">
                                 <X className="w-4 h-4" />
                             </button>
@@ -230,7 +258,7 @@ export default function CataloguePage() {
                             )}
 
                             <div>
-                                <label className="field-label">Produit en stock (réf / désignation)</label>
+                                <label className="field-label">Produit (réf / désignation)</label>
                                 <div className="relative">
                                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                                     <input
@@ -264,7 +292,7 @@ export default function CataloguePage() {
                                             <span className="text-slate-600 dark:text-slate-300"> — {p.name}</span>
                                         </button>
                                     )) : (
-                                        <p className="px-3 py-4 text-center text-xs text-slate-400">Aucun produit disponible</p>
+                                        <p className="px-3 py-4 text-center text-xs text-slate-400">Tous les produits ont déjà une fiche catalogue</p>
                                     )}
                                 </div>
                             </div>

@@ -9,7 +9,6 @@ import BonVentesPage from './pages/BonVentesPage';
 import ReglementFournisseurPage from './pages/ReglementFournisseurPage';
 import ReglementClientPage from './pages/ReglementClientPage';
 import ReglementFactureVentePage from './pages/ReglementFactureVentePage';
-import FicheProduitPage from './pages/FicheProduitPage';
 import CataloguePage from './pages/CataloguePage';
 import StockMouvementsPage from './pages/StockMouvementsPage';
 import GenericListPage from './pages/GenericListPage';
@@ -87,9 +86,12 @@ function AppRoutes() {
                 <Route path="facturation/balance" element={<ModulePage />} />
                 <Route path="fournisseurs/reglements-achats" element={<ReglementFournisseurPage />} />
 
+                {/* Catalogue */}
+                <Route path="catalogue" element={<CataloguePage />} />
+
                 {/* Stock */}
-                <Route path="stock/produits" element={<FicheProduitPage />} />
-                <Route path="stock/catalogue" element={<CataloguePage />} />
+                <Route path="stock/produits" element={<Navigate to="/catalogue" replace />} />
+                <Route path="stock/catalogue" element={<Navigate to="/catalogue" replace />} />
                 <Route path="stock/mouvements" element={<StockMouvementsPage />} />
                 <Route path="stock/fiscal" element={<Navigate to="/facturation/stock-fiscal" replace />} />
 
@@ -110,7 +112,7 @@ function AppRoutes() {
                 {/* Redirections anciennes routes */}
                 <Route path="chantiers/*" element={<Navigate to="/" replace />} />
                 <Route path="achats" element={<Navigate to="/fournisseurs/bons-achats" replace />} />
-                <Route path="stock" element={<Navigate to="/stock/produits" replace />} />
+                <Route path="stock" element={<Navigate to="/stock/mouvements" replace />} />
                 <Route path="fournisseurs" element={<Navigate to="/fournisseurs/fiches" replace />} />
                 <Route path="clients" element={<Navigate to="/clients/fiches" replace />} />
                 <Route path="personnel" element={<Navigate to="/personnel/fiches" replace />} />
