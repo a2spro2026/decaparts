@@ -14,8 +14,7 @@ function loadCart() {
     }
 }
 
-function toCartItem(item, quantity = 1) {
-    const qty = Math.max(0.001, Number(quantity) || 1);
+function toCartItem(item, quantity = '') {
     return {
         catalog_id: item.id,
         product_id: item.product_id || null,
@@ -26,7 +25,7 @@ function toCartItem(item, quantity = 1) {
         description: item.name || '',
         unit: item.unit || '',
         unit_price: item.price != null && item.price !== '' ? String(item.price) : '',
-        quantity: String(qty),
+        quantity: quantity === '' || quantity == null ? '' : String(quantity),
         photo_url: item.photo_url || null,
         name: item.name || '',
     };
@@ -43,17 +42,11 @@ export function CatalogueCartProvider({ children }) {
         }
     }, [items]);
 
-    const addItem = useCallback((catalogItem, quantity = 1) => {
+    const addItem = useCallback((catalogItem, quantity = '') => {
         setItems((prev) => {
             const id = catalogItem.id;
             const existing = prev.find((x) => x.catalog_id === id);
-            if (existing) {
-                return prev.map((x) =>
-                    x.catalog_id === id
-                        ? { ...x, quantity: String(Math.max(0.001, Number(x.quantity) || 1)) }
-                        : x,
-                );
-            }
+            if (existing) return prev;
             return [...prev, toCartItem(catalogItem, quantity)];
         });
     }, []);
@@ -64,7 +57,7 @@ export function CatalogueCartProvider({ children }) {
             if (prev.some((x) => x.catalog_id === id)) {
                 return prev.filter((x) => x.catalog_id !== id);
             }
-            return [...prev, toCartItem(catalogItem, 1)];
+            return [...prev, toCartItem(catalogItem, '')];
         });
     }, []);
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Search, Trash2, ImagePlus, Hash, Type, BadgeDollarSign, Award, Layers, RotateCcw,
@@ -30,6 +30,8 @@ export default function CataloguePage() {
     const [loading, setLoading] = useState(true);
     const [filters, setFilters] = useState(emptyFilters);
     const [error, setError] = useState('');
+    const [focusQtyId, setFocusQtyId] = useState(null);
+    const qtyRefs = useRef({});
 
     const load = useCallback(() => {
         setLoading(true);
@@ -40,6 +42,22 @@ export default function CataloguePage() {
     }, []);
 
     useEffect(() => { load(); }, [load]);
+
+    useEffect(() => {
+        if (focusQtyId == null) return;
+        const el = qtyRefs.current[focusQtyId];
+        if (el) {
+            el.focus();
+            el.select?.();
+        }
+        setFocusQtyId(null);
+    }, [focusQtyId, count]);
+
+    const handleCartClick = (item) => {
+        const already = isInCart(item.id);
+        toggleItem(item);
+        if (!already) setFocusQtyId(item.id);
+    };
 
     const handleDelete = async (item) => {
         if (!window.confirm(`Retirer « ${item.name} » du catalogue ?`)) return;
@@ -81,9 +99,37 @@ export default function CataloguePage() {
     };
 
     return (
-        <div className={`space-y-3 ${count ? 'pb-20' : ''}`}>
-            <div className="flex flex-wrap items-end justify-between gap-2">
-                <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-none">Catalogue</h2>
+        <div className="space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-none shrink-0">Catalogue</h2>
+
+                {count > 0 && (
+                    <div className="flex items-center gap-2 min-w-0 flex-1 sm:flex-initial sm:max-w-xl rounded-xl border border-brand-orange/40 bg-zinc-950 px-2.5 py-1.5 shadow-lg shadow-black/20">
+                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-brand-orange text-white shrink-0">
+                            <ShoppingCart className="w-3.5 h-3.5" />
+                        </span>
+                        <div className="min-w-0 flex-1">
+                            <p className="text-[11px] font-extrabold uppercase tracking-wide text-white truncate leading-tight">
+                                {count} pièce{count > 1 ? 's' : ''} sélectionnée{count > 1 ? 's' : ''}
+                            </p>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => clear()}
+                            className="text-[10px] font-bold uppercase tracking-wide text-zinc-400 hover:text-white px-1.5 py-1 rounded-md hover:bg-white/5 shrink-0"
+                        >
+                            Vider
+                        </button>
+                        <button
+                            type="button"
+                            onClick={goToBonVente}
+                            className="inline-flex items-center gap-1 rounded-lg bg-brand-orange hover:bg-orange-600 text-white text-[10px] font-bold uppercase tracking-wide px-2.5 py-1.5 shrink-0 transition-colors"
+                        >
+                            <FileSpreadsheet className="w-3 h-3" />
+                            Bon de Vente
+                        </button>
+                    </div>
+                )}
             </div>
 
             <div className="relative overflow-hidden rounded-xl border border-zinc-800 dark:border-zinc-700 bg-gradient-to-r from-zinc-950 via-zinc-900 to-zinc-950 shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
@@ -187,7 +233,7 @@ export default function CataloguePage() {
                                     <button
                                         type="button"
                                         title={selected ? 'Retirer du panier' : 'Ajouter au panier'}
-                                        onClick={() => toggleItem(item)}
+                                        onClick={() => handleCartClick(item)}
                                         className={`absolute top-1.5 left-1.5 z-10 p-1.5 rounded-lg transition-all ${
                                             selected
                                                 ? 'bg-brand-orange text-white shadow-lg shadow-orange-500/40'
@@ -210,13 +256,15 @@ export default function CataloguePage() {
                                         <div className="absolute bottom-1.5 left-1.5 right-1.5 z-10 flex items-center gap-1 rounded-md bg-black/70 backdrop-blur-sm px-1.5 py-1">
                                             <span className="text-[9px] font-bold uppercase text-orange-200 shrink-0">Qté</span>
                                             <input
+                                                ref={(el) => { qtyRefs.current[item.id] = el; }}
                                                 type="number"
                                                 min="0.001"
                                                 step="0.001"
                                                 value={qty}
+                                                placeholder="—"
                                                 onClick={(e) => e.stopPropagation()}
                                                 onChange={(e) => setQuantity(item.id, e.target.value)}
-                                                className="w-full h-6 rounded border-0 bg-white/95 text-center text-[11px] font-bold tabular-nums text-slate-900 focus:outline-none focus:ring-1 focus:ring-brand-orange"
+                                                className="w-full h-6 rounded border-0 bg-white/95 text-center text-[11px] font-bold tabular-nums text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-orange"
                                             />
                                         </div>
                                     )}
@@ -249,37 +297,6 @@ export default function CataloguePage() {
                     {items.length
                         ? 'Aucun résultat pour ces filtres'
                         : 'Aucune pièce catalogue — ajoutez-en via Config Catalogue'}
-                </div>
-            )}
-
-            {count > 0 && (
-                <div className="fixed bottom-4 left-1/2 z-40 -translate-x-1/2 w-[min(96vw,640px)]">
-                    <div className="flex items-center gap-2 rounded-2xl border border-brand-orange/40 bg-zinc-950/95 backdrop-blur-md px-3 py-2.5 shadow-2xl shadow-black/40">
-                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-brand-orange text-white shrink-0">
-                            <ShoppingCart className="w-4 h-4" />
-                        </span>
-                        <div className="min-w-0 flex-1">
-                            <p className="text-[11px] font-extrabold uppercase tracking-wide text-white truncate">
-                                {count} pièce{count > 1 ? 's' : ''} sélectionnée{count > 1 ? 's' : ''}
-                            </p>
-                            <p className="text-[10px] text-zinc-400 truncate">Qté modifiable — envoi vers Bon de Vente</p>
-                        </div>
-                        <button
-                            type="button"
-                            onClick={() => clear()}
-                            className="text-[10px] font-bold uppercase tracking-wide text-zinc-400 hover:text-white px-2 py-1.5 rounded-lg hover:bg-white/5"
-                        >
-                            Vider
-                        </button>
-                        <button
-                            type="button"
-                            onClick={goToBonVente}
-                            className="inline-flex items-center gap-1.5 rounded-xl bg-brand-orange hover:bg-orange-600 text-white text-[11px] font-bold uppercase tracking-wide px-3 py-2 shrink-0 transition-colors"
-                        >
-                            <FileSpreadsheet className="w-3.5 h-3.5" />
-                            Bon de Vente
-                        </button>
-                    </div>
                 </div>
             )}
         </div>

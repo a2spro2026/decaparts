@@ -44,7 +44,7 @@ function linesFromCatalogueCart(cartItems) {
         brand: item.brand || '',
         description: item.description || item.name || '',
         unit: item.unit || '',
-        quantity: item.quantity && String(item.quantity).trim() !== '' ? String(item.quantity) : '1',
+        quantity: item.quantity != null && String(item.quantity).trim() !== '' ? String(item.quantity) : '',
         unit_price: item.unit_price != null ? String(item.unit_price) : '',
     }));
 }
