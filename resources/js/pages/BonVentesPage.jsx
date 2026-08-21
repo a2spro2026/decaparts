@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle2, Plus, PlusCircle, XCircle, Eye, Pencil, Trash2, Printer, FileText, X, Package, Wallet } from 'lucide-react';
 import api from '../lib/api';
 import { useChauffeurs } from '../hooks/useChauffeurs';
+import { useCatalogueCart } from '../contexts/CatalogueCartContext';
 
 const UNIT_OPTIONS = ['', 'Kg', 'U', 'Sac', 'ML', 'M²', 'M³', 'Tn', 'M'];
 const REGLEMENT_OPTIONS = ['', 'Esp', 'Chq', 'Eff', 'Vir', 'Vers'];
@@ -31,6 +32,22 @@ const emptyLine = () => ({
     quantity: '1',
     unit_price: '',
 });
+
+function linesFromCatalogueCart(cartItems) {
+    if (!cartItems?.length) return [emptyLine()];
+    return cartItems.map((item, idx) => ({
+        key: `cart-${item.catalog_id}-${idx}`,
+        product_id: item.product_id || '',
+        article_ref: item.article_ref || '',
+        barcode: item.barcode || '',
+        category: item.category || '',
+        brand: item.brand || '',
+        description: item.description || item.name || '',
+        unit: item.unit || '',
+        quantity: item.quantity && String(item.quantity).trim() !== '' ? String(item.quantity) : '1',
+        unit_price: item.unit_price != null ? String(item.unit_price) : '',
+    }));
+}
 
 function findProductByRef(ref, products) {
     const q = ref.trim().toLowerCase();
@@ -234,6 +251,8 @@ function ViewModal({ row, onClose }) {
 
 export default function BonVentesPage() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { items: cartItems, clear: clearCart } = useCatalogueCart();
     const [form, setForm] = useState(emptyHeader);
     const [lines, setLines] = useState([emptyLine()]);
     const [rows, setRows] = useState([]);
@@ -334,15 +353,25 @@ export default function BonVentesPage() {
         }
     };
 
-    const handleNewBon = () => {
+    const handleNewBon = (fromCart = false) => {
         setForm({ ...emptyHeader, order_date: new Date().toISOString().slice(0, 10) });
-        setLines([emptyLine()]);
+        const source = fromCart ? cartItems : [];
+        setLines(linesFromCatalogueCart(source));
+        if (fromCart && source.length) clearCart();
         setEditingId(null);
         setError('');
         load();
         reloadChauffeurs();
         setFormOpen(true);
     };
+
+    useEffect(() => {
+        if (location.state?.openFromCatalogueCart) {
+            handleNewBon(true);
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- open once from catalogue cart navigation
+    }, [location.state?.openFromCatalogueCart]);
 
     const handleClose = () => {
         resetForm(false);
@@ -633,7 +662,7 @@ export default function BonVentesPage() {
             )}
 
             <div className="flex flex-wrap items-center gap-2.5">
-                <button type="button" onClick={handleNewBon} className="btn-primary">
+                <button type="button" onClick={() => handleNewBon(false)} className="btn-primary">
                     <Plus className="w-4 h-4" /> Nouveau
                 </button>
                 <button type="button" onClick={handleClose} className="btn-secondary">

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { CatalogueCartProvider } from './contexts/CatalogueCartContext';
 import Layout from './components/layout/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -132,7 +133,9 @@ export default function App() {
         <ThemeProvider>
             <AuthProvider>
                 <BrowserRouter basename="/app">
-                    <AppRoutes />
+                    <CatalogueCartProvider>
+                        <AppRoutes />
+                    </CatalogueCartProvider>
                 </BrowserRouter>
             </AuthProvider>
         </ThemeProvider>
