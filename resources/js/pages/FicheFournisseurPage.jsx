@@ -370,10 +370,22 @@ export default function FicheFournisseurPage() {
                 <div className="px-5 py-3.5 bg-gradient-to-r from-zinc-950 via-zinc-900 to-orange-800 border-b border-white/10">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Liste des fournisseurs</h3>
                 </div>
-                <ScrollableTable>
-                    <table className="w-full text-sm min-w-[960px]">
+
+                <div className="overflow-x-auto border-b border-slate-200 dark:border-slate-700">
+                    <table className="w-full text-sm min-w-[960px] table-fixed">
+                        <colgroup>
+                            <col className="w-[7%]" />
+                            <col className="w-[16%]" />
+                            <col className="w-[10%]" />
+                            <col className="w-[14%]" />
+                            <col className="w-[8%]" />
+                            <col className="w-[9%]" />
+                            <col className="w-[9%]" />
+                            <col className="w-[10%]" />
+                            <col className="w-[17%]" />
+                        </colgroup>
                         <thead>
-                            <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
+                            <tr className="bg-slate-50 dark:bg-slate-800/80">
                                 {['ID', 'Nom Fournisseur', 'Contact', 'Adresse', 'Ville', 'Règlement', 'Échéance', 'Solde Initial', 'Actions'].map((h) => (
                                     <th
                                         key={h}
@@ -384,6 +396,22 @@ export default function FicheFournisseurPage() {
                                 ))}
                             </tr>
                         </thead>
+                    </table>
+                </div>
+
+                <ScrollableTable maxHeight="min(360px, 48vh)">
+                    <table className="w-full text-sm min-w-[960px] table-fixed">
+                        <colgroup>
+                            <col className="w-[7%]" />
+                            <col className="w-[16%]" />
+                            <col className="w-[10%]" />
+                            <col className="w-[14%]" />
+                            <col className="w-[8%]" />
+                            <col className="w-[9%]" />
+                            <col className="w-[9%]" />
+                            <col className="w-[10%]" />
+                            <col className="w-[17%]" />
+                        </colgroup>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {loading ? (
                                 [...Array(3)].map((_, i) => (

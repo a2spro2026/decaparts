@@ -275,10 +275,10 @@ export default function FicheProduitPage() {
         : meta.next_ref;
 
     return (
-        <div className="flex flex-col flex-1 min-h-0 gap-4">
+        <div className="space-y-6">
             <ViewModal row={viewRow} onClose={() => setViewRow(null)} />
 
-            <form onSubmit={handleSubmit} className="shrink-0 glass-card p-4 lg:p-5 shadow-card border border-slate-200/60 dark:border-slate-700/60">
+            <form onSubmit={handleSubmit} className="glass-card p-4 lg:p-5 shadow-card border border-slate-200/60 dark:border-slate-700/60">
                 {error && (
                     <div className="mb-4 p-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm border border-red-100 dark:border-red-800">{error}</div>
                 )}
@@ -369,24 +369,56 @@ export default function FicheProduitPage() {
                 </div>
             </form>
 
-            <div className="flex-1 min-h-0 flex flex-col glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60">
-                <div className="shrink-0 px-5 py-3.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-teal-700 border-b border-white/10">
+            <div className="glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60">
+                <div className="px-5 py-3.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-teal-700 border-b border-white/10">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Liste des produits</h3>
                 </div>
-                <ScrollableTable>
-                    <table className="w-full text-sm min-w-[1100px] border-collapse">
-                        <thead className="sticky top-0 z-10">
-                            <tr className="border-b border-slate-200 dark:border-slate-700">
+
+                <div className="overflow-x-auto border-b border-slate-200 dark:border-slate-700">
+                    <table className="w-full text-sm min-w-[1100px] table-fixed border-collapse">
+                        <colgroup>
+                            <col className="w-[9%]" />
+                            <col className="w-[18%]" />
+                            <col className="w-[7%]" />
+                            <col className="w-[7%]" />
+                            <col className="w-[8%]" />
+                            <col className="w-[8%]" />
+                            <col className="w-[9%]" />
+                            <col className="w-[9%]" />
+                            <col className="w-[8%]" />
+                            <col className="w-[8%]" />
+                            <col className="w-[9%]" />
+                        </colgroup>
+                        <thead>
+                            <tr className="bg-slate-50 dark:bg-slate-800">
                                 {['Réf', 'Désignation', 'Unité', 'Qté', 'Qté Vendue', 'Stock', 'Famille', 'Origine', 'Statut', 'État', 'Actions'].map((h) => (
                                     <th
                                         key={h}
-                                        className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center bg-slate-50 dark:bg-slate-800 shadow-[0_1px_0_0_rgba(226,232,240,1)] dark:shadow-[0_1px_0_0_rgba(51,65,85,1)]"
+                                        className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center"
                                     >
                                         {h}
                                     </th>
                                 ))}
                             </tr>
                         </thead>
+                    </table>
+                </div>
+
+                <ScrollableTable maxHeight="min(360px, 48vh)">
+                    <table className="w-full text-sm min-w-[1100px] table-fixed border-collapse">
+                        <colgroup>
+                            <col className="w-[9%]" />
+                            <col className="w-[18%]" />
+                            <col className="w-[7%]" />
+                            <col className="w-[7%]" />
+                            <col className="w-[8%]" />
+                            <col className="w-[8%]" />
+                            <col className="w-[9%]" />
+                            <col className="w-[9%]" />
+                            <col className="w-[8%]" />
+                            <col className="w-[8%]" />
+                            <col className="w-[9%]" />
+                        </colgroup>
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {loading ? (
                                 [...Array(5)].map((_, i) => (
