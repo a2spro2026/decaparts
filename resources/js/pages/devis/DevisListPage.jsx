@@ -121,63 +121,66 @@ export default function DevisListPage() {
                     </button>
                 </div>
 
-                <ScrollableTable>
-                    <table className="w-full text-sm min-w-[1100px]">
-                        <thead>
+                                <ScrollableTable tableClassName="w-full text-sm min-w-[1100px]"
+                    header={
+                        <>
+                            <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                                {['Date', 'Réf', 'Nom Client', 'Contact', 'Ville', 'Type', 'Budget', 'Délai', 'Lignes', 'Total HT', 'TVA', 'Total TTC', 'Statut', 'Actions'].map((h) => (
-                                    <th key={h} className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
-                                ))}
+                            {['Date', 'Réf', 'Nom Client', 'Contact', 'Ville', 'Type', 'Budget', 'Délai', 'Lignes', 'Total HT', 'TVA', 'Total TTC', 'Statut', 'Actions'].map((h) => (
+                            <th key={h} className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
+                            ))}
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {loading ? (
-                                [...Array(4)].map((_, i) => (
-                                    <tr key={i}>{[...Array(14)].map((__, j) => (
-                                        <td key={j} className="px-4 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
-                                    ))}</tr>
-                                ))
-                            ) : rows.length ? (
-                                rows.map((row) => (
-                                    <tr key={row.id} className="hover:bg-violet-50/40 dark:hover:bg-slate-800/40 transition-colors">
-                                        <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.quote_date}</td>
-                                        <td className="px-4 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-violet-400">{row.reference}</td>
-                                        <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.client_name || '—'}</td>
-                                        <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.contact || '—'}</td>
-                                        <td className="px-4 py-2.5 text-center">
-                                            <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{row.city || '—'}</span>
-                                        </td>
-                                        <td className="px-4 py-2.5 text-center">
-                                            <span className={`inline-flex px-2 py-0.5 rounded-md text-xs font-semibold ${row.chantier_type === 'Public' ? 'bg-blue-50 dark:bg-blue-900/30 text-orange-700 dark:text-orange-300' : 'bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300'}`}>
-                                                {row.chantier_type || '—'}
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-2.5 text-center tabular-nums font-medium text-slate-700 dark:text-slate-200">{formatMontant(row.budget)}</td>
-                                        <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{formatDelayDisplay(row.work_delay)}</td>
-                                        <td className="px-4 py-2.5 text-center">
-                                            <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300" title={row.designation}>
-                                                {row.items_count || 1} ligne{(row.items_count || 1) > 1 ? 's' : ''}
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-violet-400">{formatMontant(row.subtotal)}</td>
-                                        <td className="px-4 py-2.5 text-center tabular-nums text-slate-600 dark:text-slate-300">{formatMontant(row.tva)}</td>
-                                        <td className="px-4 py-2.5 text-center font-bold tabular-nums text-brand-navy dark:text-violet-400">{formatMontant(row.total_ttc)}</td>
-                                        <td className="px-4 py-2.5 text-center"><StatutBadge value={row.statut} /></td>
-                                        <td className="px-4 py-2.5">
-                                            <div className="flex items-center justify-center gap-0.5">
-                                                <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => navigate(`/clients/devis/${row.id}`)} />
-                                                <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />
-                                                <ActionBtn title="PDF" icon={FileText} color="orange" onClick={() => openPrintable(row)} />
-                                                <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => handleDelete(row)} />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr><td colSpan={14} className="px-4 py-12 text-center text-slate-400">Aucun devis enregistré</td></tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                {loading ? (
+                                                    [...Array(4)].map((_, i) => (
+                                                        <tr key={i}>{[...Array(14)].map((__, j) => (
+                                                            <td key={j} className="px-4 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
+                                                        ))}</tr>
+                                                    ))
+                                                ) : rows.length ? (
+                                                    rows.map((row) => (
+                                                        <tr key={row.id} className="hover:bg-violet-50/40 dark:hover:bg-slate-800/40 transition-colors">
+                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.quote_date}</td>
+                                                            <td className="px-4 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-violet-400">{row.reference}</td>
+                                                            <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.client_name || '—'}</td>
+                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.contact || '—'}</td>
+                                                            <td className="px-4 py-2.5 text-center">
+                                                                <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{row.city || '—'}</span>
+                                                            </td>
+                                                            <td className="px-4 py-2.5 text-center">
+                                                                <span className={`inline-flex px-2 py-0.5 rounded-md text-xs font-semibold ${row.chantier_type === 'Public' ? 'bg-blue-50 dark:bg-blue-900/30 text-orange-700 dark:text-orange-300' : 'bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300'}`}>
+                                                                    {row.chantier_type || '—'}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-4 py-2.5 text-center tabular-nums font-medium text-slate-700 dark:text-slate-200">{formatMontant(row.budget)}</td>
+                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{formatDelayDisplay(row.work_delay)}</td>
+                                                            <td className="px-4 py-2.5 text-center">
+                                                                <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300" title={row.designation}>
+                                                                    {row.items_count || 1} ligne{(row.items_count || 1) > 1 ? 's' : ''}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-4 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-violet-400">{formatMontant(row.subtotal)}</td>
+                                                            <td className="px-4 py-2.5 text-center tabular-nums text-slate-600 dark:text-slate-300">{formatMontant(row.tva)}</td>
+                                                            <td className="px-4 py-2.5 text-center font-bold tabular-nums text-brand-navy dark:text-violet-400">{formatMontant(row.total_ttc)}</td>
+                                                            <td className="px-4 py-2.5 text-center"><StatutBadge value={row.statut} /></td>
+                                                            <td className="px-4 py-2.5">
+                                                                <div className="flex items-center justify-center gap-0.5">
+                                                                    <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => navigate(`/clients/devis/${row.id}`)} />
+                                                                    <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />
+                                                                    <ActionBtn title="PDF" icon={FileText} color="orange" onClick={() => openPrintable(row)} />
+                                                                    <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => handleDelete(row)} />
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr><td colSpan={14} className="px-4 py-12 text-center text-slate-400">Aucun devis enregistré</td></tr>
+                                                )}
+                                            </tbody>
                 </ScrollableTable>
             </div>
         </div>

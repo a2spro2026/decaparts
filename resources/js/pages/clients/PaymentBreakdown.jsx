@@ -49,6 +49,8 @@ export function PaymentBreakdown({ payments, compact = false, actions }) {
         );
     }
 
+    const headers = ['Date', 'Réf°', 'Règlement', 'N°', 'Banque', 'Nom Tiré', 'Montant', ...(actions ? ['Actions'] : [])];
+
     return (
         <div className="rounded-xl border border-emerald-200/70 dark:border-emerald-800/50 bg-gradient-to-br from-emerald-50/80 via-white to-slate-50 dark:from-emerald-950/20 dark:via-slate-900 dark:to-slate-900 overflow-hidden">
             <div className="px-4 py-2.5 border-b border-emerald-200/60 dark:border-emerald-800/40 bg-emerald-100/50 dark:bg-emerald-900/20 flex items-center justify-between gap-3">
@@ -63,59 +65,62 @@ export function PaymentBreakdown({ payments, compact = false, actions }) {
                 </span>
             </div>
 
-            <ScrollableTable>
-                <table className="w-full text-xs">
-                    <thead>
-                        <tr className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-emerald-100 dark:border-emerald-900/30">
-                            {['Date', 'Réf°', 'Règlement', 'N°', 'Banque', 'Nom Tiré', 'Montant', ...(actions ? ['Actions'] : [])].map((h) => (
-                                <th key={h} className="px-3 py-2 font-bold text-center whitespace-nowrap">{h}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/20">
-                        {payments.map((p, index) => (
-                            <tr key={p.id} className="hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 transition-colors">
-                                <td className="px-3 py-2 text-center text-slate-600 dark:text-slate-300 whitespace-nowrap">{p.payment_date || '—'}</td>
-                                <td className="px-3 py-2 text-center font-mono font-semibold text-brand-navy dark:text-violet-400 whitespace-nowrap">{p.reference || '—'}</td>
-                                <td className="px-3 py-2 text-center">
-                                    <span className="inline-flex px-2 py-0.5 rounded-md font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200">
-                                        {reglementLabel(p.reglement)}
-                                    </span>
-                                </td>
-                                <td className="px-3 py-2 text-center text-slate-600 dark:text-slate-300">{p.numero || '—'}</td>
-                                <td className="px-3 py-2 text-center text-slate-600 dark:text-slate-300 max-w-[120px] truncate">{p.banque || '—'}</td>
-                                <td className="px-3 py-2 text-center text-slate-600 dark:text-slate-300 max-w-[140px] truncate">{p.nom_tire || '—'}</td>
-                                <td className="px-3 py-2 text-center">
-                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-bold tabular-nums bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/50">
-                                        <span className="text-[9px] font-bold uppercase text-emerald-500 dark:text-emerald-400">#{index + 1}</span>
-                                        {formatMontant(p.amount)}
-                                    </span>
-                                </td>
-                                {actions && (
-                                    <td className="px-2 py-2">
-                                        <div className="flex items-center justify-center gap-0.5">
-                                            <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => actions.onView(p)} />
-                                            <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => actions.onEdit(p)} />
-                                            <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => actions.onPrint(p)} />
-                                            <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => actions.onDelete(p)} />
-                                            <ActionBtn title="PDF" icon={FileText} color="orange" onClick={() => actions.onPdf(p)} />
-                                        </div>
-                                    </td>
-                                )}
+            <ScrollableTable maxHeight="240px" tableClassName="w-full text-xs"
+                header={
+                    <>
+                        <thead>
+                            <tr className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-emerald-100 dark:border-emerald-900/30">
+                                {headers.map((h) => (
+                                    <th key={h} className="px-3 py-2 font-bold text-center whitespace-nowrap">{h}</th>
+                                ))}
                             </tr>
-                        ))}
-                    </tbody>
-                    <tfoot>
-                        <tr className="bg-emerald-50/60 dark:bg-emerald-900/15 border-t border-emerald-200/70 dark:border-emerald-800/40">
-                            <td colSpan={actions ? 7 : 6} className="px-3 py-2 text-right text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
-                                Total payé
+                        </thead>
+                    </>
+                }
+            >
+                <tbody className="divide-y divide-emerald-100/80 dark:divide-emerald-900/20">
+                    {payments.map((p, index) => (
+                        <tr key={p.id} className="hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 transition-colors">
+                            <td className="px-3 py-2 text-center text-slate-600 dark:text-slate-300 whitespace-nowrap">{p.payment_date || '—'}</td>
+                            <td className="px-3 py-2 text-center font-mono font-semibold text-brand-navy dark:text-violet-400 whitespace-nowrap">{p.reference || '—'}</td>
+                            <td className="px-3 py-2 text-center">
+                                <span className="inline-flex px-2 py-0.5 rounded-md font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200">
+                                    {reglementLabel(p.reglement)}
+                                </span>
                             </td>
-                            <td className="px-3 py-2 text-center font-bold tabular-nums text-emerald-700 dark:text-emerald-300">
-                                {formatMontant(payments.reduce((sum, p) => sum + (Number(p.amount) || 0), 0))}
+                            <td className="px-3 py-2 text-center text-slate-600 dark:text-slate-300">{p.numero || '—'}</td>
+                            <td className="px-3 py-2 text-center text-slate-600 dark:text-slate-300 max-w-[120px] truncate">{p.banque || '—'}</td>
+                            <td className="px-3 py-2 text-center text-slate-600 dark:text-slate-300 max-w-[140px] truncate">{p.nom_tire || '—'}</td>
+                            <td className="px-3 py-2 text-center">
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-bold tabular-nums bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/50">
+                                    <span className="text-[9px] font-bold uppercase text-emerald-500 dark:text-emerald-400">#{index + 1}</span>
+                                    {formatMontant(p.amount)}
+                                </span>
                             </td>
+                            {actions && (
+                                <td className="px-2 py-2">
+                                    <div className="flex items-center justify-center gap-0.5">
+                                        <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => actions.onView(p)} />
+                                        <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => actions.onEdit(p)} />
+                                        <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => actions.onPrint(p)} />
+                                        <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => actions.onDelete(p)} />
+                                        <ActionBtn title="PDF" icon={FileText} color="orange" onClick={() => actions.onPdf(p)} />
+                                    </div>
+                                </td>
+                            )}
                         </tr>
-                    </tfoot>
-                </table>
+                    ))}
+                </tbody>
+                <tfoot>
+                    <tr className="bg-emerald-50/60 dark:bg-emerald-900/15 border-t border-emerald-200/70 dark:border-emerald-800/40">
+                        <td colSpan={actions ? 7 : 6} className="px-3 py-2 text-right text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
+                            Total payé
+                        </td>
+                        <td className="px-3 py-2 text-center font-bold tabular-nums text-emerald-700 dark:text-emerald-300">
+                            {formatMontant(payments.reduce((sum, p) => sum + (Number(p.amount) || 0), 0))}
+                        </td>
+                    </tr>
+                </tfoot>
             </ScrollableTable>
         </div>
     );

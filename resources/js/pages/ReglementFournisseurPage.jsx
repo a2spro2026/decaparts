@@ -159,10 +159,14 @@ function ViewModal({ row, onClose }) {
                     <div className="px-5 pb-5">
                         <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-2">Allocations</p>
                         <div className="rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
-                            <ScrollableTable maxHeight="200px">
-                            <table className="w-full text-xs">
-                                <thead><tr className="bg-slate-50 dark:bg-slate-800"><th className="px-2 py-1.5">Bon</th><th className="px-2 py-1.5">Montant</th><th className="px-2 py-1.5">Action</th></tr></thead>
-                                <tbody>
+                            <ScrollableTable maxHeight="200px" tableClassName="w-full text-xs"
+                    header={
+                        <>
+                            <thead><tr className="bg-slate-50 dark:bg-slate-800"><th className="px-2 py-1.5">Bon</th><th className="px-2 py-1.5">Montant</th><th className="px-2 py-1.5">Action</th></tr></thead>
+                        </>
+                    }
+                >
+                    <tbody>
                                     {row.allocations.map((a) => (
                                         <tr key={a.id} className="border-t border-slate-100 dark:border-slate-800 text-center">
                                             <td className="px-2 py-1.5 font-mono">{a.bon}</td>
@@ -171,8 +175,7 @@ function ViewModal({ row, onClose }) {
                                         </tr>
                                     ))}
                                 </tbody>
-                            </table>
-                            </ScrollableTable>
+                </ScrollableTable>
                         </div>
                     </div>
                 )}
@@ -219,24 +222,28 @@ function ImportReglModal({ open, rows, selected, loading, onToggle, onToggleAll,
                     Sélectionnez un ou plusieurs règlements client reçus pour remplir le règlement fournisseur (même chèque / effet / virement).
                 </p>
 
-                <ScrollableTable fill className="flex-1 min-h-0">
-                    <table className="w-full text-sm min-w-[900px]">
-                        <thead className="sticky top-0 z-10">
-                            <tr className="bg-slate-50 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700">
-                                <th className="px-3 py-3 w-10">
-                                    <input
-                                        type="checkbox"
-                                        checked={allSelected}
-                                        onChange={onToggleAll}
-                                        className="rounded border-slate-300 text-brand-navy focus:ring-brand-orange/30"
-                                    />
-                                </th>
-                                {['Réf', 'Date', 'Client', 'Type', 'N°', 'Banq', 'Tiré', 'Montant', 'Date Décaiss', 'Statut'].map((h) => (
-                                    <th key={h} className="px-3 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap text-center">{h}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                <ScrollableTable maxHeight="320px" tableClassName="w-full text-sm min-w-[900px]"
+                    header={
+                        <>
+                            <thead>
+                                <tr className="bg-slate-50 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700">
+                                    <th className="px-3 py-3 w-10">
+                                        <input
+                                            type="checkbox"
+                                            checked={allSelected}
+                                            onChange={onToggleAll}
+                                            className="rounded border-slate-300 text-brand-navy focus:ring-brand-orange/30"
+                                        />
+                                    </th>
+                                    {['Réf', 'Date', 'Client', 'Type', 'N°', 'Banq', 'Tiré', 'Montant', 'Date Décaiss', 'Statut'].map((h) => (
+                                        <th key={h} className="px-3 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap text-center">{h}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                        </>
+                    }
+                >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {loading ? (
                                 [...Array(4)].map((_, i) => (
                                     <tr key={i}>
@@ -280,7 +287,6 @@ function ImportReglModal({ open, rows, selected, loading, onToggle, onToggleAll,
                                 </tr>
                             )}
                         </tbody>
-                    </table>
                 </ScrollableTable>
 
                 <div className="flex justify-end gap-2 px-5 py-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 shrink-0">
@@ -701,7 +707,7 @@ export default function ReglementFournisseurPage() {
     /* ───────────── LIST VIEW ───────────── */
     if (view === 'list') {
         return (
-            <div className="flex flex-col gap-3 h-[calc(100dvh-11rem)] min-h-[360px]">
+            <div className="space-y-4">
                 {error && (
                     <div className="shrink-0 p-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm border border-red-100 dark:border-red-800">{error}</div>
                 )}
@@ -805,20 +811,24 @@ export default function ReglementFournisseurPage() {
                     </div>
                 </form>
 
-                <div className="flex-1 min-h-0 glass-card flex flex-col overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60">
-                    <div className="shrink-0 px-5 py-3.5 bg-gradient-to-r from-zinc-900 via-orange-700 to-slate-800 border-b border-white/10">
+                <div className="glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60">
+                    <div className="px-5 py-3.5 bg-gradient-to-r from-zinc-900 via-orange-700 to-slate-800 border-b border-white/10">
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Tableau de consultation</h3>
                     </div>
-                    <ScrollableTable fill className="flex-1 min-h-0">
-                        <table className="w-full text-sm min-w-[1100px]">
-                            <thead className="sticky top-0 z-10">
-                                <tr className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm">
-                                    {['Réf', 'Date', 'Fournisseur', 'Type', 'Nom de Tiré', 'N°', 'Bnq', 'Date Décaiss', 'Montant', 'Statut', 'Action'].map((h) => (
-                                        <th key={h} className="px-3 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center bg-slate-100 dark:bg-slate-800">{h}</th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <ScrollableTable tableClassName="w-full text-sm min-w-[1100px]"
+                        header={
+                            <>
+                                <thead>
+                                    <tr className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                                        {['Réf', 'Date', 'Fournisseur', 'Type', 'Nom de Tiré', 'N°', 'Bnq', 'Date Décaiss', 'Montant', 'Statut', 'Action'].map((h) => (
+                                            <th key={h} className="px-3 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                            </>
+                        }
+                    >
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                 {loadingList ? (
                                     [...Array(4)].map((_, i) => (
                                         <tr key={i}>{[...Array(11)].map((__, j) => (
@@ -859,8 +869,7 @@ export default function ReglementFournisseurPage() {
                                 ) : (
                                     <tr><td colSpan={11} className="px-4 py-12 text-center text-slate-400">Aucun règlement enregistré</td></tr>
                                 )}
-                            </tbody>
-                        </table>
+                        </tbody>
                     </ScrollableTable>
                 </div>
 
@@ -1017,87 +1026,90 @@ export default function ReglementFournisseurPage() {
                     <div className="px-5 py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-orange-700 border-b border-white/10">
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Commande à Payer :</h3>
                     </div>
-                    <ScrollableTable>
-                        <table className="w-full text-sm min-w-[1100px]">
+                                    <ScrollableTable tableClassName="w-full text-sm min-w-[1100px]"
+                    header={
+                        <>
                             <thead>
-                                <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                                    {['N° Bon', 'Date Commande', 'Client Livré', 'Montant Bon', 'Montant Payé', 'Solde', 'Sélection', 'Action'].map((h) => (
-                                        <th key={h} className="px-3 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
-                                    ))}
-                                </tr>
+                            <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
+                            {['N° Bon', 'Date Commande', 'Client Livré', 'Montant Bon', 'Montant Payé', 'Solde', 'Sélection', 'Action'].map((h) => (
+                            <th key={h} className="px-3 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
+                            ))}
+                            </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                {loading ? (
-                                    [...Array(3)].map((_, i) => (
-                                        <tr key={i}>{[...Array(8)].map((__, j) => (
-                                            <td key={j} className="px-3 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
-                                        ))}</tr>
-                                    ))
-                                ) : !form.supplier_id ? (
-                                    <tr><td colSpan={8} className="px-4 py-12 text-center text-slate-400">Sélectionnez un fournisseur</td></tr>
-                                ) : orders.length ? (
-                                    <>
-                                        <tr className="bg-slate-50/70 dark:bg-slate-800/40">
-                                            <td colSpan={6} className="px-3 py-2 text-xs text-slate-500">Tout sélectionner</td>
-                                            <td className="px-3 py-2 text-center">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={orders.length > 0 && selectedIds.length === orders.length}
-                                                    onChange={toggleSelectAll}
-                                                    className="rounded border-slate-300 text-brand-navy focus:ring-brand-orange"
-                                                />
-                                            </td>
-                                            <td />
-                                        </tr>
-                                        {orders.map((row) => {
-                                            const shown = displayRow(row);
-                                            return (
-                                                <tr key={row.id} className={`hover:bg-orange-50/40 dark:hover:bg-slate-800/40 transition-colors ${selected[row.id] ? 'bg-amber-50/50 dark:bg-amber-900/10' : ''}`}>
-                                                    <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">{row.reference}</td>
-                                                    <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.order_date}</td>
-                                                    <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.client_livre || '—'}</td>
-                                                    <td className="px-3 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-orange-400">{formatMontant(row.montant_bon)}</td>
-                                                    <td className={`px-3 py-2.5 text-center tabular-nums font-semibold ${shown.isPreview ? 'text-emerald-600 dark:text-emerald-400' : 'text-emerald-700 dark:text-emerald-300'}`}>
-                                                        {formatMontant(shown.montant_paye)}
-                                                    </td>
-                                                    <td className={`px-3 py-2.5 text-center font-semibold tabular-nums ${Number(shown.solde) !== 0 ? 'text-red-600 dark:text-red-400' : 'text-slate-500'}`}>
-                                                        {formatMontant(shown.solde)}
-                                                    </td>
-                                                    <td className="px-3 py-2.5 text-center">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={!!selected[row.id]}
-                                                            onChange={() => toggleSelect(row.id)}
-                                                            className="rounded border-slate-300 text-brand-navy focus:ring-brand-orange"
-                                                        />
-                                                    </td>
-                                                    <td className="px-2 py-2">
-                                                        <div className="flex flex-wrap items-center justify-center gap-1">
-                                                            {ACTION_OPTIONS.map((opt) => (
-                                                                <button
-                                                                    key={opt.value}
-                                                                    type="button"
-                                                                    onClick={() => setAction(row.id, opt.value)}
-                                                                    className={(actions[row.id] || row.payment_action) === opt.value
-                                                                        ? opt.activeClass
-                                                                        : 'btn-action-idle'
-                                                                    }
-                                                                >
-                                                                    {opt.label}
-                                                                </button>
-                                                            ))}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </>
-                                ) : (
-                                    <tr><td colSpan={8} className="px-4 py-12 text-center text-slate-400">Aucune commande pour ce fournisseur</td></tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </ScrollableTable>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                    {loading ? (
+                                                        [...Array(3)].map((_, i) => (
+                                                            <tr key={i}>{[...Array(8)].map((__, j) => (
+                                                                <td key={j} className="px-3 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
+                                                            ))}</tr>
+                                                        ))
+                                                    ) : !form.supplier_id ? (
+                                                        <tr><td colSpan={8} className="px-4 py-12 text-center text-slate-400">Sélectionnez un fournisseur</td></tr>
+                                                    ) : orders.length ? (
+                                                        <>
+                                                            <tr className="bg-slate-50/70 dark:bg-slate-800/40">
+                                                                <td colSpan={6} className="px-3 py-2 text-xs text-slate-500">Tout sélectionner</td>
+                                                                <td className="px-3 py-2 text-center">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        checked={orders.length > 0 && selectedIds.length === orders.length}
+                                                                        onChange={toggleSelectAll}
+                                                                        className="rounded border-slate-300 text-brand-navy focus:ring-brand-orange"
+                                                                    />
+                                                                </td>
+                                                                <td />
+                                                            </tr>
+                                                            {orders.map((row) => {
+                                                                const shown = displayRow(row);
+                                                                return (
+                                                                    <tr key={row.id} className={`hover:bg-orange-50/40 dark:hover:bg-slate-800/40 transition-colors ${selected[row.id] ? 'bg-amber-50/50 dark:bg-amber-900/10' : ''}`}>
+                                                                        <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">{row.reference}</td>
+                                                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.order_date}</td>
+                                                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.client_livre || '—'}</td>
+                                                                        <td className="px-3 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-orange-400">{formatMontant(row.montant_bon)}</td>
+                                                                        <td className={`px-3 py-2.5 text-center tabular-nums font-semibold ${shown.isPreview ? 'text-emerald-600 dark:text-emerald-400' : 'text-emerald-700 dark:text-emerald-300'}`}>
+                                                                            {formatMontant(shown.montant_paye)}
+                                                                        </td>
+                                                                        <td className={`px-3 py-2.5 text-center font-semibold tabular-nums ${Number(shown.solde) !== 0 ? 'text-red-600 dark:text-red-400' : 'text-slate-500'}`}>
+                                                                            {formatMontant(shown.solde)}
+                                                                        </td>
+                                                                        <td className="px-3 py-2.5 text-center">
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                checked={!!selected[row.id]}
+                                                                                onChange={() => toggleSelect(row.id)}
+                                                                                className="rounded border-slate-300 text-brand-navy focus:ring-brand-orange"
+                                                                            />
+                                                                        </td>
+                                                                        <td className="px-2 py-2">
+                                                                            <div className="flex flex-wrap items-center justify-center gap-1">
+                                                                                {ACTION_OPTIONS.map((opt) => (
+                                                                                    <button
+                                                                                        key={opt.value}
+                                                                                        type="button"
+                                                                                        onClick={() => setAction(row.id, opt.value)}
+                                                                                        className={(actions[row.id] || row.payment_action) === opt.value
+                                                                                            ? opt.activeClass
+                                                                                            : 'btn-action-idle'
+                                                                                        }
+                                                                                    >
+                                                                                        {opt.label}
+                                                                                    </button>
+                                                                                ))}
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                );
+                                                            })}
+                                                        </>
+                                                    ) : (
+                                                        <tr><td colSpan={8} className="px-4 py-12 text-center text-slate-400">Aucune commande pour ce fournisseur</td></tr>
+                                                    )}
+                                                </tbody>
+                </ScrollableTable>
                 </div>
             )}
         </div>

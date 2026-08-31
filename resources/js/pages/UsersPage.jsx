@@ -350,79 +350,82 @@ export default function UsersPage() {
                     </button>
                 </div>
 
-                <ScrollableTable>
-                    <table className="w-full text-sm min-w-[1000px]">
-                        <thead>
+                                <ScrollableTable tableClassName="w-full text-sm min-w-[1000px]"
+                    header={
+                        <>
+                            <thead>
                             <tr className="bg-gradient-to-r from-slate-100 via-slate-200/90 to-slate-100 dark:from-slate-800 dark:via-slate-700/80 dark:to-slate-800 border-b-2 border-slate-300 dark:border-slate-600">
-                                {columns.map((h) => (
-                                    <th
-                                        key={h}
-                                        className="px-4 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center"
-                                    >
-                                        {h}
-                                    </th>
-                                ))}
+                            {columns.map((h) => (
+                            <th
+                            key={h}
+                            className="px-4 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center"
+                            >
+                            {h}
+                            </th>
+                            ))}
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {loading ? (
-                                [...Array(4)].map((_, i) => (
-                                    <tr key={i}>
-                                        {columns.map((__, j) => (
-                                            <td key={j} className="px-4 py-3 text-center">
-                                                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" />
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))
-                            ) : rows.length ? (
-                                rows.map((row) => (
-                                    <tr
-                                        key={row.id}
-                                        className={`hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors ${!row.is_active ? 'opacity-60' : ''}`}
-                                    >
-                                        <td className="px-4 py-2.5 text-center text-xs text-slate-500 dark:text-slate-400">{row.date || '—'}</td>
-                                        <td className="px-4 py-2.5 text-center tabular-nums font-semibold text-slate-700 dark:text-slate-200">{row.id}</td>
-                                        <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.name}</td>
-                                        <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.contact || row.phone || '—'}</td>
-                                        <td className="px-4 py-2.5 text-center">
-                                            <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-semibold bg-orange-50 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">
-                                                {row.statut_label || row.statut || '—'}
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-2.5 text-center font-mono text-xs text-brand-navy dark:text-violet-300">{row.login}</td>
-                                        <td className="px-4 py-2.5 text-center tracking-widest text-slate-400">{row.password_mask || '••••••••'}</td>
-                                        <td className="px-4 py-2.5 text-center">
-                                            <div className="inline-flex items-center justify-center gap-0.5">
-                                                <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
-                                                <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => openEdit(row)} />
-                                                <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => onDelete(row)} />
-                                                <ActionBtn
-                                                    title={row.is_active ? 'Suspendre' : 'Réactiver'}
-                                                    icon={row.is_active ? PauseCircle : PlayCircle}
-                                                    color={row.is_active ? 'orange' : 'emerald'}
-                                                    onClick={() => onSuspend(row)}
-                                                />
-                                            </div>
-                                            {!row.is_active && (
-                                                <div className="mt-1">
-                                                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase text-red-500">
-                                                        <Ban className="w-3 h-3" /> Suspendu
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={columns.length} className="px-4 py-12 text-center text-slate-400">
-                                        Aucun utilisateur — cliquez sur Ajouter
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                {loading ? (
+                                                    [...Array(4)].map((_, i) => (
+                                                        <tr key={i}>
+                                                            {columns.map((__, j) => (
+                                                                <td key={j} className="px-4 py-3 text-center">
+                                                                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" />
+                                                                </td>
+                                                            ))}
+                                                        </tr>
+                                                    ))
+                                                ) : rows.length ? (
+                                                    rows.map((row) => (
+                                                        <tr
+                                                            key={row.id}
+                                                            className={`hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors ${!row.is_active ? 'opacity-60' : ''}`}
+                                                        >
+                                                            <td className="px-4 py-2.5 text-center text-xs text-slate-500 dark:text-slate-400">{row.date || '—'}</td>
+                                                            <td className="px-4 py-2.5 text-center tabular-nums font-semibold text-slate-700 dark:text-slate-200">{row.id}</td>
+                                                            <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.name}</td>
+                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.contact || row.phone || '—'}</td>
+                                                            <td className="px-4 py-2.5 text-center">
+                                                                <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-semibold bg-orange-50 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">
+                                                                    {row.statut_label || row.statut || '—'}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-4 py-2.5 text-center font-mono text-xs text-brand-navy dark:text-violet-300">{row.login}</td>
+                                                            <td className="px-4 py-2.5 text-center tracking-widest text-slate-400">{row.password_mask || '••••••••'}</td>
+                                                            <td className="px-4 py-2.5 text-center">
+                                                                <div className="inline-flex items-center justify-center gap-0.5">
+                                                                    <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
+                                                                    <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => openEdit(row)} />
+                                                                    <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => onDelete(row)} />
+                                                                    <ActionBtn
+                                                                        title={row.is_active ? 'Suspendre' : 'Réactiver'}
+                                                                        icon={row.is_active ? PauseCircle : PlayCircle}
+                                                                        color={row.is_active ? 'orange' : 'emerald'}
+                                                                        onClick={() => onSuspend(row)}
+                                                                    />
+                                                                </div>
+                                                                {!row.is_active && (
+                                                                    <div className="mt-1">
+                                                                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase text-red-500">
+                                                                            <Ban className="w-3 h-3" /> Suspendu
+                                                                        </span>
+                                                                    </div>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan={columns.length} className="px-4 py-12 text-center text-slate-400">
+                                                            Aucun utilisateur — cliquez sur Ajouter
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
                 </ScrollableTable>
             </div>
 

@@ -4,16 +4,20 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 const ARROW_BTN =
     'flex w-full items-center justify-center py-1.5 text-slate-600 dark:text-slate-200 bg-slate-50/90 dark:bg-slate-800/60 hover:bg-orange-50 dark:hover:bg-slate-800/80 hover:text-brand-orange disabled:opacity-40 disabled:pointer-events-none transition-colors';
 
+const DEFAULT_MAX_HEIGHT = 'min(360px, 48vh)';
+
 /**
- * Zone tableau avec flèches haut / bas pour parcourir toutes les lignes.
- * @param {boolean} fill — occupe l'espace flex parent (max-height auto)
+ * Zone scrollable avec flèches haut/bas — uniquement sur le corps du tableau.
+ * Passer `header` (+ optionnel `colgroup`) pour garder l'en-tête fixe hors des flèches.
  */
 export default function ScrollableTable({
     children,
+    header = null,
+    colgroup = null,
+    tableClassName = '',
     className = '',
     scrollClassName = '',
-    maxHeight = 'min(420px, 55vh)',
-    fill = false,
+    maxHeight = DEFAULT_MAX_HEIGHT,
     step = 120,
 }) {
     const scrollRef = useRef(null);
@@ -34,13 +38,13 @@ export default function ScrollableTable({
         const ro = new ResizeObserver(updateScrollState);
         ro.observe(el);
         return () => ro.disconnect();
-    }, [children, updateScrollState]);
+    }, [children, header, updateScrollState]);
 
     const scroll = (direction) => {
         scrollRef.current?.scrollBy({ top: direction * step, behavior: 'smooth' });
     };
 
-    return (
+    const scrollZone = (
         <div className={`flex flex-col min-h-0 ${className}`}>
             <button
                 type="button"
@@ -54,10 +58,17 @@ export default function ScrollableTable({
             <div
                 ref={scrollRef}
                 onScroll={updateScrollState}
-                className={`${fill ? 'flex-1 min-h-0' : ''} overflow-x-auto overflow-y-auto [scrollbar-width:thin] ${scrollClassName}`}
-                style={fill ? undefined : { maxHeight }}
+                className={`overflow-x-auto overflow-y-auto [scrollbar-width:thin] ${scrollClassName}`}
+                style={{ maxHeight }}
             >
-                {children}
+                {header != null ? (
+                    <table className={tableClassName}>
+                        {colgroup}
+                        {children}
+                    </table>
+                ) : (
+                    children
+                )}
             </div>
             <button
                 type="button"
@@ -69,5 +80,21 @@ export default function ScrollableTable({
                 <ChevronDown className="w-4 h-4" strokeWidth={2.5} />
             </button>
         </div>
+    );
+
+    if (header == null) {
+        return scrollZone;
+    }
+
+    return (
+        <>
+            <div className="overflow-x-auto border-b border-slate-200 dark:border-slate-700">
+                <table className={tableClassName}>
+                    {colgroup}
+                    {header}
+                </table>
+            </div>
+            {scrollZone}
+        </>
     );
 }

@@ -32,79 +32,82 @@ export default function ReportTable({
                 )}
             </div>
 
-            <ScrollableTable>
-                <table className="w-full text-sm min-w-[640px]">
-                    <thead>
-                        <tr className={grayHeader
+                            <ScrollableTable tableClassName="w-full text-sm min-w-[640px]"
+                    header={
+                        <>
+                            <thead>
+                            <tr className={grayHeader
                             ? 'bg-gradient-to-r from-slate-100 via-slate-200/90 to-slate-100 dark:from-slate-800 dark:via-slate-700/80 dark:to-slate-800 border-b-2 border-slate-300 dark:border-slate-600'
                             : 'bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700'
-                        }>
+                            }>
                             {columns.map((col) => (
-                                <th
-                                    key={col.key}
-                                    className={`px-4 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] whitespace-nowrap ${
-                                        grayHeader
-                                            ? 'text-slate-600 dark:text-slate-300'
-                                            : 'text-xs text-slate-500 dark:text-slate-400'
-                                    } ${col.align === 'right' ? 'text-right' : 'text-center'}`}
-                                >
-                                    {col.label}
-                                </th>
+                            <th
+                            key={col.key}
+                            className={`px-4 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] whitespace-nowrap ${
+                            grayHeader
+                            ? 'text-slate-600 dark:text-slate-300'
+                            : 'text-xs text-slate-500 dark:text-slate-400'
+                            } ${col.align === 'right' ? 'text-right' : 'text-center'}`}
+                            >
+                            {col.label}
+                            </th>
                             ))}
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                        {loading ? (
-                            [...Array(4)].map((_, i) => (
-                                <tr key={i}>
-                                    {columns.map((col) => (
-                                        <td key={col.key} className="px-4 py-3">
-                                            <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))
-                        ) : rows?.length ? (
-                            rows.map((row, i) => (
-                                <tr
-                                    key={i}
-                                    className="hover:bg-orange-50/50 dark:hover:bg-slate-800/50 transition-colors group"
-                                >
-                                    {columns.map((col) => (
-                                        <td
-                                            key={col.key}
-                                            className={`px-4 py-2.5 text-slate-700 dark:text-slate-300 ${
-                                                col.align === 'right' ? 'text-right font-semibold tabular-nums' : 'text-center'
-                                            }`}
-                                        >
-                                            {col.render ? col.render(row[col.key], row) : (
-                                                col.key === 'montant' ? (
-                                                    <span className="text-brand-navy dark:text-orange-400 font-semibold">
-                                                        {formatMontant(row[col.key])}
-                                                    </span>
-                                                ) : col.key === 'destination' ? (
-                                                    <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                                                        {row[col.key]}
-                                                    </span>
-                                                ) : (
-                                                    row[col.key] ?? '—'
-                                                )
-                                            )}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={columns.length} className="px-4 py-10 text-center text-slate-400">
-                                    <FileSpreadsheet className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                                    Aucune donnée disponible
-                                </td>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
-            </ScrollableTable>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                            {loading ? (
+                                                [...Array(4)].map((_, i) => (
+                                                    <tr key={i}>
+                                                        {columns.map((col) => (
+                                                            <td key={col.key} className="px-4 py-3">
+                                                                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
+                                                            </td>
+                                                        ))}
+                                                    </tr>
+                                                ))
+                                            ) : rows?.length ? (
+                                                rows.map((row, i) => (
+                                                    <tr
+                                                        key={i}
+                                                        className="hover:bg-orange-50/50 dark:hover:bg-slate-800/50 transition-colors group"
+                                                    >
+                                                        {columns.map((col) => (
+                                                            <td
+                                                                key={col.key}
+                                                                className={`px-4 py-2.5 text-slate-700 dark:text-slate-300 ${
+                                                                    col.align === 'right' ? 'text-right font-semibold tabular-nums' : 'text-center'
+                                                                }`}
+                                                            >
+                                                                {col.render ? col.render(row[col.key], row) : (
+                                                                    col.key === 'montant' ? (
+                                                                        <span className="text-brand-navy dark:text-orange-400 font-semibold">
+                                                                            {formatMontant(row[col.key])}
+                                                                        </span>
+                                                                    ) : col.key === 'destination' ? (
+                                                                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                                                                            {row[col.key]}
+                                                                        </span>
+                                                                    ) : (
+                                                                        row[col.key] ?? '—'
+                                                                    )
+                                                                )}
+                                                            </td>
+                                                        ))}
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan={columns.length} className="px-4 py-10 text-center text-slate-400">
+                                                        <FileSpreadsheet className="w-8 h-8 mx-auto mb-2 opacity-40" />
+                                                        Aucune donnée disponible
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                </ScrollableTable>
         </div>
     );
 }

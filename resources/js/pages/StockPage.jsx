@@ -43,10 +43,11 @@ export default function StockPage() {
             </div>
 
             <div className="glass-card overflow-hidden shadow-card">
-                <ScrollableTable>
-                <table className="w-full text-sm">
-                    <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase text-slate-500">
-                        <tr>
+                                <ScrollableTable tableClassName="w-full text-sm"
+                    header={
+                        <>
+                            <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase text-slate-500">
+                            <tr>
                             <th className="px-5 py-3 text-left">Référence</th>
                             <th className="px-5 py-3 text-left">Désignation</th>
                             <th className="px-5 py-3 text-left">Marque</th>
@@ -54,22 +55,24 @@ export default function StockPage() {
                             <th className="px-5 py-3 text-right">Qté min</th>
                             <th className="px-5 py-3 text-left">Emplacement</th>
                             <th className="px-5 py-3 text-right">Prix achat</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                        {products.data?.map((p) => (
-                            <tr key={p.id} className={p.quantity_in_stock <= p.min_stock_alert ? 'bg-amber-50/50 dark:bg-amber-900/10' : ''}>
-                                <td className="px-5 py-3 font-mono text-xs">{p.reference}</td>
-                                <td className="px-5 py-3 font-medium">{p.name}</td>
-                                <td className="px-5 py-3">{p.brand || '—'}</td>
-                                <td className="px-5 py-3 text-right">{p.quantity_in_stock} {p.unit}</td>
-                                <td className="px-5 py-3 text-right">{p.min_stock_alert}</td>
-                                <td className="px-5 py-3">{p.location || '—'}</td>
-                                <td className="px-5 py-3 text-right">{p.purchase_price}</td>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                            {products.data?.map((p) => (
+                                                <tr key={p.id} className={p.quantity_in_stock <= p.min_stock_alert ? 'bg-amber-50/50 dark:bg-amber-900/10' : ''}>
+                                                    <td className="px-5 py-3 font-mono text-xs">{p.reference}</td>
+                                                    <td className="px-5 py-3 font-medium">{p.name}</td>
+                                                    <td className="px-5 py-3">{p.brand || '—'}</td>
+                                                    <td className="px-5 py-3 text-right">{p.quantity_in_stock} {p.unit}</td>
+                                                    <td className="px-5 py-3 text-right">{p.min_stock_alert}</td>
+                                                    <td className="px-5 py-3">{p.location || '—'}</td>
+                                                    <td className="px-5 py-3 text-right">{p.purchase_price}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
                 </ScrollableTable>
             </div>
         </div>

@@ -38,10 +38,11 @@ export default function ChantiersPage() {
             </div>
 
             <div className="glass-card overflow-hidden shadow-card">
-                <ScrollableTable>
-                <table className="w-full text-sm">
-                    <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase text-slate-500">
-                        <tr>
+                                <ScrollableTable tableClassName="w-full text-sm"
+                    header={
+                        <>
+                            <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase text-slate-500">
+                            <tr>
                             <th className="px-5 py-3 text-left">N° Chantier</th>
                             <th className="px-5 py-3 text-left">Nom</th>
                             <th className="px-5 py-3 text-left">Client</th>
@@ -49,35 +50,37 @@ export default function ChantiersPage() {
                             <th className="px-5 py-3 text-center">Progression</th>
                             <th className="px-5 py-3 text-center">Statut</th>
                             <th className="px-5 py-3 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                        {data.data?.map((c) => (
-                            <tr key={c.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30">
-                                <td className="px-5 py-3 font-mono text-xs">{c.reference}</td>
-                                <td className="px-5 py-3 font-medium text-slate-800 dark:text-white">{c.name}</td>
-                                <td className="px-5 py-3">{c.client?.name}</td>
-                                <td className="px-5 py-3">{c.city}</td>
-                                <td className="px-5 py-3">
-                                    <div className="flex items-center gap-2 justify-center">
-                                        <div className="w-16 bg-slate-100 dark:bg-slate-700 rounded-full h-2">
-                                            <div className="bg-brand-orange h-2 rounded-full" style={{ width: `${c.progress}%` }} />
-                                        </div>
-                                        <span className="text-xs">{c.progress}%</span>
-                                    </div>
-                                </td>
-                                <td className="px-5 py-3 text-center">
-                                    <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-orange-300">
-                                        {statusLabels[c.status] || c.status}
-                                    </span>
-                                </td>
-                                <td className="px-5 py-3 text-right">
-                                    <button onClick={() => archive(c.id)} className="text-slate-500 hover:text-brand-orange" title="Archiver"><Archive className="w-4 h-4 inline" /></button>
-                                </td>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                            {data.data?.map((c) => (
+                                                <tr key={c.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30">
+                                                    <td className="px-5 py-3 font-mono text-xs">{c.reference}</td>
+                                                    <td className="px-5 py-3 font-medium text-slate-800 dark:text-white">{c.name}</td>
+                                                    <td className="px-5 py-3">{c.client?.name}</td>
+                                                    <td className="px-5 py-3">{c.city}</td>
+                                                    <td className="px-5 py-3">
+                                                        <div className="flex items-center gap-2 justify-center">
+                                                            <div className="w-16 bg-slate-100 dark:bg-slate-700 rounded-full h-2">
+                                                                <div className="bg-brand-orange h-2 rounded-full" style={{ width: `${c.progress}%` }} />
+                                                            </div>
+                                                            <span className="text-xs">{c.progress}%</span>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-5 py-3 text-center">
+                                                        <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-orange-300">
+                                                            {statusLabels[c.status] || c.status}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-5 py-3 text-right">
+                                                        <button onClick={() => archive(c.id)} className="text-slate-500 hover:text-brand-orange" title="Archiver"><Archive className="w-4 h-4 inline" /></button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
                 </ScrollableTable>
             </div>
         </div>

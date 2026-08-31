@@ -29,24 +29,27 @@ export default function GenericListPage({ title, subtitle, endpoint, columns }) 
                 </div>
             ) : (
                 <div className="glass-card overflow-hidden shadow-card">
-                    <ScrollableTable>
-                    <table className="w-full text-sm">
-                        <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase text-slate-500">
+                                    <ScrollableTable tableClassName="w-full text-sm"
+                    header={
+                        <>
+                            <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase text-slate-500">
                             <tr>{columns?.map((c) => <th key={c.key} className="px-5 py-3 text-left">{c.label}</th>)}</tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {data.data?.length ? data.data.map((row) => (
-                                <tr key={row.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30">
-                                    {columns.map((c) => (
-                                        <td key={c.key} className="px-5 py-3">{c.render ? c.render(row) : row[c.key]}</td>
-                                    ))}
-                                </tr>
-                            )) : (
-                                <tr><td colSpan={columns?.length || 1} className="px-5 py-12 text-center text-slate-500">Aucune donnée pour le moment.</td></tr>
-                            )}
-                        </tbody>
-                    </table>
-                    </ScrollableTable>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                {data.data?.length ? data.data.map((row) => (
+                                                    <tr key={row.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30">
+                                                        {columns.map((c) => (
+                                                            <td key={c.key} className="px-5 py-3">{c.render ? c.render(row) : row[c.key]}</td>
+                                                        ))}
+                                                    </tr>
+                                                )) : (
+                                                    <tr><td colSpan={columns?.length || 1} className="px-5 py-12 text-center text-slate-500">Aucune donnée pour le moment.</td></tr>
+                                                )}
+                                            </tbody>
+                </ScrollableTable>
                 </div>
             )}
         </div>

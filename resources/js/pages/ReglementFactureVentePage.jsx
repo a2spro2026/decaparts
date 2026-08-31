@@ -248,40 +248,43 @@ export default function ReglementFactureVentePage() {
                 <div className="bg-gradient-to-r from-zinc-900 via-brand-navy to-slate-900 px-5 py-3.5">
                     <h2 className="flex items-center gap-2 text-sm font-extrabold uppercase tracking-wide text-white"><Banknote className="h-4 w-4" /> Liste des règlements de factures</h2>
                 </div>
-                <ScrollableTable>
-                    <table className="w-full min-w-[900px] text-sm">
-                        <thead>
+                                <ScrollableTable tableClassName="w-full min-w-[900px] text-sm"
+                    header={
+                        <>
+                            <thead>
                             <tr>
-                                {['Date', 'N° Règlement', 'N° Facture', 'Client', 'Mode', 'Référence', 'Montant', 'Solde Facture', 'Actions'].map((heading) => (
-                                    <th key={heading} className="px-3 py-3 text-center text-[10px] text-slate-600 dark:text-slate-200">{heading}</th>
-                                ))}
+                            {['Date', 'N° Règlement', 'N° Facture', 'Client', 'Mode', 'Référence', 'Montant', 'Solde Facture', 'Actions'].map((heading) => (
+                            <th key={heading} className="px-3 py-3 text-center text-[10px] text-slate-600 dark:text-slate-200">{heading}</th>
+                            ))}
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {loading ? (
-                                <tr><td colSpan={9} className="px-4 py-12 text-center text-slate-400">Chargement...</td></tr>
-                            ) : rows.length ? rows.map((row) => (
-                                <tr key={row.id} className="transition-colors hover:bg-orange-50/50 dark:hover:bg-slate-800/50">
-                                    <td className="px-3 py-3 text-center">{row.payment_date}</td>
-                                    <td className="px-3 py-3 text-center font-mono text-xs font-bold text-brand-navy dark:text-orange-400">{row.code}</td>
-                                    <td className="px-3 py-3 text-center font-bold">{row.invoice_reference}</td>
-                                    <td className="px-3 py-3 text-center">{row.client_name || '—'}</td>
-                                    <td className="px-3 py-3 text-center"><span className="rounded-full bg-blue-100 px-2 py-1 text-[10px] font-bold text-orange-700 dark:bg-blue-900/40 dark:text-orange-300">{methodLabel(row.method)}</span></td>
-                                    <td className="px-3 py-3 text-center text-xs">{row.reference || '—'}</td>
-                                    <td className="px-3 py-3 text-center font-extrabold tabular-nums text-emerald-700 dark:text-emerald-400">{formatAmount(row.amount)}</td>
-                                    <td className="px-3 py-3 text-center font-bold tabular-nums text-orange-600">{formatAmount(row.invoice_remaining)}</td>
-                                    <td className="px-3 py-3">
-                                        <div className="flex justify-center gap-1">
-                                            <button type="button" title="Modifier" onClick={() => openEdit(row)} className="rounded-lg p-1.5 text-slate-400 hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-900/30"><Pencil className="h-4 w-4" /></button>
-                                            <button type="button" title="Supprimer" onClick={() => remove(row)} className="rounded-lg p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30"><Trash2 className="h-4 w-4" /></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )) : (
-                                <tr><td colSpan={9} className="px-4 py-14 text-center text-slate-400">Aucun règlement de facture enregistré</td></tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                {loading ? (
+                                                    <tr><td colSpan={9} className="px-4 py-12 text-center text-slate-400">Chargement...</td></tr>
+                                                ) : rows.length ? rows.map((row) => (
+                                                    <tr key={row.id} className="transition-colors hover:bg-orange-50/50 dark:hover:bg-slate-800/50">
+                                                        <td className="px-3 py-3 text-center">{row.payment_date}</td>
+                                                        <td className="px-3 py-3 text-center font-mono text-xs font-bold text-brand-navy dark:text-orange-400">{row.code}</td>
+                                                        <td className="px-3 py-3 text-center font-bold">{row.invoice_reference}</td>
+                                                        <td className="px-3 py-3 text-center">{row.client_name || '—'}</td>
+                                                        <td className="px-3 py-3 text-center"><span className="rounded-full bg-blue-100 px-2 py-1 text-[10px] font-bold text-orange-700 dark:bg-blue-900/40 dark:text-orange-300">{methodLabel(row.method)}</span></td>
+                                                        <td className="px-3 py-3 text-center text-xs">{row.reference || '—'}</td>
+                                                        <td className="px-3 py-3 text-center font-extrabold tabular-nums text-emerald-700 dark:text-emerald-400">{formatAmount(row.amount)}</td>
+                                                        <td className="px-3 py-3 text-center font-bold tabular-nums text-orange-600">{formatAmount(row.invoice_remaining)}</td>
+                                                        <td className="px-3 py-3">
+                                                            <div className="flex justify-center gap-1">
+                                                                <button type="button" title="Modifier" onClick={() => openEdit(row)} className="rounded-lg p-1.5 text-slate-400 hover:bg-amber-50 hover:text-amber-600 dark:hover:bg-amber-900/30"><Pencil className="h-4 w-4" /></button>
+                                                                <button type="button" title="Supprimer" onClick={() => remove(row)} className="rounded-lg p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30"><Trash2 className="h-4 w-4" /></button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                )) : (
+                                                    <tr><td colSpan={9} className="px-4 py-14 text-center text-slate-400">Aucun règlement de facture enregistré</td></tr>
+                                                )}
+                                            </tbody>
                 </ScrollableTable>
             </div>
         </div>

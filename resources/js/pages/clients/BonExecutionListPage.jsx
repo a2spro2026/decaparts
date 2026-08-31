@@ -110,60 +110,63 @@ export default function BonExecutionListPage() {
                     </button>
                 </div>
 
-                <ScrollableTable>
-                    <table className="w-full text-sm min-w-[1400px]">
-                        <thead>
+                                <ScrollableTable tableClassName="w-full text-sm min-w-[1400px]"
+                    header={
+                        <>
+                            <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                                {columns.map((h) => (
-                                    <th key={h} className="px-3 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
-                                ))}
+                            {columns.map((h) => (
+                            <th key={h} className="px-3 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
+                            ))}
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {loading ? (
-                                [...Array(4)].map((_, i) => (
-                                    <tr key={i}>{columns.map((__, j) => (
-                                        <td key={j} className="px-3 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
-                                    ))}</tr>
-                                ))
-                            ) : rows.length ? (
-                                rows.map((row) => (
-                                    <tr key={row.id} className="hover:bg-emerald-50/40 dark:hover:bg-slate-800/40 transition-colors">
-                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.order_date}</td>
-                                        <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-violet-400">{row.quote_reference || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.client_name || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center">
-                                            {row.type_travaux ? (
-                                                <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-semibold bg-yellow-100 dark:bg-yellow-900/30 text-brand-navy dark:text-orange-300">
-                                                    {row.type_travaux}
-                                                </span>
-                                            ) : '—'}
-                                        </td>
-                                        <td className="px-3 py-2.5 text-center">
-                                            <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{row.city || '—'}</span>
-                                        </td>
-                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{formatDelayDisplay(row.work_delay)}</td>
-                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.reglement || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-violet-400">{formatMontant(row.subtotal)}</td>
-                                        <td className="px-3 py-2.5 text-center tabular-nums text-slate-600 dark:text-slate-300">{formatMontant(row.tva)}</td>
-                                        <td className="px-3 py-2.5 text-center font-bold tabular-nums text-brand-navy dark:text-violet-400">{formatMontant(row.total_ttc)}</td>
-                                        <td className="px-3 py-2.5 text-center tabular-nums text-emerald-700 dark:text-emerald-300">{formatMontant(row.avance)}</td>
-                                        <td className="px-3 py-2.5 text-center">
-                                            <SoldeCell value={row.solde} />
-                                        </td>
-                                        <td className="px-3 py-2.5">
-                                            <div className="flex items-center justify-center gap-0.5">
-                                                <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => handlePrint(row)} />
-                                                <ActionBtn title="PDF" icon={FileText} color="orange" onClick={() => handlePrint(row)} />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr><td colSpan={columns.length} className="px-4 py-12 text-center text-slate-400">Aucun bon d'exécution — validez un devis pour l'afficher ici</td></tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                {loading ? (
+                                                    [...Array(4)].map((_, i) => (
+                                                        <tr key={i}>{columns.map((__, j) => (
+                                                            <td key={j} className="px-3 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
+                                                        ))}</tr>
+                                                    ))
+                                                ) : rows.length ? (
+                                                    rows.map((row) => (
+                                                        <tr key={row.id} className="hover:bg-emerald-50/40 dark:hover:bg-slate-800/40 transition-colors">
+                                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.order_date}</td>
+                                                            <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-violet-400">{row.quote_reference || '—'}</td>
+                                                            <td className="px-3 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.client_name || '—'}</td>
+                                                            <td className="px-3 py-2.5 text-center">
+                                                                {row.type_travaux ? (
+                                                                    <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-semibold bg-yellow-100 dark:bg-yellow-900/30 text-brand-navy dark:text-orange-300">
+                                                                        {row.type_travaux}
+                                                                    </span>
+                                                                ) : '—'}
+                                                            </td>
+                                                            <td className="px-3 py-2.5 text-center">
+                                                                <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{row.city || '—'}</span>
+                                                            </td>
+                                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{formatDelayDisplay(row.work_delay)}</td>
+                                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.reglement || '—'}</td>
+                                                            <td className="px-3 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-violet-400">{formatMontant(row.subtotal)}</td>
+                                                            <td className="px-3 py-2.5 text-center tabular-nums text-slate-600 dark:text-slate-300">{formatMontant(row.tva)}</td>
+                                                            <td className="px-3 py-2.5 text-center font-bold tabular-nums text-brand-navy dark:text-violet-400">{formatMontant(row.total_ttc)}</td>
+                                                            <td className="px-3 py-2.5 text-center tabular-nums text-emerald-700 dark:text-emerald-300">{formatMontant(row.avance)}</td>
+                                                            <td className="px-3 py-2.5 text-center">
+                                                                <SoldeCell value={row.solde} />
+                                                            </td>
+                                                            <td className="px-3 py-2.5">
+                                                                <div className="flex items-center justify-center gap-0.5">
+                                                                    <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => handlePrint(row)} />
+                                                                    <ActionBtn title="PDF" icon={FileText} color="orange" onClick={() => handlePrint(row)} />
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr><td colSpan={columns.length} className="px-4 py-12 text-center text-slate-400">Aucun bon d'exécution — validez un devis pour l'afficher ici</td></tr>
+                                                )}
+                                            </tbody>
                 </ScrollableTable>
             </div>
         </div>

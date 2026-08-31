@@ -282,16 +282,20 @@ function FormModal({ open, form, lines, meta, editingId, saving, error, supplier
                                 <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Lignes facture</p>
                                 <button type="button" onClick={onAddLine} className="text-xs text-brand-navy dark:text-orange-400 font-semibold hover:underline">+ Ligne</button>
                             </div>
-                            <ScrollableTable scrollClassName="rounded-lg border border-slate-200 dark:border-slate-700">
-                                <table className="w-full text-xs min-w-[650px]">
-                                    <thead>
+                            <ScrollableTable scrollClassName="rounded-lg border border-slate-200 dark:border-slate-700" tableClassName="w-full text-xs min-w-[650px]"
+                    header={
+                        <>
+                            <thead>
                                         <tr className="bg-slate-50 dark:bg-slate-800/80">
                                             {['Réf Article', 'Désignation', 'Qté', 'P/U', 'Total', ''].map((h) => (
                                                 <th key={h || 'x'} className="px-2 py-2 font-bold uppercase text-slate-500">{h}</th>
                                             ))}
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                        </>
+                    }
+                >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                         {lines.map((line) => (
                                             <tr key={line.key}>
                                                 <td className="px-2 py-1.5 w-32">
@@ -315,8 +319,7 @@ function FormModal({ open, form, lines, meta, editingId, saving, error, supplier
                                             </tr>
                                         ))}
                                     </tbody>
-                                </table>
-                            </ScrollableTable>
+                </ScrollableTable>
                             <div className="flex justify-end gap-4 mt-3 text-sm">
                                 <span>HT : <strong className="tabular-nums">{formatMontant(totalHt)}</strong></span>
                                 <span>TVA : <strong className="tabular-nums">{formatMontant(tva)}</strong></span>
@@ -578,8 +581,9 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
                             <EyeOff className="w-4 h-4" />
                         </button>
                     </div>
-                    <ScrollableTable maxHeight="360px">
-                        <table className="w-full text-sm min-w-[700px]">
+                    <ScrollableTable maxHeight="360px" tableClassName="w-full text-sm min-w-[700px]"
+                    header={
+                        <>
                             <thead className="sticky top-0 z-10">
                                 <tr className="bg-slate-100 dark:bg-slate-800 border-b-2 border-slate-200 dark:border-slate-700">
                                     {['Réf', 'Désignation', 'Stock Initial', 'Vente/mois', 'Stock Actuel'].map((heading) => (
@@ -587,7 +591,10 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
                                     ))}
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                        </>
+                    }
+                >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                 {stockLoading ? (
                                     <tr><td colSpan={5} className="px-4 py-10 text-center text-slate-400">Chargement...</td></tr>
                                 ) : stockRows.length ? stockRows.map((stock) => (
@@ -602,8 +609,7 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
                                     <tr><td colSpan={5} className="px-4 py-10 text-center text-slate-400">Aucun produit en stock</td></tr>
                                 )}
                             </tbody>
-                        </table>
-                    </ScrollableTable>
+                </ScrollableTable>
                 </div>
             )}
 
@@ -617,63 +623,66 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
                     </button>
                 </div>
 
-                <ScrollableTable>
-                    <table className="w-full text-sm min-w-[1000px]">
-                        <thead>
+                                <ScrollableTable tableClassName="w-full text-sm min-w-[1000px]"
+                    header={
+                        <>
+                            <thead>
                             <tr className="bg-gradient-to-r from-slate-100 via-slate-200/90 to-slate-100 dark:from-slate-800 dark:via-slate-700/80 dark:to-slate-800 border-b-2 border-slate-300 dark:border-slate-600">
-                                {headers.map((h) => (
-                                    <th key={h} className="px-3 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center">{h}</th>
-                                ))}
+                            {headers.map((h) => (
+                            <th key={h} className="px-3 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center">{h}</th>
+                            ))}
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {loading ? (
-                                [...Array(4)].map((_, i) => (
-                                    <tr key={i}>{[...Array(10)].map((__, j) => (
-                                        <td key={j} className="px-3 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
-                                    ))}</tr>
-                                ))
-                            ) : rows.length ? (
-                                rows.map((row) => (
-                                    <tr key={row.id} className="hover:bg-orange-50/40 dark:hover:bg-slate-800/40 transition-colors">
-                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.invoice_date}</td>
-                                        <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">{row.reference}</td>
-                                        <td className="px-3 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.fournisseur}</td>
-                                        <td className="px-3 py-2.5 text-center"><DepotBadge label={row.depot_label} /></td>
-                                        <td className="px-3 py-2.5 text-center text-xs text-slate-600 dark:text-slate-300">{row.payment_mode || '—'}</td>
-                                        <td className="px-3 py-2.5">
-                                            {row.photo_url ? (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setPhotoRow(row)}
-                                                    title="Agrandir la photo"
-                                                    className="mx-auto block w-11 h-11 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 hover:ring-2 hover:ring-brand-navy/40 transition-all"
-                                                >
-                                                    <img src={row.photo_url} alt={`Facture ${row.reference}`} className="w-full h-full object-cover" loading="lazy" />
-                                                </button>
-                                            ) : (
-                                                <span className="text-slate-300 dark:text-slate-600">—</span>
-                                            )}
-                                        </td>
-                                        <td className="px-3 py-2.5 text-center tabular-nums font-semibold">{formatMontant(row.total_ht)}</td>
-                                        <td className="px-3 py-2.5 text-center tabular-nums">{formatMontant(row.tva)}</td>
-                                        <td className="px-3 py-2.5 text-center tabular-nums font-semibold text-brand-navy dark:text-orange-400">{formatMontant(row.total_ttc)}</td>
-                                        <td className="px-3 py-2.5">
-                                            <div className="flex items-center justify-center gap-0.5">
-                                                <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
-                                                <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => openEdit(row)} />
-                                                <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />
-                                                <ActionBtn title="PDF" icon={FileText} color="orange" onClick={() => openPrintable(row)} />
-                                                <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => handleDelete(row)} />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr><td colSpan={10} className="px-4 py-12 text-center text-slate-400">Aucune facture enregistrée</td></tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                {loading ? (
+                                                    [...Array(4)].map((_, i) => (
+                                                        <tr key={i}>{[...Array(10)].map((__, j) => (
+                                                            <td key={j} className="px-3 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
+                                                        ))}</tr>
+                                                    ))
+                                                ) : rows.length ? (
+                                                    rows.map((row) => (
+                                                        <tr key={row.id} className="hover:bg-orange-50/40 dark:hover:bg-slate-800/40 transition-colors">
+                                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.invoice_date}</td>
+                                                            <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">{row.reference}</td>
+                                                            <td className="px-3 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.fournisseur}</td>
+                                                            <td className="px-3 py-2.5 text-center"><DepotBadge label={row.depot_label} /></td>
+                                                            <td className="px-3 py-2.5 text-center text-xs text-slate-600 dark:text-slate-300">{row.payment_mode || '—'}</td>
+                                                            <td className="px-3 py-2.5">
+                                                                {row.photo_url ? (
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => setPhotoRow(row)}
+                                                                        title="Agrandir la photo"
+                                                                        className="mx-auto block w-11 h-11 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 hover:ring-2 hover:ring-brand-navy/40 transition-all"
+                                                                    >
+                                                                        <img src={row.photo_url} alt={`Facture ${row.reference}`} className="w-full h-full object-cover" loading="lazy" />
+                                                                    </button>
+                                                                ) : (
+                                                                    <span className="text-slate-300 dark:text-slate-600">—</span>
+                                                                )}
+                                                            </td>
+                                                            <td className="px-3 py-2.5 text-center tabular-nums font-semibold">{formatMontant(row.total_ht)}</td>
+                                                            <td className="px-3 py-2.5 text-center tabular-nums">{formatMontant(row.tva)}</td>
+                                                            <td className="px-3 py-2.5 text-center tabular-nums font-semibold text-brand-navy dark:text-orange-400">{formatMontant(row.total_ttc)}</td>
+                                                            <td className="px-3 py-2.5">
+                                                                <div className="flex items-center justify-center gap-0.5">
+                                                                    <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
+                                                                    <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => openEdit(row)} />
+                                                                    <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />
+                                                                    <ActionBtn title="PDF" icon={FileText} color="orange" onClick={() => openPrintable(row)} />
+                                                                    <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => handleDelete(row)} />
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr><td colSpan={10} className="px-4 py-12 text-center text-slate-400">Aucune facture enregistrée</td></tr>
+                                                )}
+                                            </tbody>
                 </ScrollableTable>
             </div>
         </div>

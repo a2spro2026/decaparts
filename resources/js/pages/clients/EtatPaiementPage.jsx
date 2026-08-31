@@ -495,81 +495,84 @@ export default function EtatPaiementPage() {
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">État d'exécution</h3>
                     </div>
 
-                    <ScrollableTable>
-                        <table className="w-full text-sm table-fixed">
+                                    <ScrollableTable tableClassName="w-full text-sm table-fixed"
+                    header={
+                        <>
                             <thead>
-                                <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                                    <th className="px-2 py-3 w-9 text-center">
-                                        <input
-                                            type="checkbox"
-                                            checked={rows.length > 0 && selectedIds.size === rows.length}
-                                            onChange={toggleAll}
-                                            className="w-4 h-4 rounded border-slate-300 text-brand-navy focus:ring-brand-orange/30"
-                                        />
-                                    </th>
-                                    {[
-                                        { h: 'Date', w: 'w-[88px]' },
-                                        { h: 'Réf°', w: 'w-[72px]' },
-                                        { h: 'Nom Client', w: 'w-auto' },
-                                        { h: 'Montant', w: 'w-[108px]' },
-                                        { h: 'Montant Payé', w: 'w-[108px]' },
-                                        { h: 'Solde', w: 'w-[96px]' },
-                                    ].map(({ h, w }) => (
-                                        <th key={h} className={`px-2 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center ${w}`}>{h}</th>
-                                    ))}
-                                </tr>
+                            <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
+                            <th className="px-2 py-3 w-9 text-center">
+                            <input
+                            type="checkbox"
+                            checked={rows.length > 0 && selectedIds.size === rows.length}
+                            onChange={toggleAll}
+                            className="w-4 h-4 rounded border-slate-300 text-brand-navy focus:ring-brand-orange/30"
+                            />
+                            </th>
+                            {[
+                            { h: 'Date', w: 'w-[88px]' },
+                            { h: 'Réf°', w: 'w-[72px]' },
+                            { h: 'Nom Client', w: 'w-auto' },
+                            { h: 'Montant', w: 'w-[108px]' },
+                            { h: 'Montant Payé', w: 'w-[108px]' },
+                            { h: 'Solde', w: 'w-[96px]' },
+                            ].map(({ h, w }) => (
+                            <th key={h} className={`px-2 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center ${w}`}>{h}</th>
+                            ))}
+                            </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                {loading ? (
-                                    [...Array(3)].map((_, i) => (
-                                        <tr key={i}>
-                                            <td className="px-2 py-3" />
-                                            {[...Array(6)].map((__, j) => (
-                                                <td key={j} className="px-2 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[72px]" /></td>
-                                            ))}
-                                        </tr>
-                                    ))
-                                ) : rows.length ? (
-                                    rows.map((row) => {
-                                        const solde = rowSolde(row);
-                                        const paye = Number(row.montant_paye) || 0;
-
-                                        return (
-                                            <tr
-                                                key={row.id}
-                                                className={`transition-colors ${selectedIds.has(row.id) ? 'bg-blue-50/60 dark:bg-blue-900/20' : 'hover:bg-slate-50/60 dark:hover:bg-slate-800/40'}`}
-                                            >
-                                                <td className="px-2 py-2.5 text-center">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={selectedIds.has(row.id)}
-                                                        onChange={() => toggleRow(row.id)}
-                                                        className="w-4 h-4 rounded border-slate-300 text-brand-navy focus:ring-brand-orange/30"
-                                                    />
-                                                </td>
-                                                <td className="px-2 py-2.5 text-center text-slate-600 dark:text-slate-300 text-xs">{row.order_date}</td>
-                                                <td className="px-2 py-2.5 text-center font-mono text-[11px] font-semibold text-brand-navy dark:text-violet-400">{row.quote_reference || row.reference}</td>
-                                                <td className="px-2 py-2.5 text-center font-medium text-slate-800 dark:text-white truncate">{row.client_name || '—'}</td>
-                                                <td className="px-2 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-violet-400 text-xs">{formatMontant(row.montant ?? row.total_ttc)}</td>
-                                                <td className="px-2 py-2.5 text-center font-semibold tabular-nums text-emerald-700 dark:text-emerald-300 text-xs">
-                                                    {paye > 0 ? formatMontant(paye) : '—'}
-                                                </td>
-                                                <td className="px-2 py-2.5 text-center text-xs">
-                                                    {paye > 0 ? <SoldeCell value={solde} /> : '—'}
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
-                                ) : (
-                                    <tr>
-                                        <td colSpan={7} className="px-4 py-12 text-center text-slate-400">
-                                            Aucun bon d'exécution — validez un devis pour l'afficher ici
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </ScrollableTable>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                    {loading ? (
+                                                        [...Array(3)].map((_, i) => (
+                                                            <tr key={i}>
+                                                                <td className="px-2 py-3" />
+                                                                {[...Array(6)].map((__, j) => (
+                                                                    <td key={j} className="px-2 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[72px]" /></td>
+                                                                ))}
+                                                            </tr>
+                                                        ))
+                                                    ) : rows.length ? (
+                                                        rows.map((row) => {
+                                                            const solde = rowSolde(row);
+                                                            const paye = Number(row.montant_paye) || 0;
+                    
+                                                            return (
+                                                                <tr
+                                                                    key={row.id}
+                                                                    className={`transition-colors ${selectedIds.has(row.id) ? 'bg-blue-50/60 dark:bg-blue-900/20' : 'hover:bg-slate-50/60 dark:hover:bg-slate-800/40'}`}
+                                                                >
+                                                                    <td className="px-2 py-2.5 text-center">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            checked={selectedIds.has(row.id)}
+                                                                            onChange={() => toggleRow(row.id)}
+                                                                            className="w-4 h-4 rounded border-slate-300 text-brand-navy focus:ring-brand-orange/30"
+                                                                        />
+                                                                    </td>
+                                                                    <td className="px-2 py-2.5 text-center text-slate-600 dark:text-slate-300 text-xs">{row.order_date}</td>
+                                                                    <td className="px-2 py-2.5 text-center font-mono text-[11px] font-semibold text-brand-navy dark:text-violet-400">{row.quote_reference || row.reference}</td>
+                                                                    <td className="px-2 py-2.5 text-center font-medium text-slate-800 dark:text-white truncate">{row.client_name || '—'}</td>
+                                                                    <td className="px-2 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-violet-400 text-xs">{formatMontant(row.montant ?? row.total_ttc)}</td>
+                                                                    <td className="px-2 py-2.5 text-center font-semibold tabular-nums text-emerald-700 dark:text-emerald-300 text-xs">
+                                                                        {paye > 0 ? formatMontant(paye) : '—'}
+                                                                    </td>
+                                                                    <td className="px-2 py-2.5 text-center text-xs">
+                                                                        {paye > 0 ? <SoldeCell value={solde} /> : '—'}
+                                                                    </td>
+                                                                </tr>
+                                                            );
+                                                        })
+                                                    ) : (
+                                                        <tr>
+                                                            <td colSpan={7} className="px-4 py-12 text-center text-slate-400">
+                                                                Aucun bon d'exécution — validez un devis pour l'afficher ici
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                </ScrollableTable>
                 </div>
 
                 <div className="glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60 min-w-0">
@@ -577,49 +580,52 @@ export default function EtatPaiementPage() {
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Etat Règlement</h3>
                     </div>
 
-                    <ScrollableTable>
-                        <table className="w-full text-sm">
+                                    <ScrollableTable tableClassName="w-full text-sm"
+                    header={
+                        <>
                             <thead>
-                                <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                                    {['Type', 'N°', 'Banque', 'Nom Tiré', 'Date Encais', 'Actions'].map((h) => (
-                                        <th key={h} className="px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
-                                    ))}
-                                </tr>
+                            <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
+                            {['Type', 'N°', 'Banque', 'Nom Tiré', 'Date Encais', 'Actions'].map((h) => (
+                            <th key={h} className="px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
+                            ))}
+                            </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                                {loading ? (
-                                    [...Array(2)].map((_, i) => (
-                                        <tr key={i}>
-                                            {[...Array(6)].map((__, j) => (
-                                                <td key={j} className="px-3 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[72px]" /></td>
-                                            ))}
-                                        </tr>
-                                    ))
-                                ) : reglementRows.length ? (
-                                    reglementRows.map((p) => (
-                                        <tr key={p.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40">
-                                            <td className="px-3 py-2.5 text-center text-slate-700 dark:text-slate-200 font-semibold text-xs">{p.reglement || '—'}</td>
-                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300 text-xs">{p.numero || '—'}</td>
-                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300 text-xs truncate max-w-[100px]">{p.banque || '—'}</td>
-                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300 text-xs truncate max-w-[120px]">{p.nom_tire || '—'}</td>
-                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300 text-xs whitespace-nowrap">{p.payment_date || '—'}</td>
-                                            <td className="px-1 py-2">
-                                                <div className="flex items-center justify-center gap-0.5 flex-nowrap">
-                                                    {renderPaymentActions(p.payment_id)}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan={6} className="px-4 py-12 text-center text-slate-400 text-sm">
-                                            {selectedRows.length ? 'Aucun règlement pour cette ligne' : 'Sélectionnez une ligne pour voir les règlements'}
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </ScrollableTable>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                    {loading ? (
+                                                        [...Array(2)].map((_, i) => (
+                                                            <tr key={i}>
+                                                                {[...Array(6)].map((__, j) => (
+                                                                    <td key={j} className="px-3 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[72px]" /></td>
+                                                                ))}
+                                                            </tr>
+                                                        ))
+                                                    ) : reglementRows.length ? (
+                                                        reglementRows.map((p) => (
+                                                            <tr key={p.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40">
+                                                                <td className="px-3 py-2.5 text-center text-slate-700 dark:text-slate-200 font-semibold text-xs">{p.reglement || '—'}</td>
+                                                                <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300 text-xs">{p.numero || '—'}</td>
+                                                                <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300 text-xs truncate max-w-[100px]">{p.banque || '—'}</td>
+                                                                <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300 text-xs truncate max-w-[120px]">{p.nom_tire || '—'}</td>
+                                                                <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300 text-xs whitespace-nowrap">{p.payment_date || '—'}</td>
+                                                                <td className="px-1 py-2">
+                                                                    <div className="flex items-center justify-center gap-0.5 flex-nowrap">
+                                                                        {renderPaymentActions(p.payment_id)}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    ) : (
+                                                        <tr>
+                                                            <td colSpan={6} className="px-4 py-12 text-center text-slate-400 text-sm">
+                                                                {selectedRows.length ? 'Aucun règlement pour cette ligne' : 'Sélectionnez une ligne pour voir les règlements'}
+                                                            </td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                </ScrollableTable>
                 </div>
             </div>
 

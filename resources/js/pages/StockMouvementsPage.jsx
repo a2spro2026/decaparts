@@ -177,125 +177,128 @@ export default function StockMouvementsPage() {
                     </h3>
                 </div>
 
-                <ScrollableTable>
-                    <table className="w-full text-sm border-collapse min-w-[1280px]">
-                        <thead className="sticky top-0 z-20">
+                                <ScrollableTable tableClassName="w-full text-sm border-collapse min-w-[1280px]"
+                    header={
+                        <>
+                            <thead className="sticky top-0 z-20">
                             <tr className="bg-slate-100 dark:bg-slate-800">
-                                <th
-                                    rowSpan={2}
-                                    className="px-3 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 text-center whitespace-nowrap sticky left-0 z-30 bg-slate-100 dark:bg-slate-800 border-b border-r border-slate-200 dark:border-slate-700 align-middle"
-                                >
-                                    Réf
-                                </th>
-                                <th
-                                    rowSpan={2}
-                                    className="px-2 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 text-center whitespace-nowrap border-b border-r border-slate-200 dark:border-slate-700 align-middle"
-                                >
-                                    Stock<br />Initial
-                                </th>
-                                {monthsMeta.map((m, i) => (
-                                    <th
-                                        key={m.num}
-                                        colSpan={2}
-                                        title={m.full}
-                                        className={`px-1 py-2 text-center border-b border-slate-200 dark:border-slate-700 ${
-                                            i % 2 === 0
-                                                ? 'bg-slate-100 dark:bg-slate-800'
-                                                : 'bg-slate-50 dark:bg-slate-800/70'
-                                        }`}
-                                    >
-                                        <span className="inline-block text-[11px] font-bold tracking-wide text-brand-navy dark:text-orange-300 border-b-2 border-brand-orange pb-0.5">
-                                            {m.short}
-                                        </span>
-                                    </th>
-                                ))}
-                                <th
-                                    rowSpan={2}
-                                    className="px-2 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 text-center whitespace-nowrap border-b border-l border-slate-200 dark:border-slate-700 align-middle"
-                                >
-                                    Stock<br />Actuel
-                                </th>
-                                <th
-                                    rowSpan={2}
-                                    className="px-2 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 text-center whitespace-nowrap border-b border-slate-200 dark:border-slate-700 align-middle"
-                                >
-                                    Actions
-                                </th>
+                            <th
+                            rowSpan={2}
+                            className="px-3 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 text-center whitespace-nowrap sticky left-0 z-30 bg-slate-100 dark:bg-slate-800 border-b border-r border-slate-200 dark:border-slate-700 align-middle"
+                            >
+                            Réf
+                            </th>
+                            <th
+                            rowSpan={2}
+                            className="px-2 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 text-center whitespace-nowrap border-b border-r border-slate-200 dark:border-slate-700 align-middle"
+                            >
+                            Stock<br />Initial
+                            </th>
+                            {monthsMeta.map((m, i) => (
+                            <th
+                            key={m.num}
+                            colSpan={2}
+                            title={m.full}
+                            className={`px-1 py-2 text-center border-b border-slate-200 dark:border-slate-700 ${
+                            i % 2 === 0
+                            ? 'bg-slate-100 dark:bg-slate-800'
+                            : 'bg-slate-50 dark:bg-slate-800/70'
+                            }`}
+                            >
+                            <span className="inline-block text-[11px] font-bold tracking-wide text-brand-navy dark:text-orange-300 border-b-2 border-brand-orange pb-0.5">
+                            {m.short}
+                            </span>
+                            </th>
+                            ))}
+                            <th
+                            rowSpan={2}
+                            className="px-2 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 text-center whitespace-nowrap border-b border-l border-slate-200 dark:border-slate-700 align-middle"
+                            >
+                            Stock<br />Actuel
+                            </th>
+                            <th
+                            rowSpan={2}
+                            className="px-2 py-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 text-center whitespace-nowrap border-b border-slate-200 dark:border-slate-700 align-middle"
+                            >
+                            Actions
+                            </th>
                             </tr>
                             <tr className="bg-white dark:bg-slate-900">
-                                {monthsMeta.map((m, i) => (
-                                    <FragmentMonthSubHeads key={m.num} even={i % 2 === 0} />
-                                ))}
+                            {monthsMeta.map((m, i) => (
+                            <FragmentMonthSubHeads key={m.num} even={i % 2 === 0} />
+                            ))}
                             </tr>
-                        </thead>
-                        <tbody>
-                            {loading ? (
-                                [...Array(6)].map((_, i) => (
-                                    <tr key={i} className="border-b border-slate-100 dark:border-slate-800">
-                                        {[...Array(colCount || 28)].map((__, j) => (
-                                            <td key={j} className="px-2 py-3 text-center">
-                                                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[48px]" />
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))
-                            ) : rows.length ? (
-                                rows.map((row, rowIdx) => (
-                                    <tr
-                                        key={row.id}
-                                        className={`border-b border-slate-100 dark:border-slate-800 hover:bg-orange-50/40 dark:hover:bg-slate-800/50 transition-colors ${
-                                            rowIdx % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/60 dark:bg-slate-900/60'
-                                        }`}
-                                    >
-                                        <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-300 sticky left-0 z-10 bg-inherit border-r border-slate-100 dark:border-slate-800" title={row.designation || ''}>
-                                            {row.reference}
-                                        </td>
-                                        <td className="px-2 py-2.5 text-center tabular-nums text-xs font-semibold text-slate-700 dark:text-slate-200 border-r border-slate-100 dark:border-slate-800">
-                                            {formatQty(row.stock_initial)}
-                                        </td>
-                                        {monthsMeta.map((m, i) => {
-                                            const cell = row.months?.[m.num] || { achat: 0, vente: 0 };
-                                            const stripe = i % 2 === 0 ? '' : 'bg-slate-50/90 dark:bg-slate-800/25';
-                                            return (
-                                                <Fragment key={`${row.id}-${m.num}`}>
-                                                    <td className={`px-1.5 py-2.5 text-center tabular-nums text-[11px] font-semibold ${stripe} ${qtyClass(cell.achat, 'achat')}`}>
-                                                        {formatQty(cell.achat)}
-                                                    </td>
-                                                    <td className={`px-1.5 py-2.5 text-center tabular-nums text-[11px] font-semibold border-r border-slate-100 dark:border-slate-800 ${stripe} ${qtyClass(cell.vente, 'vente')}`}>
-                                                        {formatQty(cell.vente)}
-                                                    </td>
-                                                </Fragment>
-                                            );
-                                        })}
-                                        <td className="px-2 py-2.5 text-center tabular-nums text-sm font-bold text-brand-navy dark:text-orange-400 border-l border-slate-200 dark:border-slate-700">
-                                            {formatQtyStrict(row.stock_actuel)}
-                                        </td>
-                                        <td className="px-2 py-2.5">
-                                            <div className="flex items-center justify-center gap-0.5">
-                                                <ActionBtn
-                                                    title="Imprimer"
-                                                    icon={Printer}
-                                                    onClick={() => openPrintable(row, year, monthsMeta)}
-                                                />
-                                                <ActionBtn
-                                                    title="PDF"
-                                                    icon={FileText}
-                                                    color="orange"
-                                                    onClick={() => openPrintable(row, year, monthsMeta)}
-                                                />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={colCount || 28} className="px-4 py-12 text-center text-slate-400">
-                                        Aucun produit enregistré
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody>
+                                                {loading ? (
+                                                    [...Array(6)].map((_, i) => (
+                                                        <tr key={i} className="border-b border-slate-100 dark:border-slate-800">
+                                                            {[...Array(colCount || 28)].map((__, j) => (
+                                                                <td key={j} className="px-2 py-3 text-center">
+                                                                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[48px]" />
+                                                                </td>
+                                                            ))}
+                                                        </tr>
+                                                    ))
+                                                ) : rows.length ? (
+                                                    rows.map((row, rowIdx) => (
+                                                        <tr
+                                                            key={row.id}
+                                                            className={`border-b border-slate-100 dark:border-slate-800 hover:bg-orange-50/40 dark:hover:bg-slate-800/50 transition-colors ${
+                                                                rowIdx % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50/60 dark:bg-slate-900/60'
+                                                            }`}
+                                                        >
+                                                            <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-300 sticky left-0 z-10 bg-inherit border-r border-slate-100 dark:border-slate-800" title={row.designation || ''}>
+                                                                {row.reference}
+                                                            </td>
+                                                            <td className="px-2 py-2.5 text-center tabular-nums text-xs font-semibold text-slate-700 dark:text-slate-200 border-r border-slate-100 dark:border-slate-800">
+                                                                {formatQty(row.stock_initial)}
+                                                            </td>
+                                                            {monthsMeta.map((m, i) => {
+                                                                const cell = row.months?.[m.num] || { achat: 0, vente: 0 };
+                                                                const stripe = i % 2 === 0 ? '' : 'bg-slate-50/90 dark:bg-slate-800/25';
+                                                                return (
+                                                                    <Fragment key={`${row.id}-${m.num}`}>
+                                                                        <td className={`px-1.5 py-2.5 text-center tabular-nums text-[11px] font-semibold ${stripe} ${qtyClass(cell.achat, 'achat')}`}>
+                                                                            {formatQty(cell.achat)}
+                                                                        </td>
+                                                                        <td className={`px-1.5 py-2.5 text-center tabular-nums text-[11px] font-semibold border-r border-slate-100 dark:border-slate-800 ${stripe} ${qtyClass(cell.vente, 'vente')}`}>
+                                                                            {formatQty(cell.vente)}
+                                                                        </td>
+                                                                    </Fragment>
+                                                                );
+                                                            })}
+                                                            <td className="px-2 py-2.5 text-center tabular-nums text-sm font-bold text-brand-navy dark:text-orange-400 border-l border-slate-200 dark:border-slate-700">
+                                                                {formatQtyStrict(row.stock_actuel)}
+                                                            </td>
+                                                            <td className="px-2 py-2.5">
+                                                                <div className="flex items-center justify-center gap-0.5">
+                                                                    <ActionBtn
+                                                                        title="Imprimer"
+                                                                        icon={Printer}
+                                                                        onClick={() => openPrintable(row, year, monthsMeta)}
+                                                                    />
+                                                                    <ActionBtn
+                                                                        title="PDF"
+                                                                        icon={FileText}
+                                                                        color="orange"
+                                                                        onClick={() => openPrintable(row, year, monthsMeta)}
+                                                                    />
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan={colCount || 28} className="px-4 py-12 text-center text-slate-400">
+                                                            Aucun produit enregistré
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
                 </ScrollableTable>
             </div>
         </div>

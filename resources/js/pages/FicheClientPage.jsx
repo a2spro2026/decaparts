@@ -363,9 +363,9 @@ export default function FicheClientPage() {
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Liste des clients</h3>
                 </div>
 
-                <div className="overflow-x-auto border-b border-slate-200 dark:border-slate-700">
-                    <table className="w-full text-sm min-w-[1050px] table-fixed">
-                        <colgroup>
+                <ScrollableTable tableClassName="w-full text-sm min-w-[1050px] table-fixed"
+                    colgroup={
+                        <>
                             <col className="w-[6%]" />
                             <col className="w-[14%]" />
                             <col className="w-[9%]" />
@@ -376,37 +376,26 @@ export default function FicheClientPage() {
                             <col className="w-[9%]" />
                             <col className="w-[10%]" />
                             <col className="w-[16%]" />
-                        </colgroup>
-                        <thead>
-                            <tr className="bg-slate-50 dark:bg-slate-800/80">
-                                {['CR', 'Nom Client', 'Contact', 'Ville', 'Adresse', 'Type', 'Régl', 'Échéance', 'Solde Initial', 'Actions'].map((h) => (
-                                    <th
-                                        key={h}
-                                        className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center"
-                                    >
-                                        {h}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-
-                <ScrollableTable maxHeight="min(360px, 48vh)">
-                    <table className="w-full text-sm min-w-[1050px] table-fixed">
-                        <colgroup>
-                            <col className="w-[6%]" />
-                            <col className="w-[14%]" />
-                            <col className="w-[9%]" />
-                            <col className="w-[8%]" />
-                            <col className="w-[12%]" />
-                            <col className="w-[8%]" />
-                            <col className="w-[8%]" />
-                            <col className="w-[9%]" />
-                            <col className="w-[10%]" />
-                            <col className="w-[16%]" />
-                        </colgroup>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                        </>
+                    }
+                    header={
+                        <>
+                            <thead>
+                                <tr className="bg-slate-50 dark:bg-slate-800/80">
+                                    {['CR', 'Nom Client', 'Contact', 'Ville', 'Adresse', 'Type', 'Régl', 'Échéance', 'Solde Initial', 'Actions'].map((h) => (
+                                        <th
+                                            key={h}
+                                            className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center"
+                                        >
+                                            {h}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                        </>
+                    }
+                >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {loading ? (
                                 [...Array(3)].map((_, i) => (
                                     <tr key={i}>
@@ -470,8 +459,7 @@ export default function FicheClientPage() {
                                     </td>
                                 </tr>
                             )}
-                        </tbody>
-                    </table>
+                    </tbody>
                 </ScrollableTable>
             </div>
         </div>

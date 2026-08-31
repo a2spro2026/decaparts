@@ -93,21 +93,25 @@ function ClientDetailModal({ open, supplierName, rows, loading, onClose }) {
                     </button>
                 </div>
 
-                <ScrollableTable fill className="flex-1 min-h-0">
-                    <table className="w-full text-sm min-w-[760px]">
-                        <thead className="sticky top-0 z-10">
-                            <tr className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-                                {detailColumns.map((h) => (
-                                    <th
-                                        key={h}
-                                        className="px-4 py-3 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center"
-                                    >
-                                        {h}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                <ScrollableTable maxHeight="280px" tableClassName="w-full text-sm min-w-[760px]"
+                    header={
+                        <>
+                            <thead>
+                                <tr className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                                    {detailColumns.map((h) => (
+                                        <th
+                                            key={h}
+                                            className="px-4 py-3 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center"
+                                        >
+                                            {h}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                        </>
+                    }
+                >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {loading ? (
                                 [...Array(4)].map((_, i) => (
                                     <tr key={i}>
@@ -140,8 +144,7 @@ function ClientDetailModal({ open, supplierName, rows, loading, onClose }) {
                                     </td>
                                 </tr>
                             )}
-                        </tbody>
-                    </table>
+                    </tbody>
                 </ScrollableTable>
 
                 <div className="flex justify-end px-5 py-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 shrink-0">
@@ -293,60 +296,63 @@ export default function SupplierBalancePage() {
                     </button>
                 </div>
 
-                <ScrollableTable>
-                    <table className="w-full text-sm min-w-[800px]">
-                        <thead>
+                                <ScrollableTable tableClassName="w-full text-sm min-w-[800px]"
+                    header={
+                        <>
+                            <thead>
                             <tr className="bg-gradient-to-r from-slate-100 via-slate-200/90 to-slate-100 dark:from-slate-800 dark:via-slate-700/80 dark:to-slate-800 border-b-2 border-slate-300 dark:border-slate-600">
-                                {columns.map((h) => (
-                                    <th
-                                        key={h}
-                                        className="px-4 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center"
-                                    >
-                                        {h}
-                                    </th>
-                                ))}
+                            {columns.map((h) => (
+                            <th
+                            key={h}
+                            className="px-4 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center"
+                            >
+                            {h}
+                            </th>
+                            ))}
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {loading ? (
-                                [...Array(4)].map((_, i) => (
-                                    <tr key={i}>
-                                        {columns.map((__, j) => (
-                                            <td key={j} className="px-4 py-3 text-center">
-                                                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" />
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))
-                            ) : rows.length ? (
-                                rows.map((row) => (
-                                    <tr
-                                        key={row.id}
-                                        className="hover:bg-orange-50/40 dark:hover:bg-slate-800/40 transition-colors cursor-pointer"
-                                        onDoubleClick={() => openClientDetail(row)}
-                                        title="Double-clic pour le détail par client"
-                                    >
-                                        <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.date || '—'}</td>
-                                        <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.fournisseur}</td>
-                                        <td className="px-4 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-orange-400">{formatMontant(row.total_achats)}</td>
-                                        <td className="px-4 py-2.5 text-center tabular-nums text-emerald-700 dark:text-emerald-300">{formatMontant(row.montant_paye)}</td>
-                                        <td className="px-4 py-2.5 text-center">
-                                            <SoldeFournisseurCell value={row.solde} />
-                                        </td>
-                                        <td className="px-4 py-2.5 text-center">
-                                            <ReliquatCell value={row.reliquat} />
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={columns.length} className="px-4 py-12 text-center text-slate-400">
-                                        Aucune donnée pour ces critères
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                {loading ? (
+                                                    [...Array(4)].map((_, i) => (
+                                                        <tr key={i}>
+                                                            {columns.map((__, j) => (
+                                                                <td key={j} className="px-4 py-3 text-center">
+                                                                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" />
+                                                                </td>
+                                                            ))}
+                                                        </tr>
+                                                    ))
+                                                ) : rows.length ? (
+                                                    rows.map((row) => (
+                                                        <tr
+                                                            key={row.id}
+                                                            className="hover:bg-orange-50/40 dark:hover:bg-slate-800/40 transition-colors cursor-pointer"
+                                                            onDoubleClick={() => openClientDetail(row)}
+                                                            title="Double-clic pour le détail par client"
+                                                        >
+                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.date || '—'}</td>
+                                                            <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.fournisseur}</td>
+                                                            <td className="px-4 py-2.5 text-center font-semibold tabular-nums text-brand-navy dark:text-orange-400">{formatMontant(row.total_achats)}</td>
+                                                            <td className="px-4 py-2.5 text-center tabular-nums text-emerald-700 dark:text-emerald-300">{formatMontant(row.montant_paye)}</td>
+                                                            <td className="px-4 py-2.5 text-center">
+                                                                <SoldeFournisseurCell value={row.solde} />
+                                                            </td>
+                                                            <td className="px-4 py-2.5 text-center">
+                                                                <ReliquatCell value={row.reliquat} />
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan={columns.length} className="px-4 py-12 text-center text-slate-400">
+                                                            Aucune donnée pour ces critères
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
                 </ScrollableTable>
             </div>
         </div>

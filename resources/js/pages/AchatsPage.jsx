@@ -28,10 +28,11 @@ export default function AchatsPage() {
             </div>
 
             <div className="glass-card overflow-hidden shadow-card">
-                <ScrollableTable>
-                <table className="w-full text-sm">
-                    <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase text-slate-500">
-                        <tr>
+                                <ScrollableTable tableClassName="w-full text-sm"
+                    header={
+                        <>
+                            <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase text-slate-500">
+                            <tr>
                             <th className="px-5 py-3 text-left">N° Bon</th>
                             <th className="px-5 py-3 text-left">Date</th>
                             <th className="px-5 py-3 text-left">Fournisseur</th>
@@ -39,30 +40,32 @@ export default function AchatsPage() {
                             <th className="px-5 py-3 text-right">Total TTC</th>
                             <th className="px-5 py-3 text-center">Statut</th>
                             <th className="px-5 py-3 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                        {orders.data?.map((o) => (
-                            <tr key={o.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30">
-                                <td className="px-5 py-3 font-mono font-medium">{o.reference}</td>
-                                <td className="px-5 py-3">{o.order_date}</td>
-                                <td className="px-5 py-3">{o.supplier?.name}</td>
-                                <td className="px-5 py-3">{o.chantier?.name || '—'}</td>
-                                <td className="px-5 py-3 text-right font-semibold">{formatMontant(o.total_ttc)}</td>
-                                <td className="px-5 py-3 text-center">
-                                    <span className="px-2 py-1 rounded-full text-xs bg-amber-100 text-amber-800">{o.status}</span>
-                                </td>
-                                <td className="px-5 py-3 text-right">
-                                    {o.status === 'en_attente' && (
-                                        <button onClick={() => validate(o.id)} className="text-emerald-600 hover:text-emerald-700" title="Valider">
-                                            <CheckCircle className="w-5 h-5 inline" />
-                                        </button>
-                                    )}
-                                </td>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                            {orders.data?.map((o) => (
+                                                <tr key={o.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30">
+                                                    <td className="px-5 py-3 font-mono font-medium">{o.reference}</td>
+                                                    <td className="px-5 py-3">{o.order_date}</td>
+                                                    <td className="px-5 py-3">{o.supplier?.name}</td>
+                                                    <td className="px-5 py-3">{o.chantier?.name || '—'}</td>
+                                                    <td className="px-5 py-3 text-right font-semibold">{formatMontant(o.total_ttc)}</td>
+                                                    <td className="px-5 py-3 text-center">
+                                                        <span className="px-2 py-1 rounded-full text-xs bg-amber-100 text-amber-800">{o.status}</span>
+                                                    </td>
+                                                    <td className="px-5 py-3 text-right">
+                                                        {o.status === 'en_attente' && (
+                                                            <button onClick={() => validate(o.id)} className="text-emerald-600 hover:text-emerald-700" title="Valider">
+                                                                <CheckCircle className="w-5 h-5 inline" />
+                                                            </button>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
                 </ScrollableTable>
             </div>
         </div>

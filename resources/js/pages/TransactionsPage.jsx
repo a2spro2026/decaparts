@@ -497,51 +497,54 @@ export default function TransactionsPage() {
                     </button>
                 </div>
 
-                <ScrollableTable>
-                    <table className="w-full text-sm min-w-[900px]">
-                        <thead>
+                                <ScrollableTable tableClassName="w-full text-sm min-w-[900px]"
+                    header={
+                        <>
+                            <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                                {['Date', 'Bénéficiaire', 'Montant', 'Coffre', 'Type', 'Statut', 'Motif', 'Actions'].map((h) => (
-                                    <th key={h} className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
-                                ))}
+                            {['Date', 'Bénéficiaire', 'Montant', 'Coffre', 'Type', 'Statut', 'Motif', 'Actions'].map((h) => (
+                            <th key={h} className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
+                            ))}
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {loading ? (
-                                [...Array(4)].map((_, i) => (
-                                    <tr key={i}>{[...Array(8)].map((__, j) => (
-                                        <td key={j} className="px-4 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
-                                    ))}</tr>
-                                ))
-                            ) : rows.length ? (
-                                rows.map((row) => (
-                                    <tr key={row.id} className={`hover:bg-orange-50/40 dark:hover:bg-slate-800/40 transition-colors ${editingId === row.id ? 'bg-amber-50/60 dark:bg-amber-900/10' : ''}`}>
-                                        <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.transaction_date}</td>
-                                        <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.beneficiary || '—'}</td>
-                                        <td className={`px-4 py-2.5 text-center font-semibold tabular-nums ${isSortie(row.statut) ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
-                                            {formatMontant(row.amount)}
-                                        </td>
-                                        <td className="px-4 py-2.5 text-center">
-                                            <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{row.coffre || '—'}</span>
-                                        </td>
-                                        <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.type_reglement || '—'}</td>
-                                        <td className="px-4 py-2.5 text-center"><StatutBadge value={row.statut} /></td>
-                                        <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300 max-w-[200px] truncate" title={row.motif}>{row.motif || '—'}</td>
-                                        <td className="px-4 py-2.5">
-                                            <div className="flex items-center justify-center gap-0.5">
-                                                <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
-                                                <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => fillForm(row)} />
-                                                <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />
-                                                <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => handleDelete(row)} />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr><td colSpan={8} className="px-4 py-12 text-center text-slate-400">Aucune transaction enregistrée</td></tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                {loading ? (
+                                                    [...Array(4)].map((_, i) => (
+                                                        <tr key={i}>{[...Array(8)].map((__, j) => (
+                                                            <td key={j} className="px-4 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
+                                                        ))}</tr>
+                                                    ))
+                                                ) : rows.length ? (
+                                                    rows.map((row) => (
+                                                        <tr key={row.id} className={`hover:bg-orange-50/40 dark:hover:bg-slate-800/40 transition-colors ${editingId === row.id ? 'bg-amber-50/60 dark:bg-amber-900/10' : ''}`}>
+                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.transaction_date}</td>
+                                                            <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.beneficiary || '—'}</td>
+                                                            <td className={`px-4 py-2.5 text-center font-semibold tabular-nums ${isSortie(row.statut) ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                                                                {formatMontant(row.amount)}
+                                                            </td>
+                                                            <td className="px-4 py-2.5 text-center">
+                                                                <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{row.coffre || '—'}</span>
+                                                            </td>
+                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.type_reglement || '—'}</td>
+                                                            <td className="px-4 py-2.5 text-center"><StatutBadge value={row.statut} /></td>
+                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300 max-w-[200px] truncate" title={row.motif}>{row.motif || '—'}</td>
+                                                            <td className="px-4 py-2.5">
+                                                                <div className="flex items-center justify-center gap-0.5">
+                                                                    <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
+                                                                    <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => fillForm(row)} />
+                                                                    <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />
+                                                                    <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => handleDelete(row)} />
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr><td colSpan={8} className="px-4 py-12 text-center text-slate-400">Aucune transaction enregistrée</td></tr>
+                                                )}
+                                            </tbody>
                 </ScrollableTable>
             </div>
         </div>

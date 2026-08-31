@@ -49,54 +49,57 @@ export default function ChauffeursPage() {
                     </button>
                 </div>
 
-                <ScrollableTable>
-                    <table className="w-full text-sm min-w-[560px]">
-                        <thead>
+                                <ScrollableTable tableClassName="w-full text-sm min-w-[560px]"
+                    header={
+                        <>
+                            <thead>
                             <tr className="bg-gradient-to-r from-slate-100 via-slate-200/90 to-slate-100 dark:from-slate-800 dark:via-slate-700/80 dark:to-slate-800 border-b-2 border-slate-300 dark:border-slate-600">
-                                {columns.map((h) => (
-                                    <th
-                                        key={h}
-                                        className="px-4 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center"
-                                    >
-                                        {h}
-                                    </th>
-                                ))}
+                            {columns.map((h) => (
+                            <th
+                            key={h}
+                            className="px-4 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center"
+                            >
+                            {h}
+                            </th>
+                            ))}
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {loading ? (
-                                [...Array(4)].map((_, i) => (
-                                    <tr key={i}>
-                                        {[...Array(3)].map((__, j) => (
-                                            <td key={j} className="px-4 py-3 text-center">
-                                                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[100px]" />
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))
-                            ) : rows.length ? (
-                                rows.map((row) => (
-                                    <tr key={row.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
-                                        <td className="px-4 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">
-                                            {row.id}
-                                        </td>
-                                        <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">
-                                            {row.nom || '—'}
-                                        </td>
-                                        <td className="px-4 py-2.5 text-center font-mono text-xs text-slate-600 dark:text-slate-300">
-                                            {row.matricule || '—'}
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={3} className="px-4 py-12 text-center text-slate-400">
-                                        Aucun chauffeur saisi sur les bons d&apos;achats
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                {loading ? (
+                                                    [...Array(4)].map((_, i) => (
+                                                        <tr key={i}>
+                                                            {[...Array(3)].map((__, j) => (
+                                                                <td key={j} className="px-4 py-3 text-center">
+                                                                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[100px]" />
+                                                                </td>
+                                                            ))}
+                                                        </tr>
+                                                    ))
+                                                ) : rows.length ? (
+                                                    rows.map((row) => (
+                                                        <tr key={row.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                                                            <td className="px-4 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">
+                                                                {row.id}
+                                                            </td>
+                                                            <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">
+                                                                {row.nom || '—'}
+                                                            </td>
+                                                            <td className="px-4 py-2.5 text-center font-mono text-xs text-slate-600 dark:text-slate-300">
+                                                                {row.matricule || '—'}
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan={3} className="px-4 py-12 text-center text-slate-400">
+                                                            Aucun chauffeur saisi sur les bons d&apos;achats
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
                 </ScrollableTable>
             </div>
         </div>

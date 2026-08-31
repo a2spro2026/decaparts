@@ -215,7 +215,7 @@ export default function SupplierRelevePage() {
     ].filter(Boolean).join(' · ');
 
     return (
-        <div className="flex flex-col flex-1 h-full min-h-0 gap-3">
+        <div className="space-y-4">
             <div className="shrink-0 space-y-3 sticky top-0 z-20 bg-slate-50 dark:bg-slate-950 pb-1">
                 <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
                     <div className="min-w-0">
@@ -347,73 +347,76 @@ export default function SupplierRelevePage() {
                 </div>
             </div>
 
-            <div className="flex-1 min-h-0 glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60 flex flex-col">
+            <div className="glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60">
                 <div className="px-5 py-2.5 bg-gradient-to-r from-zinc-950 via-zinc-900 to-orange-900 border-b border-white/10 shrink-0">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Relevé de compte</h3>
                 </div>
-                <ScrollableTable>
-                    <table className="w-full text-sm min-w-[1500px]">
-                        <thead className="sticky top-0 z-10">
+                                <ScrollableTable tableClassName="w-full text-sm min-w-[1500px]"
+                    header={
+                        <>
+                            <thead className="sticky top-0 z-10">
                             <tr className="bg-gradient-to-r from-slate-100 via-slate-200/90 to-slate-100 dark:from-slate-800 dark:via-slate-700/80 dark:to-slate-800 border-b-2 border-slate-300 dark:border-slate-600">
-                                {columns.map((h) => (
-                                    <th key={h} className="px-2.5 py-3 text-[10px] font-bold uppercase tracking-[0.1em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center bg-slate-100 dark:bg-slate-800">
-                                        {h}
-                                    </th>
-                                ))}
+                            {columns.map((h) => (
+                            <th key={h} className="px-2.5 py-3 text-[10px] font-bold uppercase tracking-[0.1em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center bg-slate-100 dark:bg-slate-800">
+                            {h}
+                            </th>
+                            ))}
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {loading ? (
-                                [...Array(6)].map((_, i) => (
-                                    <tr key={i}>
-                                        {columns.map((__, j) => (
-                                            <td key={j} className="px-2.5 py-3 text-center">
-                                                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[60px]" />
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))
-                            ) : rows.length ? (
-                                rows.map((row, idx) => (
-                                    <tr key={`${row.operation}-${row.numero_bn}-${idx}`} className="hover:bg-orange-50/40 dark:hover:bg-slate-800/40">
-                                        <td className="px-2.5 py-2 text-center">
-                                            <span className={`inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
-                                                row.operation === 'Achat'
-                                                    ? 'bg-blue-50 text-orange-700 dark:bg-blue-900/30 dark:text-orange-300'
-                                                    : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'
-                                            }`}>
-                                                {row.operation}
-                                            </span>
-                                        </td>
-                                        <td className="px-2.5 py-2 text-center text-slate-600 dark:text-slate-300 whitespace-nowrap">{row.date || '—'}</td>
-                                        <td className="px-2.5 py-2 text-center font-mono text-[11px] font-semibold text-brand-navy dark:text-orange-300">{row.numero_bn || '—'}</td>
-                                        <td className="px-2.5 py-2 text-center text-slate-700 dark:text-slate-200 max-w-[140px] truncate" title={row.client_livre || ''}>{row.client_livre || '—'}</td>
-                                        <td className="px-2.5 py-2 text-center text-slate-600 dark:text-slate-300">{row.ville_liv || '—'}</td>
-                                        <td className="px-2.5 py-2 text-center tabular-nums text-slate-700 dark:text-slate-200">{formatQty(row.qte)}</td>
-                                        <td className="px-2.5 py-2 text-center tabular-nums font-semibold text-rose-700 dark:text-rose-400">{formatMontant(row.debit)}</td>
-                                        <td className="px-2.5 py-2 text-center tabular-nums font-semibold text-emerald-700 dark:text-emerald-400">{formatMontant(row.credit)}</td>
-                                        <td className="px-2.5 py-2 text-center tabular-nums font-bold text-brand-navy dark:text-orange-400">
-                                            {(Number(row.solde) || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                        </td>
-                                        <td className="px-2.5 py-2 text-center text-slate-600 dark:text-slate-300">{row.type_reg || '—'}</td>
-                                        <td className="px-2.5 py-2 text-center font-mono text-[11px] text-slate-600 dark:text-slate-300">{row.numero_reg || '—'}</td>
-                                        <td className="px-2.5 py-2 text-center text-slate-700 dark:text-slate-200 max-w-[120px] truncate" title={row.nom_tire || ''}>{row.nom_tire || '—'}</td>
-                                        <td className="px-2.5 py-2 text-center text-slate-600 dark:text-slate-300 whitespace-nowrap">{row.date_encaiss || '—'}</td>
-                                        <td className="px-2.5 py-2 text-center"><StatusMark active={row.paye} tone="green" /></td>
-                                        <td className="px-2.5 py-2 text-center"><StatusMark active={row.devalide} tone="violet" /></td>
-                                        <td className="px-2.5 py-2 text-center"><StatusMark active={row.impaye} tone="red" /></td>
-                                        <td className="px-2.5 py-2 text-center"><StatusMark active={row.reporte} tone="yellow" /></td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={columns.length} className="px-4 py-12 text-center text-slate-400">
-                                        Aucune opération pour ces critères
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                {loading ? (
+                                                    [...Array(6)].map((_, i) => (
+                                                        <tr key={i}>
+                                                            {columns.map((__, j) => (
+                                                                <td key={j} className="px-2.5 py-3 text-center">
+                                                                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[60px]" />
+                                                                </td>
+                                                            ))}
+                                                        </tr>
+                                                    ))
+                                                ) : rows.length ? (
+                                                    rows.map((row, idx) => (
+                                                        <tr key={`${row.operation}-${row.numero_bn}-${idx}`} className="hover:bg-orange-50/40 dark:hover:bg-slate-800/40">
+                                                            <td className="px-2.5 py-2 text-center">
+                                                                <span className={`inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${
+                                                                    row.operation === 'Achat'
+                                                                        ? 'bg-blue-50 text-orange-700 dark:bg-blue-900/30 dark:text-orange-300'
+                                                                        : 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300'
+                                                                }`}>
+                                                                    {row.operation}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-2.5 py-2 text-center text-slate-600 dark:text-slate-300 whitespace-nowrap">{row.date || '—'}</td>
+                                                            <td className="px-2.5 py-2 text-center font-mono text-[11px] font-semibold text-brand-navy dark:text-orange-300">{row.numero_bn || '—'}</td>
+                                                            <td className="px-2.5 py-2 text-center text-slate-700 dark:text-slate-200 max-w-[140px] truncate" title={row.client_livre || ''}>{row.client_livre || '—'}</td>
+                                                            <td className="px-2.5 py-2 text-center text-slate-600 dark:text-slate-300">{row.ville_liv || '—'}</td>
+                                                            <td className="px-2.5 py-2 text-center tabular-nums text-slate-700 dark:text-slate-200">{formatQty(row.qte)}</td>
+                                                            <td className="px-2.5 py-2 text-center tabular-nums font-semibold text-rose-700 dark:text-rose-400">{formatMontant(row.debit)}</td>
+                                                            <td className="px-2.5 py-2 text-center tabular-nums font-semibold text-emerald-700 dark:text-emerald-400">{formatMontant(row.credit)}</td>
+                                                            <td className="px-2.5 py-2 text-center tabular-nums font-bold text-brand-navy dark:text-orange-400">
+                                                                {(Number(row.solde) || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                            </td>
+                                                            <td className="px-2.5 py-2 text-center text-slate-600 dark:text-slate-300">{row.type_reg || '—'}</td>
+                                                            <td className="px-2.5 py-2 text-center font-mono text-[11px] text-slate-600 dark:text-slate-300">{row.numero_reg || '—'}</td>
+                                                            <td className="px-2.5 py-2 text-center text-slate-700 dark:text-slate-200 max-w-[120px] truncate" title={row.nom_tire || ''}>{row.nom_tire || '—'}</td>
+                                                            <td className="px-2.5 py-2 text-center text-slate-600 dark:text-slate-300 whitespace-nowrap">{row.date_encaiss || '—'}</td>
+                                                            <td className="px-2.5 py-2 text-center"><StatusMark active={row.paye} tone="green" /></td>
+                                                            <td className="px-2.5 py-2 text-center"><StatusMark active={row.devalide} tone="violet" /></td>
+                                                            <td className="px-2.5 py-2 text-center"><StatusMark active={row.impaye} tone="red" /></td>
+                                                            <td className="px-2.5 py-2 text-center"><StatusMark active={row.reporte} tone="yellow" /></td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan={columns.length} className="px-4 py-12 text-center text-slate-400">
+                                                            Aucune opération pour ces critères
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
                 </ScrollableTable>
             </div>
         </div>

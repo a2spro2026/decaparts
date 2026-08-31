@@ -437,59 +437,62 @@ export default function ChargesPage() {
                     </button>
                 </div>
 
-                <ScrollableTable>
-                    <table className="w-full text-sm min-w-[1200px]">
-                        <thead>
+                                <ScrollableTable tableClassName="w-full text-sm min-w-[1200px]"
+                    header={
+                        <>
+                            <thead>
                             <tr className="bg-gradient-to-r from-slate-100 via-slate-200/90 to-slate-100 dark:from-slate-800 dark:via-slate-700/80 dark:to-slate-800 border-b-2 border-slate-300 dark:border-slate-600">
-                                {headers.map((h) => (
-                                    <th key={h} className="px-3 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center">
-                                        {h}
-                                    </th>
-                                ))}
+                            {headers.map((h) => (
+                            <th key={h} className="px-3 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600 dark:text-slate-300 whitespace-nowrap text-center">
+                            {h}
+                            </th>
+                            ))}
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {loading ? (
-                                [...Array(4)].map((_, i) => (
-                                    <tr key={i}>
-                                        {[...Array(11)].map((__, j) => (
-                                            <td key={j} className="px-3 py-3 text-center">
-                                                <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" />
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))
-                            ) : rows.length ? (
-                                rows.map((row) => (
-                                    <tr key={row.id} className="hover:bg-teal-50/40 dark:hover:bg-slate-800/40 transition-colors">
-                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.charge_date || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-teal-700 dark:text-teal-400">{row.reference}</td>
-                                        <td className="px-3 py-2.5 text-center text-slate-700 dark:text-slate-200 max-w-[160px] truncate" title={row.designation}>{row.designation || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.beneficiaire || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.type_reglement || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center font-mono text-xs text-slate-600 dark:text-slate-300">{row.numero || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.banque || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.nom_tire || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.date_decaissement || '—'}</td>
-                                        <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300 max-w-[180px] truncate" title={row.remarque}>{row.remarque || '—'}</td>
-                                        <td className="px-3 py-2.5">
-                                            <div className="flex items-center justify-center gap-0.5">
-                                                <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
-                                                <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => openEdit(row)} />
-                                                <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />
-                                                <ActionBtn title="PDF" icon={FileText} color="orange" onClick={() => openPrintable(row)} />
-                                                <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => handleDelete(row)} />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={11} className="px-4 py-12 text-center text-slate-400">Aucune charge enregistrée</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                        </>
+                    }
+                    >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                {loading ? (
+                                                    [...Array(4)].map((_, i) => (
+                                                        <tr key={i}>
+                                                            {[...Array(11)].map((__, j) => (
+                                                                <td key={j} className="px-3 py-3 text-center">
+                                                                    <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" />
+                                                                </td>
+                                                            ))}
+                                                        </tr>
+                                                    ))
+                                                ) : rows.length ? (
+                                                    rows.map((row) => (
+                                                        <tr key={row.id} className="hover:bg-teal-50/40 dark:hover:bg-slate-800/40 transition-colors">
+                                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.charge_date || '—'}</td>
+                                                            <td className="px-3 py-2.5 text-center font-mono text-xs font-semibold text-teal-700 dark:text-teal-400">{row.reference}</td>
+                                                            <td className="px-3 py-2.5 text-center text-slate-700 dark:text-slate-200 max-w-[160px] truncate" title={row.designation}>{row.designation || '—'}</td>
+                                                            <td className="px-3 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.beneficiaire || '—'}</td>
+                                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.type_reglement || '—'}</td>
+                                                            <td className="px-3 py-2.5 text-center font-mono text-xs text-slate-600 dark:text-slate-300">{row.numero || '—'}</td>
+                                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.banque || '—'}</td>
+                                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.nom_tire || '—'}</td>
+                                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.date_decaissement || '—'}</td>
+                                                            <td className="px-3 py-2.5 text-center text-slate-600 dark:text-slate-300 max-w-[180px] truncate" title={row.remarque}>{row.remarque || '—'}</td>
+                                                            <td className="px-3 py-2.5">
+                                                                <div className="flex items-center justify-center gap-0.5">
+                                                                    <ActionBtn title="Voir" icon={Eye} color="orange" onClick={() => setViewRow(row)} />
+                                                                    <ActionBtn title="Modifier" icon={Pencil} color="amber" onClick={() => openEdit(row)} />
+                                                                    <ActionBtn title="Imprimer" icon={Printer} color="slate" onClick={() => openPrintable(row)} />
+                                                                    <ActionBtn title="PDF" icon={FileText} color="orange" onClick={() => openPrintable(row)} />
+                                                                    <ActionBtn title="Supprimer" icon={Trash2} color="red" onClick={() => handleDelete(row)} />
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan={11} className="px-4 py-12 text-center text-slate-400">Aucune charge enregistrée</td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
                 </ScrollableTable>
             </div>
         </div>

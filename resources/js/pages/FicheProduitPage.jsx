@@ -374,9 +374,9 @@ export default function FicheProduitPage() {
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Liste des produits</h3>
                 </div>
 
-                <div className="overflow-x-auto border-b border-slate-200 dark:border-slate-700">
-                    <table className="w-full text-sm min-w-[1100px] table-fixed border-collapse">
-                        <colgroup>
+                <ScrollableTable tableClassName="w-full text-sm min-w-[1100px] table-fixed border-collapse"
+                    colgroup={
+                        <>
                             <col className="w-[9%]" />
                             <col className="w-[18%]" />
                             <col className="w-[7%]" />
@@ -388,38 +388,26 @@ export default function FicheProduitPage() {
                             <col className="w-[8%]" />
                             <col className="w-[8%]" />
                             <col className="w-[9%]" />
-                        </colgroup>
-                        <thead>
-                            <tr className="bg-slate-50 dark:bg-slate-800">
-                                {['Réf', 'Désignation', 'Unité', 'Qté', 'Qté Vendue', 'Stock', 'Famille', 'Origine', 'Statut', 'État', 'Actions'].map((h) => (
-                                    <th
-                                        key={h}
-                                        className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center"
-                                    >
-                                        {h}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-
-                <ScrollableTable maxHeight="min(360px, 48vh)">
-                    <table className="w-full text-sm min-w-[1100px] table-fixed border-collapse">
-                        <colgroup>
-                            <col className="w-[9%]" />
-                            <col className="w-[18%]" />
-                            <col className="w-[7%]" />
-                            <col className="w-[7%]" />
-                            <col className="w-[8%]" />
-                            <col className="w-[8%]" />
-                            <col className="w-[9%]" />
-                            <col className="w-[9%]" />
-                            <col className="w-[8%]" />
-                            <col className="w-[8%]" />
-                            <col className="w-[9%]" />
-                        </colgroup>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                        </>
+                    }
+                    header={
+                        <>
+                            <thead>
+                                <tr className="bg-slate-50 dark:bg-slate-800">
+                                    {['Réf', 'Désignation', 'Unité', 'Qté', 'Qté Vendue', 'Stock', 'Famille', 'Origine', 'Statut', 'État', 'Actions'].map((h) => (
+                                        <th
+                                            key={h}
+                                            className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center"
+                                        >
+                                            {h}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                        </>
+                    }
+                >
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                             {loading ? (
                                 [...Array(5)].map((_, i) => (
                                     <tr key={i}>{[...Array(11)].map((__, j) => (
@@ -464,8 +452,7 @@ export default function FicheProduitPage() {
                             ) : (
                                 <tr><td colSpan={11} className="px-4 py-12 text-center text-slate-400">Aucun produit enregistré</td></tr>
                             )}
-                        </tbody>
-                    </table>
+                    </tbody>
                 </ScrollableTable>
             </div>
         </div>
