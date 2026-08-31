@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Save, ArrowLeft, Send, CheckCircle, Plus, Trash2, Printer, ChevronUp, ChevronDown } from 'lucide-react';
+import { Save, ArrowLeft, Send, CheckCircle, Plus, Trash2, Printer } from 'lucide-react';
 import api from '../../lib/api';
 import DesignationPicker from '../../components/DesignationPicker';
+import ScrollableTable from '../../components/ScrollableTable';
 import {
     CONSISTANCE_OPTIONS,
     UNIT_OPTIONS,
@@ -52,21 +53,6 @@ export default function DevisFormPage() {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-
-    const linesScrollRef = useRef(null);
-    const [canScrollUp, setCanScrollUp] = useState(false);
-    const [canScrollDown, setCanScrollDown] = useState(false);
-
-    const updateScrollState = () => {
-        const el = linesScrollRef.current;
-        if (!el) return;
-        setCanScrollUp(el.scrollTop > 4);
-        setCanScrollDown(el.scrollTop + el.clientHeight < el.scrollHeight - 4);
-    };
-
-    useEffect(() => {
-        updateScrollState();
-    }, [lines.length]);
 
     const totalHt = useMemo(
         () => lines.reduce((sum, line) => sum + lineSubtotal(line), 0),
@@ -136,24 +122,8 @@ export default function DevisFormPage() {
         )));
     };
 
-    const addLine = () => {
-        setLines((prev) => [...prev, newLine()]);
-        requestAnimationFrame(() => {
-            const el = linesScrollRef.current;
-            if (el) {
-                el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
-                updateScrollState();
-            }
-        });
-    };
+    const addLine = () => setLines((prev) => [...prev, newLine()]);
     const removeLine = (index) => setLines((prev) => (prev.length <= 1 ? prev : prev.filter((_, i) => i !== index)));
-
-    const scrollLines = (direction) => {
-        const el = linesScrollRef.current;
-        if (!el) return;
-        el.scrollBy({ top: direction * 52, behavior: 'smooth' });
-        requestAnimationFrame(updateScrollState);
-    };
 
     const handleClientChange = (clientId) => {
         const client = clients.find((c) => String(c.id) === String(clientId));
@@ -371,8 +341,49 @@ export default function DevisFormPage() {
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700 flex flex-col flex-1 min-h-0">
-                    <div className="flex shrink-0 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-900">
-                        <div className="flex-1 min-w-0 flex flex-col">
+                    <div className="flex shrink-0 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-900 flex-col">
+                        <table className="w-full text-sm table-fixed">
+                            <colgroup>
+                                <col className="w-[23%]" />
+                                <col className="w-[32%]" />
+                                <col className="w-[9%]" />
+                                <col className="w-[8%]" />
+                                <col className="w-[7%]" />
+                                <col className="w-[8%]" />
+                                <col className="w-[13%]" />
+                                <col className="w-8" />
+                            </colgroup>
+                            <thead>
+                                <tr className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                                    {['Type Travaux', 'Désignation Travaux', 'Consistance', 'Unité', 'Qté', 'Prix HT', 'Sous-Total HT'].map((h) => (
+                                        <th
+                                            key={h}
+                                            className={`px-2 py-2 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap text-center ${
+                                                h === 'Type Travaux'
+                                                    ? 'text-brand-navy dark:text-orange-400'
+                                                    : 'text-slate-500 dark:text-slate-400'
+                                            }`}
+                                        >
+                                            {h}
+                                        </th>
+                                    ))}
+                                    <th className="w-8 px-0.5 py-2 text-center">
+                                        {!isValidated && (
+                                            <button
+                                                type="button"
+                                                title="Ajouter une ligne"
+                                                onClick={addLine}
+                                                className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-violet-600 hover:bg-violet-700 text-white shadow-sm transition-colors"
+                                            >
+                                                <Plus className="w-4 h-4" strokeWidth={2.5} />
+                                            </button>
+                                        )}
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        <ScrollableTable maxHeight="min(360px, 48vh)">
                             <table className="w-full text-sm table-fixed">
                                 <colgroup>
                                     <col className="w-[23%]" />
@@ -384,53 +395,7 @@ export default function DevisFormPage() {
                                     <col className="w-[13%]" />
                                     <col className="w-8" />
                                 </colgroup>
-                                <thead>
-                                    <tr className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-                                        {['Type Travaux', 'Désignation Travaux', 'Consistance', 'Unité', 'Qté', 'Prix HT', 'Sous-Total HT'].map((h) => (
-                                            <th
-                                                key={h}
-                                                className={`px-2 py-2 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap text-center ${
-                                                    h === 'Type Travaux'
-                                                        ? 'text-brand-navy dark:text-orange-400'
-                                                        : 'text-slate-500 dark:text-slate-400'
-                                                }`}
-                                            >
-                                                {h}
-                                            </th>
-                                        ))}
-                                        <th className="w-8 px-0.5 py-2 text-center">
-                                            {!isValidated && (
-                                                <button
-                                                    type="button"
-                                                    title="Ajouter une ligne"
-                                                    onClick={addLine}
-                                                    className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-violet-600 hover:bg-violet-700 text-white shadow-sm transition-colors"
-                                                >
-                                                    <Plus className="w-4 h-4" strokeWidth={2.5} />
-                                                </button>
-                                            )}
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
-
-                            <div
-                                ref={linesScrollRef}
-                                onScroll={updateScrollState}
-                                className="h-[min(360px,48vh)] overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-                            >
-                                <table className="w-full text-sm table-fixed">
-                                    <colgroup>
-                                        <col className="w-[23%]" />
-                                        <col className="w-[32%]" />
-                                        <col className="w-[9%]" />
-                                        <col className="w-[8%]" />
-                                        <col className="w-[7%]" />
-                                        <col className="w-[8%]" />
-                                        <col className="w-[13%]" />
-                                        <col className="w-8" />
-                                    </colgroup>
-                                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                         {lines.map((line, index) => {
                                             const sub = lineSubtotal(line);
                                             const hasTypeTravaux = Boolean(line.type_travaux?.trim());
@@ -493,33 +458,10 @@ export default function DevisFormPage() {
                                         })}
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col w-9 shrink-0 bg-slate-200 dark:bg-slate-700 border-l border-slate-300 dark:border-slate-600">
-                            <button
-                                type="button"
-                                title="Défiler vers le haut"
-                                onClick={() => scrollLines(-1)}
-                                disabled={!canScrollUp}
-                                className="h-10 flex items-center justify-center text-slate-600 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 disabled:opacity-35 disabled:cursor-not-allowed border-b border-slate-300 dark:border-slate-600 transition-colors"
-                            >
-                                <ChevronUp className="w-5 h-5" strokeWidth={2.5} />
-                            </button>
-                            <div className="flex-1 bg-slate-200 dark:bg-slate-700" />
-                            <button
-                                type="button"
-                                title="Défiler vers le bas"
-                                onClick={() => scrollLines(1)}
-                                disabled={!canScrollDown}
-                                className="h-10 flex items-center justify-center text-slate-600 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600 disabled:opacity-35 disabled:cursor-not-allowed transition-colors"
-                            >
-                                <ChevronDown className="w-5 h-5" strokeWidth={2.5} />
-                            </button>
-                        </div>
+                        </ScrollableTable>
                     </div>
 
-                    <div className="shrink-0 mt-4 flex justify-end pr-10">
+                    <div className="shrink-0 mt-4 flex justify-end">
                         <div className="min-w-[280px] space-y-1.5 text-sm">
                             <div className="flex items-center justify-between gap-8 px-1">
                                 <span className="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Total HT</span>

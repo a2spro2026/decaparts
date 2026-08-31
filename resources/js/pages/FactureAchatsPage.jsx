@@ -3,6 +3,7 @@ import {
     Plus, Eye, EyeOff, Pencil, Trash2, Printer, FileText, X, RefreshCw, Receipt, Upload, Image, Package,
 } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 const DEPOT_OPTIONS = [
     { value: 'depot_a', label: 'Ste A. BOUYAHYA' },
@@ -281,7 +282,7 @@ function FormModal({ open, form, lines, meta, editingId, saving, error, supplier
                                 <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Lignes facture</p>
                                 <button type="button" onClick={onAddLine} className="text-xs text-brand-navy dark:text-orange-400 font-semibold hover:underline">+ Ligne</button>
                             </div>
-                            <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+                            <ScrollableTable scrollClassName="rounded-lg border border-slate-200 dark:border-slate-700">
                                 <table className="w-full text-xs min-w-[650px]">
                                     <thead>
                                         <tr className="bg-slate-50 dark:bg-slate-800/80">
@@ -315,7 +316,7 @@ function FormModal({ open, form, lines, meta, editingId, saving, error, supplier
                                         ))}
                                     </tbody>
                                 </table>
-                            </div>
+                            </ScrollableTable>
                             <div className="flex justify-end gap-4 mt-3 text-sm">
                                 <span>HT : <strong className="tabular-nums">{formatMontant(totalHt)}</strong></span>
                                 <span>TVA : <strong className="tabular-nums">{formatMontant(tva)}</strong></span>
@@ -577,7 +578,7 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
                             <EyeOff className="w-4 h-4" />
                         </button>
                     </div>
-                    <div className="overflow-x-auto max-h-[360px] overflow-y-auto">
+                    <ScrollableTable maxHeight="360px">
                         <table className="w-full text-sm min-w-[700px]">
                             <thead className="sticky top-0 z-10">
                                 <tr className="bg-slate-100 dark:bg-slate-800 border-b-2 border-slate-200 dark:border-slate-700">
@@ -602,7 +603,7 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
                                 )}
                             </tbody>
                         </table>
-                    </div>
+                    </ScrollableTable>
                 </div>
             )}
 
@@ -616,7 +617,7 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
                     </button>
                 </div>
 
-                <div className="overflow-x-auto">
+                <ScrollableTable>
                     <table className="w-full text-sm min-w-[1000px]">
                         <thead>
                             <tr className="bg-gradient-to-r from-slate-100 via-slate-200/90 to-slate-100 dark:from-slate-800 dark:via-slate-700/80 dark:to-slate-800 border-b-2 border-slate-300 dark:border-slate-600">
@@ -673,7 +674,7 @@ export default function FactureAchatsPage({ depotFilter = null, pageTitle = '', 
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
             </div>
         </div>
     );

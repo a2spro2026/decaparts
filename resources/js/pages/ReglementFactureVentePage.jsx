@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Banknote, CircleDollarSign, FileCheck, Pencil, Plus, RefreshCw, Trash2, X } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 const METHODS = [
     ['especes', 'Espèces'],
@@ -247,7 +248,7 @@ export default function ReglementFactureVentePage() {
                 <div className="bg-gradient-to-r from-zinc-900 via-brand-navy to-slate-900 px-5 py-3.5">
                     <h2 className="flex items-center gap-2 text-sm font-extrabold uppercase tracking-wide text-white"><Banknote className="h-4 w-4" /> Liste des règlements de factures</h2>
                 </div>
-                <div className="overflow-x-auto">
+                <ScrollableTable>
                     <table className="w-full min-w-[900px] text-sm">
                         <thead>
                             <tr>
@@ -281,7 +282,7 @@ export default function ReglementFactureVentePage() {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
             </div>
         </div>
     );

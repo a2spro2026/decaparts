@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, Fragment } from 'react';
 import { FileText, Printer, RefreshCw } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 function formatQty(value) {
     const n = Number(value) || 0;
@@ -176,7 +177,7 @@ export default function StockMouvementsPage() {
                     </h3>
                 </div>
 
-                <div className="flex-1 min-h-0 overflow-auto">
+                <ScrollableTable fill className="flex-1 min-h-0">
                     <table className="w-full text-sm border-collapse min-w-[1280px]">
                         <thead className="sticky top-0 z-20">
                             <tr className="bg-slate-100 dark:bg-slate-800">
@@ -295,7 +296,7 @@ export default function StockMouvementsPage() {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
             </div>
         </div>
     );

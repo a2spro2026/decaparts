@@ -4,6 +4,7 @@ import {
     ArrowDownCircle, Scale, Wallet, User, Building2,
 } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 const COFFRE_OPTIONS = ['', 'Caisse', 'Cmpt Pers', 'Cmpt Ste'];
 const STATUT_OPTIONS = ['', 'Sortie', 'Entrée'];
@@ -496,7 +497,7 @@ export default function TransactionsPage() {
                     </button>
                 </div>
 
-                <div className="overflow-x-auto">
+                <ScrollableTable>
                     <table className="w-full text-sm min-w-[900px]">
                         <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
@@ -541,7 +542,7 @@ export default function TransactionsPage() {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
             </div>
         </div>
     );

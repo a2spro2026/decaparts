@@ -4,6 +4,7 @@ import {
     Banknote, Wallet, AlertCircle, Search, X, RefreshCw, Download,
 } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 const REGLEMENT_OPTIONS = ['', 'Esp', 'Chq', 'Eff', 'Vir', 'Vers'];
 const BANQUE_OPTIONS = ['', 'Attijariwafa', 'BMCE', 'Banque Populaire', 'CIH', 'SGMB', 'Crédit Agricole', 'CDM', 'Al Barid Bank', 'Autre'];
@@ -216,7 +217,7 @@ function ImportReglModal({ open, rows, selected, loading, onToggle, onToggleAll,
                     Sélectionnez un ou plusieurs règlements client reçus pour remplir le règlement fournisseur (même chèque / effet / virement).
                 </p>
 
-                <div className="overflow-auto flex-1 min-h-0">
+                <ScrollableTable fill className="flex-1 min-h-0">
                     <table className="w-full text-sm min-w-[900px]">
                         <thead className="sticky top-0 z-10">
                             <tr className="bg-slate-50 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700">
@@ -278,7 +279,7 @@ function ImportReglModal({ open, rows, selected, loading, onToggle, onToggleAll,
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
 
                 <div className="flex justify-end gap-2 px-5 py-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 shrink-0">
                     <button type="button" onClick={onClose} className="btn-secondary text-xs px-4">Fermer</button>
@@ -806,7 +807,7 @@ export default function ReglementFournisseurPage() {
                     <div className="shrink-0 px-5 py-3.5 bg-gradient-to-r from-zinc-900 via-orange-700 to-slate-800 border-b border-white/10">
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Tableau de consultation</h3>
                     </div>
-                    <div className="flex-1 min-h-0 overflow-auto">
+                    <ScrollableTable fill className="flex-1 min-h-0">
                         <table className="w-full text-sm min-w-[1100px]">
                             <thead className="sticky top-0 z-10">
                                 <tr className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm">
@@ -858,7 +859,7 @@ export default function ReglementFournisseurPage() {
                                 )}
                             </tbody>
                         </table>
-                    </div>
+                    </ScrollableTable>
                 </div>
 
                 <ViewModal row={viewRow} onClose={() => setViewRow(null)} />
@@ -1014,7 +1015,7 @@ export default function ReglementFournisseurPage() {
                     <div className="px-5 py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-orange-700 border-b border-white/10">
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Commande à Payer :</h3>
                     </div>
-                    <div className="overflow-x-auto">
+                    <ScrollableTable>
                         <table className="w-full text-sm min-w-[1100px]">
                             <thead>
                                 <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
@@ -1094,7 +1095,7 @@ export default function ReglementFournisseurPage() {
                                 )}
                             </tbody>
                         </table>
-                    </div>
+                    </ScrollableTable>
                 </div>
             )}
         </div>

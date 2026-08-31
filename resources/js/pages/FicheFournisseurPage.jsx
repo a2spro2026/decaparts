@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Save, RotateCcw, Eye, Pencil, Trash2, Printer, FileText, X, RefreshCw, Wallet } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 const REGLEMENT_OPTIONS = [
     { value: '', label: '—' },
@@ -369,7 +370,7 @@ export default function FicheFournisseurPage() {
                 <div className="px-5 py-3.5 bg-gradient-to-r from-zinc-950 via-zinc-900 to-orange-800 border-b border-white/10">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Liste des fournisseurs</h3>
                 </div>
-                <div className="overflow-x-auto">
+                <ScrollableTable>
                     <table className="w-full text-sm min-w-[960px]">
                         <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
@@ -439,7 +440,7 @@ export default function FicheFournisseurPage() {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
             </div>
         </div>
     );

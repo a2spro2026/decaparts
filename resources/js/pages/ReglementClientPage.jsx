@@ -4,6 +4,7 @@ import {
     Banknote, Wallet, AlertCircle, Search, X, RefreshCw,
 } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 const REGLEMENT_OPTIONS = ['', 'Esp', 'Chq', 'Eff', 'Vir', 'Vers'];
 const BANQUE_OPTIONS = ['', 'Attijariwafa', 'BMCE', 'Banque Populaire', 'CIH', 'SGMB', 'Crédit Agricole', 'CDM', 'Al Barid Bank', 'Autre'];
@@ -645,7 +646,7 @@ export default function ReglementClientPage() {
                     <div className="shrink-0 px-5 py-3.5 bg-gradient-to-r from-zinc-900 via-orange-700 to-slate-800 border-b border-white/10">
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Tableau de consultation</h3>
                     </div>
-                    <div className="flex-1 min-h-0 overflow-auto">
+                    <ScrollableTable fill className="flex-1 min-h-0">
                         <table className="w-full text-sm min-w-[1100px]">
                             <thead className="sticky top-0 z-10">
                                 <tr className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm">
@@ -700,7 +701,7 @@ export default function ReglementClientPage() {
                                 )}
                             </tbody>
                         </table>
-                    </div>
+                    </ScrollableTable>
                 </div>
 
                 <ViewModal row={viewRow} onClose={() => setViewRow(null)} />
@@ -848,7 +849,7 @@ export default function ReglementClientPage() {
                     <div className="px-5 py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-orange-700 border-b border-white/10">
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Commande à Encaisser :</h3>
                     </div>
-                    <div className="overflow-x-auto">
+                    <ScrollableTable>
                         <table className="w-full text-sm min-w-[1100px]">
                             <thead>
                                 <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
@@ -928,7 +929,7 @@ export default function ReglementClientPage() {
                                 )}
                             </tbody>
                         </table>
-                    </div>
+                    </ScrollableTable>
                 </div>
             )}
         </div>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { RefreshCw, Search, Scale, Wallet, Receipt, X } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 import { ReliquatCell } from './clients/clientAmountUtils';
 
 const emptyFilters = {
@@ -92,7 +93,7 @@ function ClientDetailModal({ open, supplierName, rows, loading, onClose }) {
                     </button>
                 </div>
 
-                <div className="overflow-auto min-h-0 flex-1">
+                <ScrollableTable fill className="flex-1 min-h-0">
                     <table className="w-full text-sm min-w-[760px]">
                         <thead className="sticky top-0 z-10">
                             <tr className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
@@ -141,7 +142,7 @@ function ClientDetailModal({ open, supplierName, rows, loading, onClose }) {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
 
                 <div className="flex justify-end px-5 py-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 shrink-0">
                     <button type="button" onClick={onClose} className="btn-secondary text-xs px-5">
@@ -292,7 +293,7 @@ export default function SupplierBalancePage() {
                     </button>
                 </div>
 
-                <div className="overflow-x-auto">
+                <ScrollableTable>
                     <table className="w-full text-sm min-w-[800px]">
                         <thead>
                             <tr className="bg-gradient-to-r from-slate-100 via-slate-200/90 to-slate-100 dark:from-slate-800 dark:via-slate-700/80 dark:to-slate-800 border-b-2 border-slate-300 dark:border-slate-600">
@@ -346,7 +347,7 @@ export default function SupplierBalancePage() {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
             </div>
         </div>
     );

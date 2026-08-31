@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { Save, RefreshCw, Eye, Pencil, Printer, Trash2, FileText, X } from 'lucide-react';
 import api from '../../lib/api';
+import ScrollableTable from '../../components/ScrollableTable';
 import { formatMontant } from './bonExecutionUtils';
 import { formatSoldePlain, soldeTone, SoldeCell } from './clientAmountUtils';
 import { openPaymentPrintable } from './etatPaiementUtils';
@@ -494,7 +495,7 @@ export default function EtatPaiementPage() {
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">État d'exécution</h3>
                     </div>
 
-                    <div className="overflow-x-auto">
+                    <ScrollableTable>
                         <table className="w-full text-sm table-fixed">
                             <thead>
                                 <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
@@ -568,7 +569,7 @@ export default function EtatPaiementPage() {
                                 )}
                             </tbody>
                         </table>
-                    </div>
+                    </ScrollableTable>
                 </div>
 
                 <div className="glass-card overflow-hidden shadow-card border border-slate-200/60 dark:border-slate-700/60 min-w-0">
@@ -576,7 +577,7 @@ export default function EtatPaiementPage() {
                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Etat Règlement</h3>
                     </div>
 
-                    <div className="overflow-x-auto">
+                    <ScrollableTable>
                         <table className="w-full text-sm">
                             <thead>
                                 <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
@@ -618,7 +619,7 @@ export default function EtatPaiementPage() {
                                 )}
                             </tbody>
                         </table>
-                    </div>
+                    </ScrollableTable>
                 </div>
             </div>
 

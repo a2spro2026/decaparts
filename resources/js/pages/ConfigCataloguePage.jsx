@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Pencil, Trash2, X, ImagePlus, RefreshCw, SlidersHorizontal, Plus, Search } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 const inputClass =
     'w-full rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-orange/30 focus:border-brand-orange';
@@ -225,7 +226,7 @@ export default function ConfigCataloguePage() {
                 <div className="px-5 py-3.5 bg-gradient-to-r from-zinc-900 via-orange-700 to-slate-800 flex items-center justify-between">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Fiches catalogue</h3>
                 </div>
-                <div className="overflow-x-auto">
+                <ScrollableTable>
                     <table className="w-full text-sm min-w-[900px]">
                         <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
@@ -283,7 +284,7 @@ export default function ConfigCataloguePage() {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
             </div>
 
             {addOpen && (

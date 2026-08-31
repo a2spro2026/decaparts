@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Save, RotateCcw, Eye, Pencil, Trash2, Printer, FileText, X, RefreshCw, LayoutGrid } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 const UNIT_OPTIONS = ['', 'Kg', 'U', 'Sac', 'ML', 'M²', 'M³', 'Tn', 'M'];
 const STATUT_OPTIONS = [
@@ -372,7 +373,7 @@ export default function FicheProduitPage() {
                 <div className="shrink-0 px-5 py-3.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-teal-700 border-b border-white/10">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Liste des produits</h3>
                 </div>
-                <div className="flex-1 min-h-0 overflow-auto">
+                <ScrollableTable fill className="flex-1 min-h-0">
                     <table className="w-full text-sm min-w-[1100px] border-collapse">
                         <thead className="sticky top-0 z-10">
                             <tr className="border-b border-slate-200 dark:border-slate-700">
@@ -433,7 +434,7 @@ export default function FicheProduitPage() {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
             </div>
         </div>
     );

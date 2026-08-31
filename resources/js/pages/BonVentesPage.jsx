@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle2, Plus, PlusCircle, XCircle, Eye, Pencil, Trash2, Printer, FileText, X, Package, Wallet } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 import { useChauffeurs } from '../hooks/useChauffeurs';
 import { useCatalogueCart } from '../contexts/CatalogueCartContext';
 
@@ -568,7 +569,7 @@ export default function BonVentesPage() {
                                 <div className="px-4 py-2 bg-gradient-to-r from-zinc-950 via-zinc-900 to-orange-800 flex items-center justify-end">
                                     <span className="text-[10px] text-orange-100 font-semibold tabular-nums">Total : {totalBon}</span>
                                 </div>
-                                <div className="overflow-x-auto">
+                                <ScrollableTable maxHeight="min(360px, 48vh)">
                                     <table className="w-full text-sm min-w-[1100px]">
                                         <thead>
                                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
@@ -635,7 +636,7 @@ export default function BonVentesPage() {
                                             ))}
                                         </tbody>
                                     </table>
-                                </div>
+                                </ScrollableTable>
                                 <datalist id="bon-vente-refs">
                                     {products.map((p) => (
                                         <option key={p.id} value={p.article_id || p.reference || ''} />
@@ -699,7 +700,7 @@ export default function BonVentesPage() {
                 <div className="px-5 py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-orange-700 border-b border-white/10">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Tableau des Bons de Vente</h3>
                 </div>
-                <div className="overflow-x-auto">
+                <ScrollableTable>
                     <table className="w-full text-sm min-w-[1100px]">
                         <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
@@ -753,7 +754,7 @@ export default function BonVentesPage() {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
             </div>
         </div>
     );

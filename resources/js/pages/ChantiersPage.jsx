@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Plus, Search, Archive, FileDown } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 const statusLabels = { planifie: 'En préparation', en_cours: 'En cours', suspendu: 'Suspendu', termine: 'Terminé', annule: 'Annulé' };
 
@@ -37,6 +38,7 @@ export default function ChantiersPage() {
             </div>
 
             <div className="glass-card overflow-hidden shadow-card">
+                <ScrollableTable>
                 <table className="w-full text-sm">
                     <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase text-slate-500">
                         <tr>
@@ -76,6 +78,7 @@ export default function ChantiersPage() {
                         ))}
                     </tbody>
                 </table>
+                </ScrollableTable>
             </div>
         </div>
     );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Plus, CheckCircle } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 const formatMontant = (n) => new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Number(n) || 0);
 
@@ -27,6 +28,7 @@ export default function AchatsPage() {
             </div>
 
             <div className="glass-card overflow-hidden shadow-card">
+                <ScrollableTable>
                 <table className="w-full text-sm">
                     <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase text-slate-500">
                         <tr>
@@ -61,6 +63,7 @@ export default function AchatsPage() {
                         ))}
                     </tbody>
                 </table>
+                </ScrollableTable>
             </div>
         </div>
     );

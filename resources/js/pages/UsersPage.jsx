@@ -4,6 +4,7 @@ import {
     Plus, Eye, Pencil, Trash2, RefreshCw, X, UserCog, PauseCircle, PlayCircle, Ban, Lock, User,
 } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 const STATUT_OPTIONS = [
     { value: 'Gerant', label: 'Gérant' },
@@ -349,7 +350,7 @@ export default function UsersPage() {
                     </button>
                 </div>
 
-                <div className="overflow-x-auto">
+                <ScrollableTable>
                     <table className="w-full text-sm min-w-[1000px]">
                         <thead>
                             <tr className="bg-gradient-to-r from-slate-100 via-slate-200/90 to-slate-100 dark:from-slate-800 dark:via-slate-700/80 dark:to-slate-800 border-b-2 border-slate-300 dark:border-slate-600">
@@ -422,7 +423,7 @@ export default function UsersPage() {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
             </div>
 
             <FormModal

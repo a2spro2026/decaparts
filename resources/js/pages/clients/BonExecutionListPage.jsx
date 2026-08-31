@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Printer, FileText, RefreshCw, Search } from 'lucide-react';
 import api from '../../lib/api';
+import ScrollableTable from '../../components/ScrollableTable';
 import {
     emptyFilters,
     formatDelayDisplay,
@@ -109,7 +110,7 @@ export default function BonExecutionListPage() {
                     </button>
                 </div>
 
-                <div className="overflow-x-auto">
+                <ScrollableTable>
                     <table className="w-full text-sm min-w-[1400px]">
                         <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
@@ -163,7 +164,7 @@ export default function BonExecutionListPage() {
                             )}
                         </tbody>
                     </table>
-                </div>
+                </ScrollableTable>
             </div>
         </div>
     );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AlertTriangle, Package } from 'lucide-react';
 import api from '../lib/api';
+import ScrollableTable from '../components/ScrollableTable';
 
 export default function StockPage() {
     const [products, setProducts] = useState({ data: [] });
@@ -42,6 +43,7 @@ export default function StockPage() {
             </div>
 
             <div className="glass-card overflow-hidden shadow-card">
+                <ScrollableTable>
                 <table className="w-full text-sm">
                     <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase text-slate-500">
                         <tr>
@@ -68,6 +70,7 @@ export default function StockPage() {
                         ))}
                     </tbody>
                 </table>
+                </ScrollableTable>
             </div>
         </div>
     );
