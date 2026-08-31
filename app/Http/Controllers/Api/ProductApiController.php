@@ -115,6 +115,8 @@ class ProductApiController extends Controller
             'famille' => 'nullable|string|max:255',
             'initial_stock' => 'numeric|min:0',
             'min_stock_alert' => 'nullable|numeric|min:0',
+            'purchase_price' => 'nullable|numeric|min:0',
+            'unit_price' => 'nullable|numeric|min:0',
             'status' => 'in:actif,inactif',
             'etat' => 'nullable|in:Dispo,Faible,Rupture',
         ]);
@@ -150,6 +152,9 @@ class ProductApiController extends Controller
             'unit' => $product->unit,
             'famille' => $product->famille,
             'brand' => $product->brand,
+            'purchase_price' => (float) ($product->purchase_price ?? 0),
+            'unit_price' => (float) ($product->unit_price ?? 0),
+            'margin_pct' => $this->marginPct($product),
             'initial_stock' => (float) $product->initial_stock,
             'stock_initial' => (float) $product->initial_stock,
             'quantity' => $quantity,
@@ -165,5 +170,16 @@ class ProductApiController extends Controller
             'origin_label' => $origin === 'bon_achat' ? 'Bon d\'achat' : 'Saisie',
             'created_at' => $product->created_at?->format('d/m/Y'),
         ];
+    }
+
+    private function marginPct(Product $product): ?float
+    {
+        $purchase = (float) ($product->purchase_price ?? 0);
+        $sell = (float) ($product->unit_price ?? 0);
+        if ($purchase <= 0 || $sell <= 0) {
+            return null;
+        }
+
+        return round((($sell - $purchase) / $purchase) * 100, 2);
     }
 }

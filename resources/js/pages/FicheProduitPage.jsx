@@ -21,9 +21,32 @@ const emptyForm = {
     unit: '',
     famille: '',
     initial_stock: '',
+    purchase_price: '',
+    margin_pct: '',
+    unit_price: '',
     status: 'actif',
     etat: 'Rupture',
 };
+
+function calcSellPrice(purchase, marginPct) {
+    const p = parseFloat(String(purchase).replace(',', '.'));
+    const m = parseFloat(String(marginPct).replace(',', '.'));
+    if (!p || p <= 0 || Number.isNaN(m)) return '';
+    return (p * (1 + m / 100)).toFixed(2);
+}
+
+function calcMarginPct(purchase, sell) {
+    const p = parseFloat(String(purchase).replace(',', '.'));
+    const s = parseFloat(String(sell).replace(',', '.'));
+    if (!p || p <= 0 || !s || s <= 0) return '';
+    return (((s - p) / p) * 100).toFixed(2);
+}
+
+function formatMoney(value) {
+    const n = Number(value);
+    if (Number.isNaN(n)) return '—';
+    return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 
 function Field({ label, children, className = '', compact = false }) {
     return (
@@ -144,6 +167,9 @@ function ViewModal({ row, onClose }) {
                         ['Désignation', row.name],
                         ['Unité', row.unit],
                         ['Famille', row.famille],
+                        ['Prix d\'achat', formatMoney(row.purchase_price)],
+                        ['Marge', row.margin_pct != null ? `${row.margin_pct} %` : '—'],
+                        ['Prix vente', formatMoney(row.unit_price)],
                         ['Qté', row.quantity ?? row.initial_stock ?? 0],
                         ['Qté vendue', row.sold_qty ?? 0],
                         ['Stock', row.stock_actuel ?? row.quantity_in_stock ?? 0],
@@ -203,7 +229,19 @@ export default function FicheProduitPage() {
 
     useEffect(() => { load(); }, [load]);
 
-    const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
+    const set = (key, value) => setForm((f) => {
+        const next = { ...f, [key]: value };
+        if (key === 'purchase_price' || key === 'margin_pct') {
+            next.unit_price = calcSellPrice(
+                key === 'purchase_price' ? value : f.purchase_price,
+                key === 'margin_pct' ? value : f.margin_pct,
+            );
+        }
+        if (key === 'unit_price') {
+            next.margin_pct = calcMarginPct(f.purchase_price, value);
+        }
+        return next;
+    });
 
     const resetForm = () => {
         setForm(emptyForm);
@@ -218,12 +256,17 @@ export default function FicheProduitPage() {
     };
 
     const fillForm = (row) => {
+        const purchase = row.purchase_price != null ? String(row.purchase_price) : '';
+        const sell = row.unit_price != null ? String(row.unit_price) : '';
         setForm({
             reference: row.reference || '',
             name: row.name || '',
             unit: row.unit || '',
             famille: row.famille || '',
             initial_stock: row.initial_stock ?? row.quantity_in_stock ?? '',
+            purchase_price: purchase,
+            margin_pct: row.margin_pct != null ? String(row.margin_pct) : calcMarginPct(purchase, sell),
+            unit_price: sell,
             status: row.status || 'actif',
             etat: row.etat || 'Rupture',
         });
@@ -253,6 +296,8 @@ export default function FicheProduitPage() {
             unit: form.unit,
             famille: form.famille || null,
             initial_stock: parseFloat(form.initial_stock) || 0,
+            purchase_price: parseFloat(String(form.purchase_price).replace(',', '.')) || 0,
+            unit_price: parseFloat(String(form.unit_price).replace(',', '.')) || 0,
             status: form.status,
             etat: form.etat,
         };
@@ -341,6 +386,42 @@ export default function FicheProduitPage() {
                                 </option>
                             ))}
                         </select>
+                    </Field>
+                </div>
+
+                <div className="grid grid-cols-3 gap-1.5 items-end w-full mt-1.5">
+                    <Field label="Prix d'achat" compact>
+                        <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={form.purchase_price}
+                            onChange={(e) => set('purchase_price', e.target.value)}
+                            placeholder="0,00"
+                            className={inputClass}
+                        />
+                    </Field>
+                    <Field label="Marge (%)" compact>
+                        <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={form.margin_pct}
+                            onChange={(e) => set('margin_pct', e.target.value)}
+                            placeholder="0"
+                            className={inputClass}
+                        />
+                    </Field>
+                    <Field label="Prix vente" compact>
+                        <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={form.unit_price}
+                            onChange={(e) => set('unit_price', e.target.value)}
+                            placeholder="0,00"
+                            className={inputClass}
+                        />
                     </Field>
                 </div>
 

@@ -43,11 +43,11 @@ export default function ReportTable({
                             {columns.map((col) => (
                             <th
                             key={col.key}
-                            className={`px-4 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] whitespace-nowrap ${
+                            className={`px-4 py-3.5 text-[11px] font-bold uppercase tracking-[0.12em] whitespace-nowrap text-center ${
                             grayHeader
                             ? 'text-slate-600 dark:text-slate-300'
                             : 'text-xs text-slate-500 dark:text-slate-400'
-                            } ${col.align === 'right' ? 'text-right' : 'text-center'}`}
+                            }`}
                             >
                             {col.label}
                             </th>
@@ -77,9 +77,7 @@ export default function ReportTable({
                                                         {columns.map((col) => (
                                                             <td
                                                                 key={col.key}
-                                                                className={`px-4 py-2.5 text-slate-700 dark:text-slate-300 ${
-                                                                    col.align === 'right' ? 'text-right font-semibold tabular-nums' : 'text-center'
-                                                                }`}
+                                                                className="px-4 py-2.5 text-center text-slate-700 dark:text-slate-300"
                                                             >
                                                                 {col.render ? col.render(row[col.key], row) : (
                                                                     col.key === 'montant' ? (

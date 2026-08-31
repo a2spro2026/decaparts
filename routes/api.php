@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ChargeApiController;
 use App\Http\Controllers\Api\ChantierApiController;
 use App\Http\Controllers\Api\ChauffeurApiController;
 use App\Http\Controllers\Api\ClientOrderApiController;
+use App\Http\Controllers\Api\ClientReleveApiController;
 use App\Http\Controllers\Api\ClientPaymentApiController;
 use App\Http\Controllers\Api\ClientApiController;
 use App\Http\Controllers\Api\DashboardApiController;
@@ -48,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('client-payments/{client_payment}', [ClientPaymentApiController::class, 'update']);
     Route::patch('client-payments/{client_payment}/statut', [ClientPaymentApiController::class, 'updateStatut']);
     Route::delete('client-payments/{client_payment}', [ClientPaymentApiController::class, 'destroy']);
+    Route::get('client-releve', [ClientReleveApiController::class, 'index']);
     Route::get('client-orders/balance', [ClientOrderApiController::class, 'balance']);
     Route::apiResource('client-orders', ClientOrderApiController::class)->only(['index', 'show']);
     Route::apiResource('quotes', QuoteApiController::class);

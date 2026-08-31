@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Search, Trash2, ImagePlus, Hash, Type, BadgeDollarSign, Award, Layers, RotateCcw,
-    ShoppingCart, FileSpreadsheet,
+    ShoppingCart, FileSpreadsheet, X,
 } from 'lucide-react';
 import api from '../lib/api';
 import { useCatalogueCart } from '../contexts/CatalogueCartContext';
@@ -23,6 +23,147 @@ const FILTER_FIELDS = [
     { key: 'category', label: 'Catégorie', icon: Layers, hint: 'Famille' },
 ];
 
+function formatQty(value) {
+    const n = Number(value);
+    if (Number.isNaN(n)) return '—';
+    return n.toLocaleString('fr-FR', { maximumFractionDigits: 3 });
+}
+
+function formatPrice(value) {
+    if (value == null || value === '') return '—';
+    return `${Number(value).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} MAD`;
+}
+
+function EtatBadge({ value }) {
+    const styles = {
+        Dispo: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
+        Faible: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
+        Rupture: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+    };
+    return (
+        <span className={`inline-flex px-2 py-0.5 rounded-md text-xs font-semibold ${styles[value] || 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'}`}>
+            {value || '—'}
+        </span>
+    );
+}
+
+function DetailRow({ label, value, children }) {
+    return (
+        <div className="grid grid-cols-[1fr_1.2fr] gap-3 items-center py-2.5 border-b border-slate-100 dark:border-slate-800 text-sm">
+            <span className="text-[11px] font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">{label}</span>
+            <div className="text-center font-medium text-slate-800 dark:text-white break-words">
+                {children ?? (value === 0 ? '0' : value || '—')}
+            </div>
+        </div>
+    );
+}
+
+function ProductDetailPanel({
+    item,
+    onClose,
+    selected,
+    qty,
+    onAddToCart,
+    onQtyChange,
+    qtyRef,
+}) {
+    if (!item) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 flex justify-end">
+            <button
+                type="button"
+                aria-label="Fermer"
+                className="absolute inset-0 bg-black/55 backdrop-blur-sm"
+                onClick={onClose}
+            />
+            <aside
+                className="relative flex h-full w-full max-w-md flex-col bg-white dark:bg-slate-900 shadow-2xl border-l border-slate-200 dark:border-slate-700"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex items-start justify-between gap-3 px-4 py-3 bg-gradient-to-r from-zinc-950 via-zinc-900 to-orange-900 border-b border-white/10 shrink-0">
+                    <div className="min-w-0 text-center flex-1">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-orange-200">Fiche catalogue</p>
+                        <p className="text-white font-bold font-mono truncate">{item.reference || item.article_id || '—'}</p>
+                        <p className="text-sm text-white/90 truncate mt-0.5">{item.name || '—'}</p>
+                    </div>
+                    <button type="button" onClick={onClose} className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10 shrink-0">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto">
+                    <div className="aspect-[4/3] bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+                        {item.photo_url ? (
+                            <img src={item.photo_url} alt={item.name} className="w-full h-full object-contain" />
+                        ) : (
+                            <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 gap-2">
+                                <ImagePlus className="w-12 h-12" />
+                                <span className="text-xs">Aucune photo</span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="px-4 py-3">
+                        <DetailRow label="Référence" value={item.reference} />
+                        <DetailRow label="Code article" value={item.article_id} />
+                        <DetailRow label="Désignation" value={item.name} />
+                        <DetailRow label="Catégorie" value={item.category} />
+                        <DetailRow label="Marque" value={item.brand} />
+                        <DetailRow label="Description" value={item.description} />
+                        <DetailRow label="Prix d'achat" value={formatPrice(item.purchase_price)} />
+                        <DetailRow label="Marge" value={item.margin_pct != null ? `${Number(item.margin_pct).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} %` : '—'} />
+                        <DetailRow label="Prix catalogue" value={formatPrice(item.price)} />
+                        <DetailRow label="Unité" value={item.unit} />
+                        <DetailRow label="Famille" value={item.famille} />
+                        <DetailRow label="Consistance" value={item.consistance} />
+                        <DetailRow label="Emplacement" value={item.location} />
+                        <DetailRow label="Qté" value={formatQty(item.quantity ?? item.initial_stock)} />
+                        <DetailRow label="Qté achetée" value={formatQty(item.purchased_qty)} />
+                        <DetailRow label="Qté vendue" value={formatQty(item.sold_qty)} />
+                        <DetailRow label="Stock actuel" value={formatQty(item.stock_actuel)} />
+                        <DetailRow label="Seuil alerte" value={formatQty(item.min_stock_alert)} />
+                        <DetailRow label="État">
+                            <EtatBadge value={item.etat} />
+                        </DetailRow>
+                        <DetailRow label="Statut" value={item.statut} />
+                        <DetailRow label="Origine stock" value={item.origin_label} />
+                    </div>
+                </div>
+
+                <div className="shrink-0 border-t border-slate-200 dark:border-slate-700 p-4 space-y-3 bg-slate-50 dark:bg-slate-800/50">
+                    {selected ? (
+                        <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold uppercase text-slate-500 shrink-0">Quantité</span>
+                            <input
+                                ref={qtyRef}
+                                type="number"
+                                min="0.001"
+                                step="0.001"
+                                value={qty}
+                                onChange={(e) => onQtyChange(e.target.value)}
+                                className="flex-1 h-9 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-center text-sm font-bold tabular-nums focus:outline-none focus:ring-2 focus:ring-brand-orange/30"
+                            />
+                        </div>
+                    ) : null}
+                    <button
+                        type="button"
+                        onClick={onAddToCart}
+                        className={`w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold uppercase tracking-wide transition-colors ${
+                            selected
+                                ? 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300'
+                                : 'bg-brand-orange hover:bg-orange-600 text-white'
+                        }`}
+                    >
+                        <ShoppingCart className="w-4 h-4" />
+                        {selected ? 'Retirer du panier' : 'Ajouter au panier'}
+                    </button>
+                </div>
+            </aside>
+        </div>
+    );
+}
+
 export default function CataloguePage() {
     const navigate = useNavigate();
     const { count, toggleItem, setQuantity, isInCart, getQuantity, clear } = useCatalogueCart();
@@ -31,7 +172,9 @@ export default function CataloguePage() {
     const [filters, setFilters] = useState(emptyFilters);
     const [error, setError] = useState('');
     const [focusQtyId, setFocusQtyId] = useState(null);
+    const [detailItem, setDetailItem] = useState(null);
     const qtyRefs = useRef({});
+    const detailQtyRef = useRef(null);
 
     const load = useCallback(() => {
         setLoading(true);
@@ -45,13 +188,13 @@ export default function CataloguePage() {
 
     useEffect(() => {
         if (focusQtyId == null) return;
-        const el = qtyRefs.current[focusQtyId];
+        const el = qtyRefs.current[focusQtyId] ?? (detailItem?.id === focusQtyId ? detailQtyRef.current : null);
         if (el) {
             el.focus();
             el.select?.();
         }
         setFocusQtyId(null);
-    }, [focusQtyId, count]);
+    }, [focusQtyId, count, detailItem]);
 
     const handleCartClick = (item) => {
         const already = isInCart(item.id);
@@ -216,11 +359,18 @@ export default function CataloguePage() {
                                         : 'border-slate-200 dark:border-slate-700'
                                 }`}
                             >
-                                <div className="relative flex-1 bg-slate-100 dark:bg-slate-800">
+                                <div
+                                    className="relative flex-1 bg-slate-100 dark:bg-slate-800 cursor-pointer"
+                                    onClick={() => setDetailItem(item)}
+                                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDetailItem(item); } }}
+                                    role="button"
+                                    tabIndex={0}
+                                    title="Voir la fiche produit"
+                                >
                                     {item.photo_url ? (
-                                        <img src={item.photo_url} alt={item.name} className="absolute inset-0 w-full h-full object-cover" />
+                                        <img src={item.photo_url} alt={item.name} className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
                                     ) : (
-                                        <div className="absolute inset-0 flex items-center justify-center text-slate-300">
+                                        <div className="absolute inset-0 flex items-center justify-center text-slate-300 pointer-events-none">
                                             <ImagePlus className="w-7 h-7" />
                                         </div>
                                     )}
@@ -233,7 +383,7 @@ export default function CataloguePage() {
                                     <button
                                         type="button"
                                         title={selected ? 'Retirer du panier' : 'Ajouter au panier'}
-                                        onClick={() => handleCartClick(item)}
+                                        onClick={(e) => { e.stopPropagation(); handleCartClick(item); }}
                                         className={`absolute top-1.5 left-1.5 z-10 p-1.5 rounded-lg transition-all ${
                                             selected
                                                 ? 'bg-brand-orange text-white shadow-lg shadow-orange-500/40'
@@ -246,7 +396,7 @@ export default function CataloguePage() {
                                     <button
                                         type="button"
                                         title="Retirer du catalogue"
-                                        onClick={() => handleDelete(item)}
+                                        onClick={(e) => { e.stopPropagation(); handleDelete(item); }}
                                         className="absolute top-1.5 right-1.5 z-10 p-1 rounded-md bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
                                     >
                                         <Trash2 className="w-3 h-3" />
@@ -299,6 +449,21 @@ export default function CataloguePage() {
                         : 'Aucune pièce catalogue — ajoutez-en via Config Catalogue'}
                 </div>
             )}
+
+            <ProductDetailPanel
+                item={detailItem}
+                onClose={() => setDetailItem(null)}
+                selected={detailItem ? isInCart(detailItem.id) : false}
+                qty={detailItem ? getQuantity(detailItem.id) : ''}
+                qtyRef={detailQtyRef}
+                onQtyChange={(value) => detailItem && setQuantity(detailItem.id, value)}
+                onAddToCart={() => {
+                    if (!detailItem) return;
+                    const already = isInCart(detailItem.id);
+                    toggleItem(detailItem);
+                    if (!already) setFocusQtyId(detailItem.id);
+                }}
+            />
         </div>
     );
 }

@@ -20,6 +20,7 @@ import FicheFournisseurPage from './pages/FicheFournisseurPage';
 import FicheClientPage from './pages/FicheClientPage';
 import BonExecutionListPage from './pages/clients/BonExecutionListPage';
 import ClientBalancePage from './pages/clients/ClientBalancePage';
+import ClientRelevePage from './pages/clients/ClientRelevePage';
 import DevisListPage from './pages/devis/DevisListPage';
 import DevisFormPage from './pages/devis/DevisFormPage';
 import TransactionsPage from './pages/TransactionsPage';
@@ -75,7 +76,7 @@ function AppRoutes() {
                 <Route path="clients/factures-ventes" element={<ModulePage />} />
                 <Route path="clients/reglements-factures" element={<ModulePage />} />
                 <Route path="clients/balance" element={<ClientBalancePage />} />
-                <Route path="clients/releve-compte" element={<ModulePage />} />
+                <Route path="clients/releve-compte" element={<ClientRelevePage />} />
 
                 {/* Facturation */}
                 <Route path="facturation/factures-achats" element={<FactureAchatsPage pageTitle="Factures Achats" />} />

@@ -7,8 +7,8 @@ const ARROW_BTN =
 const DEFAULT_MAX_HEIGHT = 'min(360px, 48vh)';
 
 /**
- * Zone scrollable avec flèches haut/bas — uniquement sur le corps du tableau.
- * Passer `header` (+ optionnel `colgroup`) pour garder l'en-tête fixe hors des flèches.
+ * Zone scrollable avec flèches haut/bas.
+ * Un seul `<table>` : en-tête sticky + corps — colonnes toujours alignées.
  */
 export default function ScrollableTable({
     children,
@@ -20,6 +20,7 @@ export default function ScrollableTable({
     maxHeight = DEFAULT_MAX_HEIGHT,
     step = 120,
 }) {
+    const mergedTableClass = ['text-center', tableClassName].filter(Boolean).join(' ');
     const scrollRef = useRef(null);
     const [canUp, setCanUp] = useState(false);
     const [canDown, setCanDown] = useState(false);
@@ -44,7 +45,7 @@ export default function ScrollableTable({
         scrollRef.current?.scrollBy({ top: direction * step, behavior: 'smooth' });
     };
 
-    const scrollZone = (
+    return (
         <div className={`flex flex-col min-h-0 ${className}`}>
             <button
                 type="button"
@@ -58,12 +59,13 @@ export default function ScrollableTable({
             <div
                 ref={scrollRef}
                 onScroll={updateScrollState}
-                className={`overflow-x-auto overflow-y-auto [scrollbar-width:thin] ${scrollClassName}`}
+                className={`scrollable-table-wrap overflow-x-auto overflow-y-auto [scrollbar-width:thin] ${scrollClassName}`}
                 style={{ maxHeight }}
             >
                 {header != null ? (
-                    <table className={tableClassName}>
+                    <table className={mergedTableClass}>
                         {colgroup}
+                        {header}
                         {children}
                     </table>
                 ) : (
@@ -80,21 +82,5 @@ export default function ScrollableTable({
                 <ChevronDown className="w-4 h-4" strokeWidth={2.5} />
             </button>
         </div>
-    );
-
-    if (header == null) {
-        return scrollZone;
-    }
-
-    return (
-        <>
-            <div className="overflow-x-auto border-b border-slate-200 dark:border-slate-700">
-                <table className={tableClassName}>
-                    {colgroup}
-                    {header}
-                </table>
-            </div>
-            {scrollZone}
-        </>
     );
 }

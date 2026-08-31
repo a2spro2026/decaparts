@@ -12,9 +12,39 @@ const emptyAddForm = {
     category: '',
     brand: '',
     description: '',
+    purchase_price: '',
+    margin_pct: '',
     price: '',
     photo: null,
 };
+
+function calcSellPrice(purchase, marginPct) {
+    const p = parseFloat(String(purchase).replace(',', '.'));
+    const m = parseFloat(String(marginPct).replace(',', '.'));
+    if (!p || p <= 0 || Number.isNaN(m)) return '';
+    return (p * (1 + m / 100)).toFixed(2);
+}
+
+function calcMarginPct(purchase, sell) {
+    const p = parseFloat(String(purchase).replace(',', '.'));
+    const s = parseFloat(String(sell).replace(',', '.'));
+    if (!p || p <= 0 || !s || s <= 0) return '';
+    return (((s - p) / p) * 100).toFixed(2);
+}
+
+function patchPriceFields(form, key, value) {
+    const next = { ...form, [key]: value };
+    if (key === 'purchase_price' || key === 'margin_pct') {
+        next.price = calcSellPrice(
+            key === 'purchase_price' ? value : form.purchase_price,
+            key === 'margin_pct' ? value : form.margin_pct,
+        );
+    }
+    if (key === 'price') {
+        next.margin_pct = calcMarginPct(form.purchase_price, value);
+    }
+    return next;
+}
 
 function ActionBtn({ title, icon: Icon, color = 'slate', onClick }) {
     const colors = {
@@ -38,7 +68,7 @@ export default function ConfigCataloguePage() {
     const [addOpen, setAddOpen] = useState(false);
     const [addForm, setAddForm] = useState(emptyAddForm);
     const [addPreview, setAddPreview] = useState(null);
-    const [form, setForm] = useState({ category: '', brand: '', description: '', price: '', photo: null });
+    const [form, setForm] = useState({ category: '', brand: '', description: '', purchase_price: '', margin_pct: '', price: '', photo: null });
     const [preview, setPreview] = useState(null);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
@@ -135,12 +165,16 @@ export default function ConfigCataloguePage() {
     };
 
     const openEdit = (item) => {
+        const purchase = item.purchase_price != null ? String(item.purchase_price) : '';
+        const sell = item.price != null ? String(item.price) : '';
         setEditing(item);
         setForm({
             category: item.category || '',
             brand: item.brand || '',
             description: item.description || '',
-            price: item.price != null ? String(item.price) : '',
+            purchase_price: purchase,
+            margin_pct: item.margin_pct != null ? String(item.margin_pct) : calcMarginPct(purchase, sell),
+            price: sell,
             photo: null,
         });
         setPreview(item.photo_url || null);
@@ -149,7 +183,7 @@ export default function ConfigCataloguePage() {
 
     const closeEdit = () => {
         setEditing(null);
-        setForm({ category: '', brand: '', description: '', price: '', photo: null });
+        setForm({ category: '', brand: '', description: '', purchase_price: '', margin_pct: '', price: '', photo: null });
         setPreview(null);
         setError('');
     };
@@ -330,11 +364,14 @@ export default function ConfigCataloguePage() {
                                         <button
                                             key={p.id}
                                             type="button"
-                                            onClick={() => setAddForm((f) => ({
+                                            onClick={() => setAddForm((f) => patchPriceFields({
                                                 ...f,
                                                 product_id: String(p.id),
                                                 search: `${p.reference} — ${p.name}`,
-                                            }))}
+                                                purchase_price: p.purchase_price != null ? String(p.purchase_price) : '',
+                                                margin_pct: p.margin_pct != null ? String(p.margin_pct) : calcMarginPct(p.purchase_price, p.unit_price),
+                                                price: p.unit_price != null ? String(p.unit_price) : calcSellPrice(p.purchase_price, p.margin_pct),
+                                            }, 'product_id', String(p.id)))}
                                             className={`w-full text-left px-3 py-2 text-xs hover:bg-orange-50 dark:hover:bg-slate-800 ${
                                                 String(addForm.product_id) === String(p.id) ? 'bg-orange-50 dark:bg-orange-950/30' : ''
                                             }`}
@@ -366,9 +403,43 @@ export default function ConfigCataloguePage() {
                                 <textarea rows={3} value={addForm.description} onChange={(e) => setAddForm((f) => ({ ...f, description: e.target.value }))} className={inputClass} />
                             </div>
 
-                            <div>
-                                <label className="field-label">Prix (facultatif)</label>
-                                <input type="number" step="0.01" min="0" value={addForm.price} onChange={(e) => setAddForm((f) => ({ ...f, price: e.target.value }))} placeholder="—" className={inputClass} />
+                            <div className="grid grid-cols-3 gap-3">
+                                <div>
+                                    <label className="field-label">Prix d&apos;achat</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        value={addForm.purchase_price}
+                                        onChange={(e) => setAddForm((f) => patchPriceFields(f, 'purchase_price', e.target.value))}
+                                        placeholder="0,00"
+                                        className={inputClass}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="field-label">Marge (%)</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        value={addForm.margin_pct}
+                                        onChange={(e) => setAddForm((f) => patchPriceFields(f, 'margin_pct', e.target.value))}
+                                        placeholder="0"
+                                        className={inputClass}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="field-label">Prix catalogue</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        value={addForm.price}
+                                        onChange={(e) => setAddForm((f) => patchPriceFields(f, 'price', e.target.value))}
+                                        placeholder="—"
+                                        className={inputClass}
+                                    />
+                                </div>
                             </div>
 
                             <div>
@@ -432,9 +503,43 @@ export default function ConfigCataloguePage() {
                                 <textarea rows={3} value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} className={inputClass} />
                             </div>
 
-                            <div>
-                                <label className="field-label">Prix (facultatif)</label>
-                                <input type="number" step="0.01" min="0" value={form.price} onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))} placeholder="—" className={inputClass} />
+                            <div className="grid grid-cols-3 gap-3">
+                                <div>
+                                    <label className="field-label">Prix d&apos;achat</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        value={form.purchase_price}
+                                        onChange={(e) => setForm((f) => patchPriceFields(f, 'purchase_price', e.target.value))}
+                                        placeholder="0,00"
+                                        className={inputClass}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="field-label">Marge (%)</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        value={form.margin_pct}
+                                        onChange={(e) => setForm((f) => patchPriceFields(f, 'margin_pct', e.target.value))}
+                                        placeholder="0"
+                                        className={inputClass}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="field-label">Prix catalogue</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        value={form.price}
+                                        onChange={(e) => setForm((f) => patchPriceFields(f, 'price', e.target.value))}
+                                        placeholder="—"
+                                        className={inputClass}
+                                    />
+                                </div>
                             </div>
 
                             <div>

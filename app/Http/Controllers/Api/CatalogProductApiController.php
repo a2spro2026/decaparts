@@ -120,10 +120,25 @@ class CatalogProductApiController extends Controller
             'price' => $item->price !== null ? number_format((float) $item->price, 2, '.', '') : null,
             'photo_url' => $item->photo_path ? '/storage/'.$item->photo_path : null,
             'unit' => $product?->unit,
+            'famille' => $product?->famille,
+            'consistance' => $product?->consistance,
             'quantity' => $stock ? $stock['quantity'] : 0,
+            'purchased_qty' => $stock ? $stock['purchased'] : 0,
             'sold_qty' => $stock ? $stock['sold'] : 0,
             'stock_actuel' => $stock ? $stock['stock_actuel'] : 0,
-            'etat' => $stock['etat'] ?? null,
+            'initial_stock' => $product ? (float) $product->initial_stock : null,
+            'min_stock_alert' => $product ? (float) $product->min_stock_alert : null,
+            'etat' => $stock ? ($stock['etat'] ?? null) : null,
+            'status' => $product?->status,
+            'statut' => $product?->status === 'actif' ? 'Actif' : ($product ? 'Inactif' : null),
+            'origin' => $stock ? ($stock['origin'] ?? null) : null,
+            'origin_label' => $stock && ($stock['origin'] ?? null) === 'bon_achat' ? 'Bon d\'achat' : ($product ? 'Saisie' : null),
+            'location' => $product?->location,
+            'purchase_price' => $product ? number_format((float) ($product->purchase_price ?? 0), 2, '.', '') : null,
+            'unit_price' => $product ? number_format((float) ($product->unit_price ?? 0), 2, '.', '') : null,
+            'margin_pct' => $product && (float) ($product->purchase_price ?? 0) > 0 && (float) ($product->unit_price ?? 0) > 0
+                ? number_format(((float) $product->unit_price - (float) $product->purchase_price) / (float) $product->purchase_price * 100, 2, '.', '')
+                : null,
         ];
     }
 }

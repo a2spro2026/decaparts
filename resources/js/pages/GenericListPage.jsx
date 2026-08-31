@@ -33,7 +33,7 @@ export default function GenericListPage({ title, subtitle, endpoint, columns }) 
                     header={
                         <>
                             <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase text-slate-500">
-                            <tr>{columns?.map((c) => <th key={c.key} className="px-5 py-3 text-left">{c.label}</th>)}</tr>
+                            <tr>{columns?.map((c) => <th key={c.key} className="px-5 py-3 text-center">{c.label}</th>)}</tr>
                             </thead>
                         </>
                     }
@@ -42,7 +42,7 @@ export default function GenericListPage({ title, subtitle, endpoint, columns }) 
                                                 {data.data?.length ? data.data.map((row) => (
                                                     <tr key={row.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/30">
                                                         {columns.map((c) => (
-                                                            <td key={c.key} className="px-5 py-3">{c.render ? c.render(row) : row[c.key]}</td>
+                                                            <td key={c.key} className="px-5 py-3 text-center">{c.render ? c.render(row) : row[c.key]}</td>
                                                         ))}
                                                     </tr>
                                                 )) : (
