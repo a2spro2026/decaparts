@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const ARROW_BTN =
-    'flex w-full items-center justify-center py-1.5 text-slate-500 dark:text-slate-300 hover:bg-orange-50 dark:hover:bg-slate-800/80 hover:text-brand-orange disabled:opacity-25 disabled:pointer-events-none transition-colors';
+    'flex w-full items-center justify-center py-1.5 text-slate-600 dark:text-slate-200 bg-slate-50/90 dark:bg-slate-800/60 hover:bg-orange-50 dark:hover:bg-slate-800/80 hover:text-brand-orange disabled:opacity-40 disabled:pointer-events-none transition-colors';
 
 /**
  * Zone tableau avec flèches haut / bas pour parcourir toutes les lignes.

@@ -351,7 +351,7 @@ export default function SupplierRelevePage() {
                 <div className="px-5 py-2.5 bg-gradient-to-r from-zinc-950 via-zinc-900 to-orange-900 border-b border-white/10 shrink-0">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Relevé de compte</h3>
                 </div>
-                <ScrollableTable fill className="flex-1 min-h-0">
+                <ScrollableTable>
                     <table className="w-full text-sm min-w-[1500px]">
                         <thead className="sticky top-0 z-10">
                             <tr className="bg-gradient-to-r from-slate-100 via-slate-200/90 to-slate-100 dark:from-slate-800 dark:via-slate-700/80 dark:to-slate-800 border-b-2 border-slate-300 dark:border-slate-600">

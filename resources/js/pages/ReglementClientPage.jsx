@@ -162,6 +162,7 @@ function ViewModal({ row, onClose }) {
                     <div className="px-5 pb-5">
                         <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-2">Allocations</p>
                         <div className="rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+                            <ScrollableTable maxHeight="200px">
                             <table className="w-full text-xs">
                                 <thead><tr className="bg-slate-50 dark:bg-slate-800"><th className="px-2 py-1.5">Bon</th><th className="px-2 py-1.5">Montant</th><th className="px-2 py-1.5">Action</th></tr></thead>
                                 <tbody>
@@ -174,6 +175,7 @@ function ViewModal({ row, onClose }) {
                                     ))}
                                 </tbody>
                             </table>
+                            </ScrollableTable>
                         </div>
                     </div>
                 )}

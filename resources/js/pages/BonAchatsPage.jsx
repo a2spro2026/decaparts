@@ -189,7 +189,7 @@ function ViewModal({ row, onClose }) {
                     </div>
 
                     <div className="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-                        <div className="overflow-x-auto">
+                        <ScrollableTable maxHeight="240px">
                             <table className="w-full text-sm min-w-[640px]">
                                 <thead>
                                     <tr className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
@@ -218,7 +218,7 @@ function ViewModal({ row, onClose }) {
                                     </tr>
                                 </tfoot>
                             </table>
-                        </div>
+                        </ScrollableTable>
                     </div>
                 </div>
 
