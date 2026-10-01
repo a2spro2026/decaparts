@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,26 +20,13 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@decaparts.com',
         ]);
 
-        User::updateOrCreate(
+        // Le compte administrateur propriétaire est créé via `php artisan decaparts:owner-admin`.
+        User::firstOrCreate(
             ['email' => 'admin@decaparts.com'],
             [
                 'name' => 'MR AHMED',
-                'password' => Hash::make('password'),
+                'password' => Hash::make(Str::random(32)),
                 'role_id' => $adminRole->id,
-                'phone' => '0600000000',
-                'statut' => 'Gerant',
-                'is_active' => true,
-                'email_verified_at' => now(),
-            ]
-        );
-
-        User::updateOrCreate(
-            ['email' => 'yahya@decaparts.com'],
-            [
-                'name' => 'MR TAHA',
-                'password' => Hash::make('0661755048'),
-                'role_id' => $adminRole->id,
-                'phone' => '0661755048',
                 'statut' => 'Gerant',
                 'is_active' => true,
                 'email_verified_at' => now(),

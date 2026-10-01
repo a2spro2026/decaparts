@@ -36,6 +36,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'is_owner' => 'boolean',
         ];
     }
 
@@ -61,5 +62,10 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role?->slug === 'administrateur';
+    }
+
+    public function isOwner(): bool
+    {
+        return (bool) $this->is_owner;
     }
 }

@@ -18,9 +18,10 @@ class UserApiController extends Controller
         'Facturation' => 'Facturation',
     ];
 
-    public function index()
+    public function index(Request $request)
     {
         $users = User::with('role')
+            ->when(! $request->user()->isOwner(), fn ($q) => $q->where('is_owner', false))
             ->orderBy('id')
             ->get()
             ->map(fn (User $user) => $this->formatUser($user));
@@ -57,8 +58,10 @@ class UserApiController extends Controller
         ], 201);
     }
 
-    public function show(User $user)
+    public function show(Request $request, User $user)
     {
+        $this->guardOwner($request, $user);
+
         return response()->json([
             'data' => $this->formatUser($user->load('role')),
         ]);
@@ -66,6 +69,12 @@ class UserApiController extends Controller
 
     public function update(Request $request, User $user)
     {
+        $this->guardOwner($request, $user);
+
+        if ($user->isOwner()) {
+            return response()->json(['message' => 'Ce compte se gère hors de l\'interface.'], 403);
+        }
+
         $validated = $this->validated($request, $user);
 
         $data = [
@@ -89,7 +98,9 @@ class UserApiController extends Controller
 
     public function destroy(Request $request, User $user)
     {
-        if ($user->id === $request->user()->id) {
+        $this->guardOwner($request, $user);
+
+        if ($user->isOwner() || $user->id === $request->user()->id) {
             return response()->json(['message' => 'Vous ne pouvez pas supprimer votre propre compte.'], 422);
         }
 
@@ -100,7 +111,9 @@ class UserApiController extends Controller
 
     public function suspend(Request $request, User $user)
     {
-        if ($user->id === $request->user()->id) {
+        $this->guardOwner($request, $user);
+
+        if ($user->isOwner() || $user->id === $request->user()->id) {
             return response()->json(['message' => 'Vous ne pouvez pas suspendre votre propre compte.'], 422);
         }
 
@@ -110,6 +123,13 @@ class UserApiController extends Controller
             'data' => $this->formatUser($user->fresh('role')),
             'message' => $user->is_active ? 'Compte réactivé.' : 'Compte suspendu.',
         ]);
+    }
+
+    private function guardOwner(Request $request, User $user): void
+    {
+        if ($user->isOwner() && ! $request->user()->isOwner()) {
+            abort(404);
+        }
     }
 
     private function validated(Request $request, ?User $user = null): array

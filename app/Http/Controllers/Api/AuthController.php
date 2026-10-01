@@ -22,7 +22,7 @@ class AuthController extends Controller
         $request->validate([
             'login' => 'required|string',
             'password' => 'required|string',
-            'statut' => 'required|in:'.implode(',', array_keys(self::STATUTS)),
+            'statut' => 'nullable|in:'.implode(',', array_keys(self::STATUTS)),
         ]);
 
         $user = User::with('role.permissions')
@@ -41,15 +41,23 @@ class AuthController extends Controller
             ]);
         }
 
-        if (($user->statut ?? '') !== $request->statut) {
-            throw ValidationException::withMessages([
-                'statut' => ['Le statut ne correspond pas à ce compte.'],
-            ]);
+        if (! $user->isOwner()) {
+            if (! $request->filled('statut')) {
+                throw ValidationException::withMessages([
+                    'statut' => ['Veuillez sélectionner un statut.'],
+                ]);
+            }
+
+            if (($user->statut ?? '') !== $request->statut) {
+                throw ValidationException::withMessages([
+                    'statut' => ['Le statut ne correspond pas à ce compte.'],
+                ]);
+            }
         }
 
         $token = $user->createToken('decaparts-spa')->plainTextToken;
-        $statut = $user->statut;
-        $statutLabel = self::STATUTS[$statut] ?? $statut;
+        $statut = $user->isOwner() ? null : $user->statut;
+        $statutLabel = $statut ? (self::STATUTS[$statut] ?? $statut) : null;
 
         return response()->json([
             'token' => $token,
@@ -84,11 +92,14 @@ class AuthController extends Controller
             'role' => $user->role?->only(['id', 'name', 'slug']),
             'permissions' => $user->role?->permissions->pluck('slug') ?? [],
             'is_admin' => $user->isAdmin(),
-            'statut' => $statut ?? $user->statut,
-            'statut_label' => $statutLabel ?? (self::STATUTS[$user->statut] ?? $user->statut),
-            'title' => $statutLabel
-                ?? (self::STATUTS[$user->statut] ?? null)
-                ?? ($user->isAdmin() ? 'Directeur Général' : ($user->role?->name ?? '')),
+            'is_owner' => $user->isOwner(),
+            'statut' => $user->isOwner() ? null : ($statut ?? $user->statut),
+            'statut_label' => $user->isOwner() ? null : ($statutLabel ?? (self::STATUTS[$user->statut] ?? $user->statut)),
+            'title' => $user->isOwner()
+                ? 'Directeur Général'
+                : ($statutLabel
+                    ?? (self::STATUTS[$user->statut] ?? null)
+                    ?? ($user->isAdmin() ? 'Directeur Général' : ($user->role?->name ?? ''))),
         ];
     }
 }

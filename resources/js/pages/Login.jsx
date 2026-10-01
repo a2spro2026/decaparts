@@ -158,10 +158,6 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        if (!statut) {
-            setError('Veuillez sélectionner un statut');
-            return;
-        }
         if (!loginValue.trim() || !password) {
             setError('Veuillez saisir le login et le mot de passe');
             return;
@@ -278,7 +274,6 @@ export default function Login() {
                                                     onChange={(e) => setStatut(e.target.value)}
                                                     onFocus={() => setStatutFocused(true)}
                                                     onBlur={() => setStatutFocused(false)}
-                                                    required
                                                     className={`block w-full appearance-none pl-11 pr-10 py-3 text-sm bg-transparent outline-none cursor-pointer ${
                                                         statut ? 'text-white font-medium' : 'text-zinc-500'
                                                     }`}

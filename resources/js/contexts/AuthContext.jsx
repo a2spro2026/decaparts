@@ -51,7 +51,8 @@ export function AuthProvider({ children }) {
         }
         localStorage.setItem('decaparts_token', data.token);
         localStorage.setItem('decaparts_user', JSON.stringify(data.user));
-        if (statut) localStorage.setItem('decaparts_statut', statut);
+        if (data.user.statut) localStorage.setItem('decaparts_statut', data.user.statut);
+        else localStorage.removeItem('decaparts_statut');
         setUser(data.user);
         return data.user;
     };
