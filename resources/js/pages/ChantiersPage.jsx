@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Plus, Search, Archive, FileDown } from 'lucide-react';
 import api from '../lib/api';
+import { authStorage } from '../lib/authStorage';
 import ScrollableTable from '../components/ScrollableTable';
 
 const statusLabels = { planifie: 'En préparation', en_cours: 'En cours', suspendu: 'Suspendu', termine: 'Terminé', annule: 'Annulé' };
@@ -17,7 +18,7 @@ export default function ChantiersPage() {
         load();
     };
 
-    const exportCsv = () => window.open('/api/reports/export/chantiers?format=csv&token=' + localStorage.getItem('decaparts_token'));
+    const exportCsv = () => window.open('/api/reports/export/chantiers?format=csv&token=' + authStorage.get('decaparts_token'));
 
     return (
         <div className="space-y-6">

@@ -1,20 +1,18 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import api from '../lib/api';
+import { authStorage } from '../lib/authStorage';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(() => {
-        const saved = localStorage.getItem('decaparts_user');
-        return saved ? JSON.parse(saved) : null;
-    });
-    const [loading, setLoading] = useState(!!localStorage.getItem('decaparts_token'));
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(!!authStorage.get('decaparts_token'));
 
     useEffect(() => {
-        if (localStorage.getItem('decaparts_token')) {
+        if (authStorage.get('decaparts_token')) {
             api.get('/user')
                 .then((r) => {
-                    const savedStatut = localStorage.getItem('decaparts_statut');
+                    const savedStatut = authStorage.get('decaparts_statut');
                     const statutLabels = {
                         Gerant: 'Gérant',
                         Assistant: 'Assistant(e)',
@@ -30,12 +28,10 @@ export function AuthProvider({ children }) {
                         } : {}),
                     };
                     setUser(user);
-                    localStorage.setItem('decaparts_user', JSON.stringify(user));
+                    authStorage.set('decaparts_user', JSON.stringify(user));
                 })
                 .catch(() => {
-                    localStorage.removeItem('decaparts_token');
-                    localStorage.removeItem('decaparts_user');
-                    localStorage.removeItem('decaparts_statut');
+                    authStorage.clear();
                     setUser(null);
                 })
                 .finally(() => setLoading(false));
@@ -49,19 +45,17 @@ export function AuthProvider({ children }) {
         if (!data?.token || !data?.user) {
             throw new Error('Réponse de connexion invalide.');
         }
-        localStorage.setItem('decaparts_token', data.token);
-        localStorage.setItem('decaparts_user', JSON.stringify(data.user));
-        if (data.user.statut) localStorage.setItem('decaparts_statut', data.user.statut);
-        else localStorage.removeItem('decaparts_statut');
+        authStorage.set('decaparts_token', data.token);
+        authStorage.set('decaparts_user', JSON.stringify(data.user));
+        if (data.user.statut) authStorage.set('decaparts_statut', data.user.statut);
+        else authStorage.remove('decaparts_statut');
         setUser(data.user);
         return data.user;
     };
 
     const logout = async () => {
         try { await api.post('/logout'); } catch {}
-        localStorage.removeItem('decaparts_token');
-        localStorage.removeItem('decaparts_user');
-        localStorage.removeItem('decaparts_statut');
+        authStorage.clear();
         setUser(null);
     };
 
