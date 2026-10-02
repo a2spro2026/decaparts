@@ -34,10 +34,9 @@ const emptyForm = {
     name: '',
     ice: '',
     phone: '',
-    city: '',
+    email: '',
     chantier_type: '',
     reglement: '',
-    chantier_address: '',
     work_delay: '', // Échéance
     budget: '', // Solde Initial
 };
@@ -94,10 +93,9 @@ th{background:#f8fafc;width:180px;font-weight:700}
 <tr><th>Nom Client</th><td>${row.name || '—'}</td></tr>
 <tr><th>ICE</th><td>${row.ice || '—'}</td></tr>
 <tr><th>Contact</th><td>${row.contact || '—'}</td></tr>
-<tr><th>Ville</th><td>${row.city || '—'}</td></tr>
+<tr><th>E-mail</th><td>${row.email || '—'}</td></tr>
 <tr><th>Type</th><td>${row.chantier_type || '—'}</td></tr>
 <tr><th>Régl</th><td>${row.reglement || '—'}</td></tr>
-<tr><th>Adresse</th><td>${row.chantier_address || '—'}</td></tr>
 <tr><th>Échéance</th><td>${row.work_delay || row.echeance || '—'}</td></tr>
 <tr><th>Solde Initial</th><td><strong>${formatSolde(row.budget ?? row.initial_balance)}</strong></td></tr>
 <tr><th>Date création</th><td>${row.created_at || '—'}</td></tr>
@@ -159,10 +157,9 @@ function ViewModal({ row, onClose }) {
                         ['Nom Client', row.name],
                         ['ICE', row.ice],
                         ['Contact', row.contact],
-                        ['Ville', row.city],
+                        ['E-mail', row.email],
                         ['Type', row.chantier_type],
                         ['Régl', row.reglement],
-                        ['Adresse', row.chantier_address],
                         ['Échéance', row.work_delay || row.echeance],
                         ['Solde Initial', formatSolde(row.budget ?? row.initial_balance), hasSoldeInitial(row.budget ?? row.initial_balance)],
                         ['Date', row.created_at],
@@ -225,10 +222,9 @@ export default function FicheClientPage() {
             name: row.name || '',
             ice: row.ice || '',
             phone: row.phone || row.contact || '',
-            city: row.city || '',
+            email: row.email || '',
             chantier_type: row.chantier_type || '',
             reglement: row.reglement || '',
-            chantier_address: row.chantier_address || '',
             work_delay: row.work_delay || row.echeance || '',
             budget: parseSoldeInput(row.budget ?? row.initial_balance),
         });
@@ -260,10 +256,9 @@ export default function FicheClientPage() {
             name: form.name,
             ice: form.ice,
             phone: form.phone || null,
-            city: form.city || null,
+            email: form.email || null,
             chantier_type: form.chantier_type || null,
             reglement: form.reglement || null,
-            chantier_address: form.chantier_address || null,
             work_delay: form.work_delay || null,
             budget: form.budget === '' ? 0 : Number(parseSoldeInput(form.budget) || 0),
         };
@@ -276,7 +271,7 @@ export default function FicheClientPage() {
             resetForm();
         } catch (err) {
             const errors = err.response?.data?.errors;
-            setError(errors?.ice?.[0] || err.response?.data?.message || 'Erreur lors de l\'enregistrement');
+            setError(errors?.ice?.[0] || errors?.email?.[0] || err.response?.data?.message || 'Erreur lors de l\'enregistrement');
         } finally {
             setSaving(false);
         }
@@ -300,7 +295,7 @@ export default function FicheClientPage() {
                 )}
 
                 <div className="overflow-x-auto">
-                    <div className="grid grid-cols-[78px_72px_minmax(120px,1.2fr)_150px_95px_90px_minmax(120px,1.1fr)_70px_56px_88px_95px] gap-1.5 items-end min-w-[1230px]">
+                    <div className="grid grid-cols-[78px_72px_minmax(120px,1.2fr)_150px_105px_minmax(150px,1.2fr)_70px_56px_88px_95px] gap-1.5 items-end min-w-[1150px]">
                         <Field label="Date">
                             <input type="text" readOnly value={meta.date} className={readOnlyClass} />
                         </Field>
@@ -327,11 +322,8 @@ export default function FicheClientPage() {
                         <Field label="Contact">
                             <input type="tel" value={form.phone} onChange={(e) => set('phone', e.target.value)} placeholder="06 XX XX XX XX" className={inputClass} />
                         </Field>
-                        <Field label="Ville">
-                            <input type="text" value={form.city} onChange={(e) => set('city', e.target.value)} placeholder="Ville" className={inputClass} />
-                        </Field>
-                        <Field label="Adresse">
-                            <input type="text" value={form.chantier_address} onChange={(e) => set('chantier_address', e.target.value)} placeholder="Adresse" className={inputClass} />
+                        <Field label="E-mail">
+                            <input type="email" value={form.email} onChange={(e) => set('email', e.target.value)} placeholder="contact@..." className={inputClass} />
                         </Field>
                         <Field label="Type">
                             <select value={form.chantier_type} onChange={(e) => set('chantier_type', e.target.value)} className={inputClass}>
@@ -393,15 +385,14 @@ export default function FicheClientPage() {
                     colgroup={
                         <>
                             <col className="w-[6%]" />
-                            <col className="w-[13%]" />
+                            <col className="w-[14%]" />
                             <col className="w-[12%]" />
+                            <col className="w-[10%]" />
+                            <col className="w-[15%]" />
+                            <col className="w-[6%]" />
+                            <col className="w-[6%]" />
+                            <col className="w-[8%]" />
                             <col className="w-[9%]" />
-                            <col className="w-[7%]" />
-                            <col className="w-[11%]" />
-                            <col className="w-[6%]" />
-                            <col className="w-[6%]" />
-                            <col className="w-[8%]" />
-                            <col className="w-[8%]" />
                             <col className="w-[14%]" />
                         </>
                     }
@@ -409,7 +400,7 @@ export default function FicheClientPage() {
                         <>
                             <thead>
                                 <tr className="bg-slate-50 dark:bg-slate-800/80">
-                                    {['CR', 'Nom Client', 'ICE', 'Contact', 'Ville', 'Adresse', 'Type', 'Régl', 'Échéance', 'Solde Initial', 'Actions'].map((h) => (
+                                    {['CR', 'Nom Client', 'ICE', 'Contact', 'E-mail', 'Type', 'Régl', 'Échéance', 'Solde Initial', 'Actions'].map((h) => (
                                         <th
                                             key={h}
                                             className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center"
@@ -426,7 +417,7 @@ export default function FicheClientPage() {
                             {loading ? (
                                 [...Array(3)].map((_, i) => (
                                     <tr key={i}>
-                                        {[...Array(11)].map((__, j) => (
+                                        {[...Array(10)].map((__, j) => (
                                             <td key={j} className="px-4 py-3 text-center">
                                                 <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" />
                                             </td>
@@ -440,12 +431,7 @@ export default function FicheClientPage() {
                                         <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.name}</td>
                                         <td className="px-2 py-2.5 text-center font-mono text-xs text-slate-600 dark:text-slate-300">{row.ice || '—'}</td>
                                         <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.contact || '—'}</td>
-                                        <td className="px-4 py-2.5 text-center">
-                                            <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                                                {row.city || '—'}
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300 max-w-[160px] truncate mx-auto">{row.chantier_address || '—'}</td>
+                                        <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300 truncate" title={row.email || ''}>{row.email || '—'}</td>
                                         <td className="px-4 py-2.5 text-center">
                                             <span className={`inline-flex px-2 py-0.5 rounded-md text-xs font-semibold ${
                                                 row.chantier_type === 'Rev' ? 'bg-blue-50 dark:bg-blue-900/30 text-orange-700 dark:text-orange-300'
@@ -482,7 +468,7 @@ export default function FicheClientPage() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={11} className="px-4 py-12 text-center text-slate-400">
+                                    <td colSpan={10} className="px-4 py-12 text-center text-slate-400">
                                         Aucun client enregistré
                                     </td>
                                 </tr>
