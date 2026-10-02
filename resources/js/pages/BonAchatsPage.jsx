@@ -106,8 +106,7 @@ th{background:#f8fafc;font-weight:700}.badge{background:#fff7ed;color:#ea580c;pa
 <h1>DECAPARTS — Bon d'Achat <span class="badge">${row.reference}</span></h1>
 <table>
 <tr><th>Date</th><td>${row.order_date || '—'}</td><th>Fournisseur</th><td>${row.fournisseur || '—'}</td></tr>
-<tr><th>N° Bn Frns</th><td>${row.bc_number || '—'}</td><th>Client Livré</th><td>${row.client_livre || '—'}</td></tr>
-<tr><th>Ville Livraison</th><td>${row.city || '—'}</td><th>Type Rég / Échéance</th><td>${row.reglement || '—'} / ${row.echeance || '—'}</td></tr>
+<tr><th>N° Bn Frns</th><td>${row.bc_number || '—'}</td><th>Type Rég / Échéance</th><td>${row.reglement || '—'} / ${row.echeance || '—'}</td></tr>
 <tr><th>Chauffeur</th><td>${row.chauffeur || '—'}</td><th>Matricule</th><td>${row.matricule || '—'}</td></tr>
 </table>
 <table>
@@ -174,12 +173,11 @@ function ViewModal({ row, onClose }) {
                 </div>
 
                 <div className="p-5 space-y-4 overflow-y-auto min-h-0 flex-1">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         {[
                             ['Date Bon', row.order_date],
                             ['N° Bon', row.reference],
                             ['Nom Fournisseur', row.fournisseur],
-                            ['Client Livré', row.client_livre],
                         ].map(([label, value]) => (
                             <div key={label} className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 px-3 py-2.5 text-center">
                                 <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{label}</p>
@@ -502,7 +500,7 @@ export default function BonAchatsPage() {
                             )}
 
                             <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/40 p-2.5">
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-10 gap-2 items-end">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-8 gap-2 items-end">
                                     <Field label="Date">
                                         <input type="date" required value={form.order_date} onChange={(e) => set('order_date', e.target.value)} className={inputClass} />
                                     </Field>
@@ -517,12 +515,6 @@ export default function BonAchatsPage() {
                                     </Field>
                                     <Field label="N° Bn Frns">
                                         <input type="text" value={form.bc_number} onChange={(e) => set('bc_number', e.target.value)} placeholder="N° Bn Frns" className={inputClass} />
-                                    </Field>
-                                    <Field label="Client Livré">
-                                        <input type="text" disabled value="" placeholder="—" className={disabledClass} title="Section à venir" />
-                                    </Field>
-                                    <Field label="Ville Livraison">
-                                        <input type="text" disabled value="" placeholder="—" className={disabledClass} title="Section à venir" />
                                     </Field>
                                     <Field label="Type Rég">
                                         <select value={form.reglement} onChange={(e) => set('reglement', e.target.value)} className={inputClass}>
@@ -700,12 +692,12 @@ export default function BonAchatsPage() {
                                     <div className="px-5 py-3.5 bg-gradient-to-r from-amber-500 via-orange-500 to-orange-700 border-b border-white/10">
                                         <h3 className="text-sm font-bold text-white uppercase tracking-wide">Tableau des Bon D&apos;achats</h3>
                                     </div>
-                                    <ScrollableTable tableClassName="w-full text-sm min-w-[1100px]"
+                                    <ScrollableTable tableClassName="w-full text-sm min-w-[900px]"
                                         header={
                                             <>
                                                 <thead>
                                                     <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                                                        {['Date', 'N° B-A', 'Fournisseur', 'N° Bn Frns', 'Client Livré', 'Ville', 'Qté totale', 'Total', 'Échéance', 'Actions'].map((h) => (
+                                                        {['Date', 'N° B-A', 'Fournisseur', 'N° Bn Frns', 'Qté totale', 'Total', 'Échéance', 'Actions'].map((h) => (
                                                             <th key={h} className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
                                                         ))}
                                                     </tr>
@@ -716,7 +708,7 @@ export default function BonAchatsPage() {
                                         <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                                                 {loading ? (
                                                     [...Array(3)].map((_, i) => (
-                                                        <tr key={i}>{[...Array(10)].map((__, j) => (
+                                                        <tr key={i}>{[...Array(8)].map((__, j) => (
                                                             <td key={j} className="px-4 py-3 text-center"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
                                                         ))}</tr>
                                                     ))
@@ -732,8 +724,6 @@ export default function BonAchatsPage() {
                                                             <td className="px-4 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">{row.reference}</td>
                                                             <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.fournisseur || '—'}</td>
                                                             <td className="px-4 py-2.5 text-center font-mono text-xs text-slate-600 dark:text-slate-300">{row.bc_number || '—'}</td>
-                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.client_livre || '—'}</td>
-                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.city || '—'}</td>
                                                             <td className="px-4 py-2.5 text-center font-semibold tabular-nums text-emerald-700 dark:text-emerald-300">
                                                                 {orderTotalQuantity(row).toLocaleString('fr-FR', { maximumFractionDigits: 3 })}
                                                             </td>
@@ -755,7 +745,7 @@ export default function BonAchatsPage() {
                                                         </tr>
                                                     ))
                                                 ) : (
-                                                    <tr><td colSpan={10} className="px-4 py-12 text-center text-slate-400">Aucun bon d&apos;achat enregistré</td></tr>
+                                                    <tr><td colSpan={8} className="px-4 py-12 text-center text-slate-400">Aucun bon d&apos;achat enregistré</td></tr>
                                                 )}
                                             </tbody>
                 </ScrollableTable>
