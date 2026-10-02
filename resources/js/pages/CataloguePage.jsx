@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Search, Trash2, ImagePlus, Hash, Type, BadgeDollarSign, Award, Layers, RotateCcw,
+    Search, Trash2, ImagePlus, Hash, Type, BadgeDollarSign, ScanBarcode, RotateCcw,
     ShoppingCart, FileSpreadsheet, X,
 } from 'lucide-react';
 import api from '../lib/api';
@@ -9,19 +9,21 @@ import { useCatalogueCart } from '../contexts/CatalogueCartContext';
 
 const emptyFilters = {
     reference: '',
+    barcode: '',
     name: '',
     price: '',
-    brand: '',
-    category: '',
 };
 
 const FILTER_FIELDS = [
     { key: 'reference', label: 'Réf', icon: Hash, hint: 'N° pièce' },
+    { key: 'barcode', label: 'Code Barre', icon: ScanBarcode, hint: 'Scanner / saisir' },
     { key: 'name', label: 'Désignation', icon: Type, hint: 'Pièce' },
     { key: 'price', label: 'Prix', icon: BadgeDollarSign, hint: 'MAD' },
-    { key: 'brand', label: 'Marque', icon: Award, hint: 'OEM / Aftermarket' },
-    { key: 'category', label: 'Catégorie', icon: Layers, hint: 'Famille' },
 ];
+
+function itemBarcodes(item) {
+    return [...(item.barcodes || []), item.reference].filter(Boolean);
+}
 
 function formatQty(value) {
     const n = Number(value);
@@ -107,9 +109,8 @@ function ProductDetailPanel({
                     <div className="px-4 py-3">
                         <DetailRow label="Référence" value={item.reference} />
                         <DetailRow label="Code article" value={item.article_id} />
+                        <DetailRow label="Code barre" value={(item.barcodes || []).join(', ') || null} />
                         <DetailRow label="Désignation" value={item.name} />
-                        <DetailRow label="Catégorie" value={item.category} />
-                        <DetailRow label="Marque" value={item.brand} />
                         <DetailRow label="Description" value={item.description} />
                         <DetailRow label="Prix d'achat" value={formatPrice(item.purchase_price)} />
                         <DetailRow label="Marge" value={item.margin_pct != null ? `${Number(item.margin_pct).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} %` : '—'} />
@@ -216,17 +217,15 @@ export default function CataloguePage() {
         const refQ = filters.reference.trim().toLowerCase();
         const nameQ = filters.name.trim().toLowerCase();
         const priceQ = filters.price.trim().toLowerCase();
-        const brandQ = filters.brand.trim().toLowerCase();
-        const catQ = filters.category.trim().toLowerCase();
+        const barcodeQ = filters.barcode.trim().toLowerCase();
 
         return items.filter((item) => {
             if (refQ) {
                 const ref = `${item.reference || ''} ${item.article_id || ''}`.toLowerCase();
                 if (!ref.includes(refQ)) return false;
             }
+            if (barcodeQ && !itemBarcodes(item).some((code) => code.toLowerCase().includes(barcodeQ))) return false;
             if (nameQ && !(item.name || '').toLowerCase().includes(nameQ)) return false;
-            if (brandQ && !(item.brand || '').toLowerCase().includes(brandQ)) return false;
-            if (catQ && !(item.category || '').toLowerCase().includes(catQ)) return false;
             if (priceQ) {
                 const priceStr = item.price != null ? String(item.price) : '';
                 if (!priceStr.toLowerCase().includes(priceQ)) return false;
@@ -299,7 +298,7 @@ export default function CataloguePage() {
                     )}
                 </div>
 
-                <div className="relative z-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1.5 p-2">
+                <div className="relative z-10 grid grid-cols-2 lg:grid-cols-4 gap-1.5 p-2">
                     {FILTER_FIELDS.map(({ key, label, icon: Icon, hint }) => {
                         const active = String(filters[key] || '').trim() !== '';
                         return (

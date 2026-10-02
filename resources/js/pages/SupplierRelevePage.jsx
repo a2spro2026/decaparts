@@ -11,11 +11,10 @@ const emptyFilters = {
     date_from: '',
     date_to: '',
     supplier_id: '',
-    client_livre: '',
 };
 
 const columns = [
-    'Opération', 'Date', 'N° Bn', 'Client Livré', 'Ville Liv', 'Qte',
+    'Opération', 'Date', 'N° Bn', 'Qte',
     'Débit', 'Crédit', 'Solde', 'Type Rég', 'N° Rég', 'Nom Tiré',
     'Date Encaiss', 'Payé', 'Dévalidé', 'Impayé', 'Reporté',
 ];
@@ -91,8 +90,6 @@ function buildPrintHtml(rows, summary, filtersLabel) {
         <td>${row.operation || '—'}</td>
         <td>${row.date || '—'}</td>
         <td>${row.numero_bn || '—'}</td>
-        <td>${row.client_livre || '—'}</td>
-        <td>${row.ville_liv || '—'}</td>
         <td>${formatQty(row.qte)}</td>
         <td>${formatMontant(row.debit)}</td>
         <td>${formatMontant(row.credit)}</td>
@@ -127,7 +124,7 @@ th{background:#f1f5f9;font-size:9px;text-transform:uppercase}
 </div>
 <table>
 <thead><tr>${columns.map((c) => `<th>${c}</th>`).join('')}</tr></thead>
-<tbody>${body || '<tr><td colspan="17">Aucune opération</td></tr>'}</tbody>
+<tbody>${body || `<tr><td colspan="${columns.length}">Aucune opération</td></tr>`}</tbody>
 </table>
 </body></html>`;
 }
@@ -162,7 +159,6 @@ export default function SupplierRelevePage() {
         if (applied.date_from) params.date_from = applied.date_from;
         if (applied.date_to) params.date_to = applied.date_to;
         if (applied.supplier_id) params.supplier_id = applied.supplier_id;
-        if (applied.client_livre) params.client_livre = applied.client_livre;
 
         api.get('/supplier-releve', { params })
             .then((r) => {
@@ -211,7 +207,6 @@ export default function SupplierRelevePage() {
         applied.date_from ? `Du ${applied.date_from}` : null,
         applied.date_to ? `au ${applied.date_to}` : null,
         supplierName,
-        applied.client_livre ? `Client : ${applied.client_livre}` : null,
     ].filter(Boolean).join(' · ');
 
     return (
@@ -308,7 +303,7 @@ export default function SupplierRelevePage() {
                 </div>
 
                 <div className="glass-card p-3 shadow-card border border-slate-200/60 dark:border-slate-700/60">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.3fr_1.3fr_auto] gap-2.5 items-end">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1.6fr_auto] gap-2.5 items-end">
                         <Field label="De">
                             <input type="date" value={filters.date_from} onChange={(e) => setFilter('date_from', e.target.value)} className={filterClass} />
                         </Field>
@@ -322,15 +317,6 @@ export default function SupplierRelevePage() {
                                     <option key={s.id} value={s.id}>{s.name}</option>
                                 ))}
                             </select>
-                        </Field>
-                        <Field label="Client Livré">
-                            <input
-                                type="text"
-                                value={filters.client_livre}
-                                onChange={(e) => setFilter('client_livre', e.target.value)}
-                                placeholder="Client livré"
-                                className={filterClass}
-                            />
                         </Field>
                         <div className="flex items-center gap-1.5 self-end">
                             <button type="button" onClick={handleSearch} className="p-2 rounded-lg border border-slate-200 dark:border-slate-600 text-slate-500 hover:text-brand-navy hover:bg-slate-50 dark:hover:bg-slate-800" title="Actualiser">
@@ -351,7 +337,7 @@ export default function SupplierRelevePage() {
                 <div className="px-5 py-2.5 bg-gradient-to-r from-zinc-950 via-zinc-900 to-orange-900 border-b border-white/10 shrink-0">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Relevé de compte</h3>
                 </div>
-                                <ScrollableTable tableClassName="w-full text-sm min-w-[1500px]"
+                                <ScrollableTable tableClassName="w-full text-sm min-w-[1250px]"
                     header={
                         <>
                             <thead className="sticky top-0 z-10">
@@ -391,8 +377,6 @@ export default function SupplierRelevePage() {
                                                             </td>
                                                             <td className="px-2.5 py-2 text-center text-slate-600 dark:text-slate-300 whitespace-nowrap">{row.date || '—'}</td>
                                                             <td className="px-2.5 py-2 text-center font-mono text-[11px] font-semibold text-brand-navy dark:text-orange-300">{row.numero_bn || '—'}</td>
-                                                            <td className="px-2.5 py-2 text-center text-slate-700 dark:text-slate-200 max-w-[140px] truncate" title={row.client_livre || ''}>{row.client_livre || '—'}</td>
-                                                            <td className="px-2.5 py-2 text-center text-slate-600 dark:text-slate-300">{row.ville_liv || '—'}</td>
                                                             <td className="px-2.5 py-2 text-center tabular-nums text-slate-700 dark:text-slate-200">{formatQty(row.qte)}</td>
                                                             <td className="px-2.5 py-2 text-center tabular-nums font-semibold text-rose-700 dark:text-rose-400">{formatMontant(row.debit)}</td>
                                                             <td className="px-2.5 py-2 text-center tabular-nums font-semibold text-emerald-700 dark:text-emerald-400">{formatMontant(row.credit)}</td>

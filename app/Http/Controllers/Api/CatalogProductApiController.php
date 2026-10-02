@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\CatalogProduct;
 use App\Models\Product;
+use App\Models\PurchaseOrderItem;
 use App\Services\ProductStockCalculator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -15,12 +16,12 @@ class CatalogProductApiController extends Controller
 
     public function index()
     {
-        $items = CatalogProduct::with('product')
-            ->latest()
-            ->get()
-            ->map(fn (CatalogProduct $item) => $this->format($item));
+        $items = CatalogProduct::with('product')->latest()->get();
+        $barcodes = $this->barcodesByProduct($items->pluck('product_id')->filter()->all());
 
-        return response()->json(['data' => $items]);
+        return response()->json([
+            'data' => $items->map(fn (CatalogProduct $item) => $this->format($item, $barcodes)),
+        ]);
     }
 
     public function store(Request $request)
@@ -102,17 +103,41 @@ class CatalogProductApiController extends Controller
         return response()->json(['message' => 'Fiche catalogue supprimée']);
     }
 
-    private function format(CatalogProduct $item): array
+    /**
+     * @param  array<int>  $productIds
+     * @return array<int, array<string>>
+     */
+    private function barcodesByProduct(array $productIds): array
+    {
+        if (! $productIds) {
+            return [];
+        }
+
+        return PurchaseOrderItem::query()
+            ->whereIn('product_id', $productIds)
+            ->whereNotNull('barcode')
+            ->where('barcode', '!=', '')
+            ->select('product_id', 'barcode')
+            ->distinct()
+            ->get()
+            ->groupBy('product_id')
+            ->map(fn ($rows) => $rows->pluck('barcode')->unique()->values()->all())
+            ->all();
+    }
+
+    private function format(CatalogProduct $item, ?array $barcodes = null): array
     {
         /** @var Product|null $product */
         $product = $item->product;
         $stock = $product ? $this->stockCalculator->forProduct($product) : null;
+        $barcodes ??= $this->barcodesByProduct(array_filter([$item->product_id]));
 
         return [
             'id' => $item->id,
             'product_id' => $item->product_id,
             'reference' => $product?->reference,
             'article_id' => $product?->article_id,
+            'barcodes' => $barcodes[$item->product_id] ?? [],
             'name' => $product?->name,
             'category' => $item->category,
             'brand' => $item->brand,

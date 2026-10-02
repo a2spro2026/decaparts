@@ -265,7 +265,7 @@ export default function ConfigCataloguePage() {
                         <>
                             <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-                            {['Photo', 'Réf', 'Désignation', 'Catégorie', 'Marque', 'Prix', 'Actions'].map((h) => (
+                            {['Photo', 'Réf', 'Désignation', 'Prix', 'Actions'].map((h) => (
                             <th key={h} className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 text-center">{h}</th>
                             ))}
                             </tr>
@@ -277,7 +277,7 @@ export default function ConfigCataloguePage() {
                                                 {loading ? (
                                                     [...Array(4)].map((_, i) => (
                                                         <tr key={i}>
-                                                            {[...Array(7)].map((__, j) => (
+                                                            {[...Array(5)].map((__, j) => (
                                                                 <td key={j} className="px-4 py-3"><div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" /></td>
                                                             ))}
                                                         </tr>
@@ -298,8 +298,6 @@ export default function ConfigCataloguePage() {
                                                             </td>
                                                             <td className="px-4 py-2.5 text-center font-mono text-xs font-semibold text-brand-orange">{row.reference || '—'}</td>
                                                             <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white max-w-[200px] truncate" title={row.name}>{row.name || '—'}</td>
-                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.category || '—'}</td>
-                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.brand || '—'}</td>
                                                             <td className="px-4 py-2.5 text-center tabular-nums font-semibold text-emerald-600 dark:text-emerald-400">
                                                                 {row.price != null && row.price !== ''
                                                                     ? `${Number(row.price).toLocaleString('fr-FR', { minimumFractionDigits: 2 })} MAD`
@@ -315,7 +313,7 @@ export default function ConfigCataloguePage() {
                                                     ))
                                                 ) : (
                                                     <tr>
-                                                        <td colSpan={7} className="px-4 py-12 text-center text-slate-400">
+                                                        <td colSpan={5} className="px-4 py-12 text-center text-slate-400">
                                                             Aucune fiche catalogue — cliquez sur Ajouter
                                                         </td>
                                                     </tr>
@@ -384,17 +382,6 @@ export default function ConfigCataloguePage() {
                                             Aucun produit disponible — créez-en d&apos;abord sur Fiche Produit
                                         </p>
                                     )}
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label className="field-label">Catégorie</label>
-                                    <input type="text" value={addForm.category} onChange={(e) => setAddForm((f) => ({ ...f, category: e.target.value }))} className={inputClass} />
-                                </div>
-                                <div>
-                                    <label className="field-label">Marque</label>
-                                    <input type="text" value={addForm.brand} onChange={(e) => setAddForm((f) => ({ ...f, brand: e.target.value }))} className={inputClass} />
                                 </div>
                             </div>
 
@@ -486,17 +473,6 @@ export default function ConfigCataloguePage() {
                             {error && (
                                 <div className="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 text-sm border border-red-100 dark:border-red-800">{error}</div>
                             )}
-
-                            <div className="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label className="field-label">Catégorie</label>
-                                    <input type="text" value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))} className={inputClass} />
-                                </div>
-                                <div>
-                                    <label className="field-label">Marque</label>
-                                    <input type="text" value={form.brand} onChange={(e) => setForm((f) => ({ ...f, brand: e.target.value }))} className={inputClass} />
-                                </div>
-                            </div>
 
                             <div>
                                 <label className="field-label">Description</label>

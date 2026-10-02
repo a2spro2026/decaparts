@@ -5,7 +5,7 @@ import api from '../lib/api';
 import ScrollableTable from '../components/ScrollableTable';
 import { useChauffeurs } from '../hooks/useChauffeurs';
 
-const UNIT_OPTIONS = ['', 'Kg', 'U', 'Sac', 'ML', 'M²', 'M³', 'Tn', 'M'];
+const UNIT_OPTIONS = ['U'];
 const REGLEMENT_OPTIONS = ['', 'Esp', 'Chq', 'Eff', 'Vir', 'Vers'];
 const ECHEANCE_OPTIONS = ['', 'A vue', '45 Jrs', '60 Jrs', '90 Jrs', '120 Jrs'];
 
@@ -28,7 +28,7 @@ const emptyLine = () => ({
     barcode: '',
     category: '',
     description: '',
-    unit: '',
+    unit: 'U',
     quantity: '1',
     unit_price: '',
 });
@@ -330,7 +330,7 @@ export default function BonAchatsPage() {
             barcode: product.reference || '',
             category: product.famille || product.category_name || '',
             description: product.name || '',
-            unit: product.unit || '',
+            unit: 'U',
         });
     };
 
@@ -395,7 +395,7 @@ export default function BonAchatsPage() {
                 barcode: i.barcode || '',
                 category: i.category || '',
                 description: i.description || '',
-                unit: i.unit || '',
+                unit: 'U',
                 quantity: i.quantity != null ? String(i.quantity) : '1',
                 unit_price: i.unit_price != null ? String(i.unit_price) : '',
             })));
@@ -404,7 +404,7 @@ export default function BonAchatsPage() {
                 ...emptyLine(),
                 article_ref: row.article_ref || '',
                 description: row.designation || '',
-                unit: row.unit || '',
+                unit: 'U',
                 quantity: row.quantity != null ? String(row.quantity) : '1',
                 unit_price: row.unit_price != null ? String(row.unit_price) : '',
             }]);
@@ -453,7 +453,7 @@ export default function BonAchatsPage() {
                 barcode: l.barcode || null,
                 category: l.category || null,
                 description: l.description,
-                unit: l.unit || null,
+                unit: 'U',
                 quantity: parseFloat(String(l.quantity).replace(',', '.')) || 1,
                 unit_price: parseFloat(String(l.unit_price).replace(',', '.')) || 0,
             })),
@@ -566,7 +566,7 @@ export default function BonAchatsPage() {
                         <>
                             <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                            {['Réf', 'Code barre', 'Catégorie', 'Désignation', 'U', 'Qté', 'P/U', 'S/Total', ''].map((h) => (
+                            {['Réf', 'Code barre', 'Désignation', 'U', 'Qté', 'P/U', 'S/Total', ''].map((h) => (
                             <th key={h || 'act'} className="px-2 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-center whitespace-nowrap">{h}</th>
                             ))}
                             </tr>
@@ -591,7 +591,7 @@ export default function BonAchatsPage() {
                                                                                 className={tableInput}
                                                                             />
                                                                         </td>
-                                                                        <td className="px-2 py-1.5 w-[110px]">
+                                                                        <td className="px-2 py-1.5 w-[170px]">
                                                                             <input
                                                                                 type="text"
                                                                                 value={line.barcode}
@@ -600,21 +600,12 @@ export default function BonAchatsPage() {
                                                                                 className={tableInput}
                                                                             />
                                                                         </td>
-                                                                        <td className="px-2 py-1.5 w-[110px]">
-                                                                            <input
-                                                                                type="text"
-                                                                                value={line.category}
-                                                                                onChange={(e) => updateLine(line.key, { category: e.target.value })}
-                                                                                placeholder="Catégorie"
-                                                                                className={tableInput}
-                                                                            />
-                                                                        </td>
                                                                         <td className="px-2 py-1.5 min-w-[180px]">
                                                                             <input type="text" value={line.description} onChange={(e) => updateLine(line.key, { description: e.target.value })} placeholder="Désignation" className={`${tableInput} text-left`} />
                                                                         </td>
                                                                         <td className="px-2 py-1.5 w-[72px]">
                                                                             <select value={line.unit} onChange={(e) => updateLine(line.key, { unit: e.target.value })} className={tableInput}>
-                                                                                {UNIT_OPTIONS.map((v) => <option key={v || 'u'} value={v}>{v || '—'}</option>)}
+                                                                                {UNIT_OPTIONS.map((v) => <option key={v} value={v}>{v}</option>)}
                                                                             </select>
                                                                         </td>
                                                                         <td className="px-2 py-1.5 w-[80px]">

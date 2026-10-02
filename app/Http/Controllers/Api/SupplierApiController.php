@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class SupplierApiController extends Controller
 {
+    private const ICE_MESSAGES = [
+        'ice.required' => 'L\'ICE est obligatoire.',
+        'ice.digits' => 'L\'ICE doit contenir exactement 15 chiffres.',
+    ];
+
     public function index(Request $request)
     {
         $query = Supplier::query()
@@ -41,12 +46,12 @@ class SupplierApiController extends Controller
             'phone' => 'nullable|string',
             'address' => 'nullable|string',
             'city' => 'nullable|string',
-            'ice' => 'nullable|string',
+            'ice' => 'required|digits:15',
             'payment_terms' => 'nullable|string|max:50',
             'reglement' => 'nullable|in:Esp,Chq,Eff,Vir,Vers',
             'initial_balance' => 'nullable|numeric',
             'status' => 'in:actif,inactif',
-        ]);
+        ], self::ICE_MESSAGES);
 
         $supplier = Supplier::create([
             ...$validated,
@@ -71,11 +76,12 @@ class SupplierApiController extends Controller
             'phone' => 'nullable|string',
             'address' => 'nullable|string',
             'city' => 'nullable|string',
+            'ice' => 'required|digits:15',
             'payment_terms' => 'nullable|string|max:50',
             'reglement' => 'nullable|in:Esp,Chq,Eff,Vir,Vers',
             'initial_balance' => 'nullable|numeric',
             'status' => 'in:actif,inactif',
-        ]));
+        ], self::ICE_MESSAGES));
 
         return response()->json($this->formatSupplier($supplier));
     }
@@ -106,6 +112,7 @@ class SupplierApiController extends Controller
             'phone' => $supplier->phone,
             'address' => $supplier->address,
             'city' => $supplier->city,
+            'ice' => $supplier->ice,
             'initial_balance' => number_format((float) $supplier->initial_balance, 2, '.', ''),
             'solde' => number_format((float) $supplier->initial_balance, 2, '.', ''),
             'status' => $supplier->status,
