@@ -6,7 +6,7 @@ import ScrollableTable from '../components/ScrollableTable';
 import { useChauffeurs } from '../hooks/useChauffeurs';
 import { useCatalogueCart } from '../contexts/CatalogueCartContext';
 
-const UNIT_OPTIONS = ['', 'Kg', 'U', 'Sac', 'ML', 'M²', 'M³', 'Tn', 'M'];
+const UNIT_OPTIONS = ['U'];
 const REGLEMENT_OPTIONS = ['', 'Esp', 'Chq', 'Eff', 'Vir', 'Vers'];
 const ECHEANCE_OPTIONS = ['', 'A vue', '45 Jrs', '60 Jrs', '90 Jrs', '120 Jrs'];
 
@@ -29,7 +29,7 @@ const emptyLine = () => ({
     category: '',
     brand: '',
     description: '',
-    unit: '',
+    unit: 'U',
     quantity: '1',
     unit_price: '',
 });
@@ -44,7 +44,7 @@ function linesFromCatalogueCart(cartItems) {
         category: item.category || '',
         brand: item.brand || '',
         description: item.description || item.name || '',
-        unit: item.unit || '',
+        unit: 'U',
         quantity: item.quantity != null && String(item.quantity).trim() !== '' ? String(item.quantity) : '',
         unit_price: item.unit_price != null ? String(item.unit_price) : '',
     }));
@@ -334,7 +334,7 @@ export default function BonVentesPage() {
             category: product.famille || product.category_name || '',
             brand: product.brand || '',
             description: product.name || '',
-            unit: product.unit || '',
+            unit: 'U',
             unit_price: product.unit_price != null ? String(product.unit_price) : '',
         });
     };
@@ -410,7 +410,7 @@ export default function BonVentesPage() {
                 category: i.category || '',
                 brand: i.brand || '',
                 description: i.description || '',
-                unit: i.unit || '',
+                unit: 'U',
                 quantity: i.quantity != null ? String(i.quantity) : '1',
                 unit_price: i.unit_price != null ? String(i.unit_price) : '',
             })));
@@ -419,7 +419,7 @@ export default function BonVentesPage() {
                 ...emptyLine(),
                 article_ref: row.article_ref || '',
                 description: row.designation || '',
-                unit: row.unit || '',
+                unit: 'U',
                 quantity: row.quantity != null ? String(row.quantity) : '1',
                 unit_price: row.unit_price != null ? String(row.unit_price) : '',
             }]);
@@ -468,7 +468,7 @@ export default function BonVentesPage() {
                 category: l.category || null,
                 brand: l.brand || null,
                 description: l.description,
-                unit: l.unit || null,
+                unit: 'U',
                 quantity: parseFloat(String(l.quantity).replace(',', '.')) || 1,
                 unit_price: parseFloat(String(l.unit_price).replace(',', '.')) || 0,
             })),
@@ -572,12 +572,12 @@ export default function BonVentesPage() {
                                 <div className="px-4 py-2 bg-gradient-to-r from-zinc-950 via-zinc-900 to-orange-800 flex items-center justify-end">
                                     <span className="text-[10px] text-orange-100 font-semibold tabular-nums">Total : {totalBon}</span>
                                 </div>
-                                                <ScrollableTable maxHeight="min(360px, 48vh)" tableClassName="w-full text-sm min-w-[1100px]"
+                                                <ScrollableTable maxHeight="min(360px, 48vh)" tableClassName="w-full text-sm min-w-[900px]"
                     header={
                         <>
                             <thead>
                             <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                            {['Réf', 'Barre Code', 'Désignation', 'Catégorie', 'Marque', 'U', 'Qte', 'P/U', 'S/Total', ''].map((h) => (
+                            {['Réf', 'Barre Code', 'Désignation', 'U', 'Qte', 'P/U', 'S/Total', ''].map((h) => (
                             <th key={h || 'act'} className="px-2 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-center whitespace-nowrap">{h}</th>
                             ))}
                             </tr>
@@ -611,18 +611,12 @@ export default function BonVentesPage() {
                                                                                 className={`${tableInput} font-mono tracking-wide`}
                                                                             />
                                                                         </td>
-                                                                        <td className="px-2 py-1.5 w-[130px]">
+                                                                        <td className="px-2 py-1.5 min-w-[220px]">
                                                                             <input type="text" value={line.description} onChange={(e) => updateLine(line.key, { description: e.target.value })} placeholder="Désignation" className={`${tableInput} text-left`} />
-                                                                        </td>
-                                                                        <td className="px-2 py-1.5 w-[130px]">
-                                                                            <input type="text" value={line.category} onChange={(e) => updateLine(line.key, { category: e.target.value })} placeholder="Catégorie" className={`${tableInput} font-semibold`} />
-                                                                        </td>
-                                                                        <td className="px-2 py-1.5 w-[110px]">
-                                                                            <input type="text" value={line.brand} onChange={(e) => updateLine(line.key, { brand: e.target.value })} placeholder="Marque" className={tableInput} />
                                                                         </td>
                                                                         <td className="px-2 py-1.5 w-[72px]">
                                                                             <select value={line.unit} onChange={(e) => updateLine(line.key, { unit: e.target.value })} className={tableInput}>
-                                                                                {UNIT_OPTIONS.map((v) => <option key={v || 'u'} value={v}>{v || '—'}</option>)}
+                                                                                {UNIT_OPTIONS.map((v) => <option key={v} value={v}>{v}</option>)}
                                                                             </select>
                                                                         </td>
                                                                         <td className="px-2 py-1.5 w-[80px]">

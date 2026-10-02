@@ -73,13 +73,16 @@ class ClientApiController extends Controller
             'phone' => 'nullable|string',
             'address' => 'nullable|string',
             'city' => 'nullable|string',
-            'ice' => 'nullable|string',
+            'ice' => 'required|digits:15',
             'chantier_type' => 'nullable|in:Rev,Entr,Pro',
             'reglement' => 'nullable|in:Esp,Chq,Eff,Vir,Vers',
             'chantier_address' => 'nullable|string',
             'budget' => 'nullable|numeric|min:0',
             'work_delay' => 'nullable|string|max:100',
             'status' => 'in:actif,inactif',
+        ], [
+            'ice.required' => 'L\'ICE est obligatoire.',
+            'ice.digits' => 'L\'ICE doit contenir exactement 15 chiffres.',
         ]);
     }
 
@@ -102,6 +105,7 @@ class ClientApiController extends Controller
             'phone' => $client->phone,
             'address' => $client->address,
             'city' => $client->city,
+            'ice' => $client->ice,
             'chantier_type' => $client->chantier_type,
             'reglement' => $client->reglement,
             'chantier_address' => $client->chantier_address,

@@ -28,8 +28,11 @@ const ECHEANCE_OPTIONS = [
     { value: '120 Jrs', label: '120 Jrs' },
 ];
 
+const ICE_LENGTH = 15;
+
 const emptyForm = {
     name: '',
+    ice: '',
     phone: '',
     city: '',
     chantier_type: '',
@@ -89,6 +92,7 @@ th{background:#f8fafc;width:180px;font-weight:700}
 <table>
 <tr><th>CR</th><td><span class="badge">${row.code}</span></td></tr>
 <tr><th>Nom Client</th><td>${row.name || '—'}</td></tr>
+<tr><th>ICE</th><td>${row.ice || '—'}</td></tr>
 <tr><th>Contact</th><td>${row.contact || '—'}</td></tr>
 <tr><th>Ville</th><td>${row.city || '—'}</td></tr>
 <tr><th>Type</th><td>${row.chantier_type || '—'}</td></tr>
@@ -153,6 +157,7 @@ function ViewModal({ row, onClose }) {
                 <div className="p-5 space-y-3 text-sm">
                     {[
                         ['Nom Client', row.name],
+                        ['ICE', row.ice],
                         ['Contact', row.contact],
                         ['Ville', row.city],
                         ['Type', row.chantier_type],
@@ -218,6 +223,7 @@ export default function FicheClientPage() {
     const fillForm = (row) => {
         setForm({
             name: row.name || '',
+            ice: row.ice || '',
             phone: row.phone || row.contact || '',
             city: row.city || '',
             chantier_type: row.chantier_type || '',
@@ -245,9 +251,14 @@ export default function FicheClientPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        if (form.ice.length !== ICE_LENGTH) {
+            setError(`L'ICE doit contenir exactement ${ICE_LENGTH} chiffres.`);
+            return;
+        }
         setSaving(true);
         const payload = {
             name: form.name,
+            ice: form.ice,
             phone: form.phone || null,
             city: form.city || null,
             chantier_type: form.chantier_type || null,
@@ -264,7 +275,8 @@ export default function FicheClientPage() {
             }
             resetForm();
         } catch (err) {
-            setError(err.response?.data?.message || 'Erreur lors de l\'enregistrement');
+            const errors = err.response?.data?.errors;
+            setError(errors?.ice?.[0] || err.response?.data?.message || 'Erreur lors de l\'enregistrement');
         } finally {
             setSaving(false);
         }
@@ -288,7 +300,7 @@ export default function FicheClientPage() {
                 )}
 
                 <div className="overflow-x-auto">
-                    <div className="grid grid-cols-[78px_72px_minmax(120px,1.2fr)_95px_90px_minmax(120px,1.1fr)_70px_70px_88px_95px] gap-1.5 items-end min-w-[1100px]">
+                    <div className="grid grid-cols-[78px_72px_minmax(120px,1.2fr)_150px_95px_90px_minmax(120px,1.1fr)_70px_56px_88px_95px] gap-1.5 items-end min-w-[1230px]">
                         <Field label="Date">
                             <input type="text" readOnly value={meta.date} className={readOnlyClass} />
                         </Field>
@@ -297,6 +309,20 @@ export default function FicheClientPage() {
                         </Field>
                         <Field label="Nom Client">
                             <input type="text" required value={form.name} onChange={(e) => set('name', e.target.value)} placeholder="Raison sociale" className={inputClass} />
+                        </Field>
+                        <Field label={`ICE (${form.ice.length}/${ICE_LENGTH})`}>
+                            <input
+                                type="text"
+                                inputMode="numeric"
+                                required
+                                maxLength={ICE_LENGTH}
+                                pattern={`\\d{${ICE_LENGTH}}`}
+                                title={`${ICE_LENGTH} chiffres obligatoires`}
+                                value={form.ice}
+                                onChange={(e) => set('ice', e.target.value.replace(/\D/g, '').slice(0, ICE_LENGTH))}
+                                placeholder="15 chiffres"
+                                className={`${inputClass} font-mono tracking-wider ${form.ice && form.ice.length !== ICE_LENGTH ? 'border-red-400 focus:ring-red-400/40 focus:border-red-500' : ''}`}
+                            />
                         </Field>
                         <Field label="Contact">
                             <input type="tel" value={form.phone} onChange={(e) => set('phone', e.target.value)} placeholder="06 XX XX XX XX" className={inputClass} />
@@ -363,26 +389,27 @@ export default function FicheClientPage() {
                     <h3 className="text-sm font-bold text-white uppercase tracking-wide">Liste des clients</h3>
                 </div>
 
-                <ScrollableTable tableClassName="w-full text-sm min-w-[1050px] table-fixed"
+                <ScrollableTable tableClassName="w-full text-sm min-w-[1150px] table-fixed"
                     colgroup={
                         <>
                             <col className="w-[6%]" />
-                            <col className="w-[14%]" />
-                            <col className="w-[9%]" />
-                            <col className="w-[8%]" />
+                            <col className="w-[13%]" />
                             <col className="w-[12%]" />
-                            <col className="w-[8%]" />
-                            <col className="w-[8%]" />
                             <col className="w-[9%]" />
-                            <col className="w-[10%]" />
-                            <col className="w-[16%]" />
+                            <col className="w-[7%]" />
+                            <col className="w-[11%]" />
+                            <col className="w-[6%]" />
+                            <col className="w-[6%]" />
+                            <col className="w-[8%]" />
+                            <col className="w-[8%]" />
+                            <col className="w-[14%]" />
                         </>
                     }
                     header={
                         <>
                             <thead>
                                 <tr className="bg-slate-50 dark:bg-slate-800/80">
-                                    {['CR', 'Nom Client', 'Contact', 'Ville', 'Adresse', 'Type', 'Régl', 'Échéance', 'Solde Initial', 'Actions'].map((h) => (
+                                    {['CR', 'Nom Client', 'ICE', 'Contact', 'Ville', 'Adresse', 'Type', 'Régl', 'Échéance', 'Solde Initial', 'Actions'].map((h) => (
                                         <th
                                             key={h}
                                             className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center"
@@ -399,7 +426,7 @@ export default function FicheClientPage() {
                             {loading ? (
                                 [...Array(3)].map((_, i) => (
                                     <tr key={i}>
-                                        {[...Array(10)].map((__, j) => (
+                                        {[...Array(11)].map((__, j) => (
                                             <td key={j} className="px-4 py-3 text-center">
                                                 <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto max-w-[80px]" />
                                             </td>
@@ -411,6 +438,7 @@ export default function FicheClientPage() {
                                     <tr key={row.id} className={`hover:bg-orange-50/40 dark:hover:bg-slate-800/40 transition-colors ${editingId === row.id ? 'bg-amber-50/60 dark:bg-amber-900/10' : ''}`}>
                                         <td className="px-4 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">{row.code}</td>
                                         <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.name}</td>
+                                        <td className="px-2 py-2.5 text-center font-mono text-xs text-slate-600 dark:text-slate-300">{row.ice || '—'}</td>
                                         <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.contact || '—'}</td>
                                         <td className="px-4 py-2.5 text-center">
                                             <span className="inline-flex px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
@@ -454,7 +482,7 @@ export default function FicheClientPage() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={10} className="px-4 py-12 text-center text-slate-400">
+                                    <td colSpan={11} className="px-4 py-12 text-center text-slate-400">
                                         Aucun client enregistré
                                     </td>
                                 </tr>

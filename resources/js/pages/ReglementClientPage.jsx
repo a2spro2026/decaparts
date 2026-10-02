@@ -109,7 +109,7 @@ th{background:#f8fafc;font-weight:700}.badge{background:#dbeafe;color:#1d4ed8;pa
 <table>
 <tr><th>Date</th><td>${row.payment_date || '—'}</td><th>Client</th><td>${row.client || '—'}</td></tr>
 <tr><th>Type</th><td>${row.reglement || '—'}</td><th>N°</th><td>${row.numero || '—'}</td></tr>
-<tr><th>Banque</th><td>${row.banque || '—'}</td><th>Date Décaiss</th><td>${row.date_decaissement || '—'}</td></tr>
+<tr><th>Banque</th><td>${row.banque || '—'}</td><th>Date Encaiss</th><td>${row.date_decaissement || '—'}</td></tr>
 <tr><th>Montant</th><td><strong>${formatMontant(row.montant)}</strong></td><th>Trésorerie</th><td>${row.tresorerie != null && row.tresorerie !== '' ? String(row.tresorerie) : '—'}</td></tr>
 <tr><th>Statut</th><td>${row.statut || '—'}</td><th>Nom tiré</th><td>${row.nom_tire || '—'}</td></tr>
 <tr><th>Remarque</th><td colspan="3">${row.remarque || '—'}</td></tr>
@@ -136,7 +136,7 @@ function ViewModal({ row, onClose }) {
         ['Type', row.reglement],
         ['N°', row.numero],
         ['Banque', row.banque],
-        ['Date Décaiss', row.date_decaissement],
+        ['Date Encaiss', row.date_decaissement],
         ['Montant', formatMontant(row.montant)],
         ['Trésorerie', row.tresorerie != null && row.tresorerie !== '' ? String(row.tresorerie) : '—'],
         ['Statut', row.statut],
@@ -656,7 +656,7 @@ export default function ReglementClientPage() {
                             <>
                                 <thead>
                                     <tr className="bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-                                        {['Réf', 'Date', 'Client', 'Type', 'Nom de Tiré', 'N°', 'Bnq', 'Date Décaiss', 'Montant', 'Trésorerie', 'Statut', 'Action'].map((h) => (
+                                        {['Réf', 'Date', 'Client', 'Type', 'Nom de Tiré', 'N°', 'Bnq', 'Date Encaiss', 'Montant', 'Trésorerie', 'Statut', 'Action'].map((h) => (
                                             <th key={h} className="px-3 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
                                         ))}
                                     </tr>
@@ -842,7 +842,7 @@ export default function ReglementClientPage() {
                                 className={inputClass}
                             />
                         </Field>
-                        <Field label="Date Décaiss">
+                        <Field label="Date Encaiss">
                             <input type="date" value={form.date_decaissement} onChange={(e) => set('date_decaissement', e.target.value)} className={inputClass} />
                         </Field>
                         <Field label="Remarque">
