@@ -249,6 +249,7 @@ class SaleOrderApiController extends Controller
             'order_date_raw' => $order->order_date?->format('Y-m-d'),
             'client_id' => $order->client_id,
             'client' => $order->client?->name,
+            'client_ice' => $order->client?->ice,
             'designation' => $order->designation,
             'article_ref' => $order->article_ref,
             'unit' => $order->unit,

@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle2, Plus, PlusCircle, XCircle, Eye, Pencil, Trash2, Printer, FileText, X, Package, Wallet } from 'lucide-react';
 import api from '../lib/api';
 import ScrollableTable from '../components/ScrollableTable';
-import { useChauffeurs } from '../hooks/useChauffeurs';
 import { useCatalogueCart } from '../contexts/CatalogueCartContext';
 
 const UNIT_OPTIONS = ['U'];
@@ -122,9 +121,7 @@ th{background:#f8fafc;font-weight:700}.badge{background:#fff7ed;color:#ea580c;pa
 <h1>DECAPARTS — Bon de Vente <span class="badge">${row.reference}</span></h1>
 <table>
 <tr><th>Date</th><td>${row.order_date || '—'}</td><th>Client</th><td>${row.client || '—'}</td></tr>
-<tr><th>Ville</th><td>${row.city || '—'}</td><th>Adresse Livraison</th><td>${row.address || '—'}</td></tr>
-<tr><th>Type Régl / Échéance</th><td>${row.reglement || '—'} / ${row.echeance || '—'}</td><th>Chauffeur</th><td>${row.chauffeur || '—'}</td></tr>
-<tr><th>Matricule</th><td colspan="3">${row.matricule || '—'}</td></tr>
+<tr><th>ICE</th><td>${row.client_ice || '—'}</td><th>Type Régl / Échéance</th><td>${row.reglement || '—'} / ${row.echeance || '—'}</td></tr>
 </table>
 <table>
 <thead><tr><th>Réf</th><th>Désignation</th><th>U</th><th>Qté</th><th>P/U</th><th>S/Total</th></tr></thead>
@@ -302,8 +299,6 @@ export default function BonVentesPage() {
             .finally(() => setLoading(false));
     }, []);
 
-    const { chauffeurs, resolveMatricule, reloadChauffeurs } = useChauffeurs();
-
     useEffect(() => {
         setForm((f) => ({ ...f, order_date: new Date().toISOString().slice(0, 10) }));
         load();
@@ -311,12 +306,15 @@ export default function BonVentesPage() {
 
     const set = (key, value) => setForm((f) => ({ ...f, [key]: value }));
 
-    const onChauffeurChange = (value) => {
-        const matricule = resolveMatricule(value);
+    const selectedClient = clients.find((c) => String(c.id) === String(form.client_id)) || null;
+
+    const onClientChange = (clientId) => {
+        const client = clients.find((c) => String(c.id) === String(clientId));
         setForm((f) => ({
             ...f,
-            chauffeur: value,
-            ...(matricule ? { matricule } : {}),
+            client_id: clientId,
+            reglement: client?.reglement || '',
+            echeance: client?.work_delay || client?.echeance || '',
         }));
     };
 
@@ -351,10 +349,7 @@ export default function BonVentesPage() {
         setEditingId(null);
         setError('');
         setFormOpen(false);
-        if (reload) {
-            load();
-            reloadChauffeurs();
-        }
+        if (reload) load();
     };
 
     const handleNewBon = (fromCart = false) => {
@@ -365,7 +360,6 @@ export default function BonVentesPage() {
         setEditingId(null);
         setError('');
         load();
-        reloadChauffeurs();
         setFormOpen(true);
     };
 
@@ -517,7 +511,7 @@ export default function BonVentesPage() {
                             )}
 
                             <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/40 p-2.5">
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-9 gap-2 items-end">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-[140px_110px_2fr_1.3fr_1fr_1fr] gap-2 items-end">
                                     <Field label="Date">
                                         <input type="date" required value={form.order_date} onChange={(e) => set('order_date', e.target.value)} className={inputClass} />
                                     </Field>
@@ -525,16 +519,13 @@ export default function BonVentesPage() {
                                         <input type="text" readOnly value={currentRef} className={readOnlyClass} />
                                     </Field>
                                     <Field label="Nom Client">
-                                        <select required value={form.client_id} onChange={(e) => set('client_id', e.target.value)} className={inputClass}>
+                                        <select required value={form.client_id} onChange={(e) => onClientChange(e.target.value)} className={inputClass}>
                                             <option value="">—</option>
                                             {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                                         </select>
                                     </Field>
-                                    <Field label="Ville">
-                                        <input type="text" value={form.city} onChange={(e) => set('city', e.target.value)} placeholder="Ville" className={inputClass} />
-                                    </Field>
-                                    <Field label="Adresse Livraison">
-                                        <input type="text" value={form.address} onChange={(e) => set('address', e.target.value)} placeholder="Adresse livraison" className={inputClass} />
+                                    <Field label="ICE">
+                                        <input type="text" readOnly value={selectedClient?.ice || ''} placeholder="—" className={`${readOnlyClass} font-mono tracking-wider`} />
                                     </Field>
                                     <Field label="Type Régl">
                                         <select value={form.reglement} onChange={(e) => set('reglement', e.target.value)} className={inputClass}>
@@ -545,25 +536,6 @@ export default function BonVentesPage() {
                                         <select value={form.echeance} onChange={(e) => set('echeance', e.target.value)} className={inputClass}>
                                             {ECHEANCE_OPTIONS.map((v) => <option key={v || 'e'} value={v}>{v || '—'}</option>)}
                                         </select>
-                                    </Field>
-                                    <Field label="Chauffeur">
-                                        <input
-                                            type="text"
-                                            list="bon-vente-chauffeurs"
-                                            value={form.chauffeur}
-                                            onChange={(e) => onChauffeurChange(e.target.value)}
-                                            placeholder="Chauffeur"
-                                            className={inputClass}
-                                            autoComplete="off"
-                                        />
-                                        <datalist id="bon-vente-chauffeurs">
-                                            {chauffeurs.map((c) => (
-                                                <option key={c.id} value={c.nom} />
-                                            ))}
-                                        </datalist>
-                                    </Field>
-                                    <Field label="Matricule">
-                                        <input type="text" value={form.matricule} onChange={(e) => set('matricule', e.target.value)} placeholder="Matricule" className={inputClass} />
                                     </Field>
                                 </div>
                             </div>
@@ -705,7 +677,7 @@ export default function BonVentesPage() {
                                             <>
                                                 <thead>
                                                     <tr className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
-                                                        {['Date', 'N° B-V', 'Client', 'Ville', 'Adresse Livraison', 'Qté totale', 'Total', 'Échéance', 'Actions'].map((h) => (
+                                                        {['Date', 'N° B-V', 'Client', 'ICE', 'Type Régl', 'Qté totale', 'Total', 'Échéance', 'Actions'].map((h) => (
                                                             <th key={h} className="px-4 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap text-center">{h}</th>
                                                         ))}
                                                     </tr>
@@ -731,8 +703,8 @@ export default function BonVentesPage() {
                                                             <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.order_date}</td>
                                                             <td className="px-4 py-2.5 text-center font-mono text-xs font-semibold text-brand-navy dark:text-orange-400">{row.reference}</td>
                                                             <td className="px-4 py-2.5 text-center font-medium text-slate-800 dark:text-white">{row.client || '—'}</td>
-                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.city || '—'}</td>
-                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.address || '—'}</td>
+                                                            <td className="px-4 py-2.5 text-center font-mono text-xs text-slate-600 dark:text-slate-300">{row.client_ice || '—'}</td>
+                                                            <td className="px-4 py-2.5 text-center text-slate-600 dark:text-slate-300">{row.reglement || '—'}</td>
                                                             <td className="px-4 py-2.5 text-center font-semibold tabular-nums text-emerald-700 dark:text-emerald-300">
                                                                 {orderTotalQuantity(row).toLocaleString('fr-FR', { maximumFractionDigits: 3 })}
                                                             </td>
