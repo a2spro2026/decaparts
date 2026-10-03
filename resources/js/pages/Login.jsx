@@ -199,11 +199,10 @@ export default function Login() {
         <div className="relative min-h-screen flex flex-col bg-black overflow-hidden">
             <div className="absolute inset-0 overflow-hidden">
                 <img
-                    src="/images/login-bg-v2.jpg"
+                    src="/images/login-bg-v3.jpg"
                     alt=""
-                    className="absolute inset-0 h-full w-full object-cover object-[30%_center]"
+                    className="absolute inset-0 h-full w-full object-cover object-[20%_center]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/40 pointer-events-none" />
             </div>
 
             <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 group">
