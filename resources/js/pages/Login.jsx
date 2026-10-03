@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Lock, User, Eye, EyeOff, ArrowRight, Shield, BadgeCheck, ChevronDown } from 'lucide-react';
+import { Lock, User, Eye, EyeOff, ArrowRight, Shield, BadgeCheck, ChevronDown, Phone } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { LoginBranding, LoginBrandLogo } from '../components/LoginBrand';
 
@@ -152,8 +152,20 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [emailFocused, setEmailFocused] = useState(false);
     const [statutFocused, setStatutFocused] = useState(false);
+    const [panelOpen, setPanelOpen] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
+
+    const togglePanel = () => {
+        if (panelOpen) {
+            setLoginValue('');
+            setPassword('');
+            setStatut('');
+            setShowPassword(false);
+            setError('');
+        }
+        setPanelOpen((open) => !open);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -184,36 +196,64 @@ export default function Login() {
     };
 
     return (
-        <div className="relative min-h-screen flex flex-col bg-black">
-            {/* Arrière-plan DECA PARTS — calée à gauche, hauteur pleine */}
-            <div className="absolute inset-0 flex justify-start overflow-hidden">
+        <div className="relative min-h-screen flex flex-col bg-black overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden">
                 <img
-                    src="/images/login-bg.png"
+                    src="/images/login-bg-v2.jpg"
                     alt=""
-                    className="h-full w-auto max-w-none"
+                    className="absolute inset-0 h-full w-full object-cover object-[30%_center]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/5 via-black/15 to-black/55 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/40 pointer-events-none" />
             </div>
 
-            {/* Panneau connexion — aligné à droite */}
-            <div className="relative z-10 flex flex-1 items-center justify-end px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 py-6 min-h-0">
-                <motion.div
-                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.6, delay: 0.15, type: 'spring', stiffness: 120 }}
-                    className="login-card-wrapper w-full max-w-[400px] shrink-0"
+            <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 group">
+                <motion.button
+                    type="button"
+                    onClick={togglePanel}
+                    whileHover={{ scale: 1.06 }}
+                    whileTap={{ scale: 0.92 }}
+                    aria-label={panelOpen ? 'Masquer le panneau' : 'Afficher le panneau'}
+                    aria-pressed={panelOpen}
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-md ring-1 ring-orange-500/70 shadow-lg shadow-black/50 hover:bg-black/65 hover:ring-orange-400 transition-colors"
                 >
-                        {/* Branding mobile */}
+                    <AnimatePresence mode="wait" initial={false}>
+                        <motion.span
+                            key={panelOpen ? 'hide' : 'show'}
+                            initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                            animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                            exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                            transition={{ duration: 0.2 }}
+                            className="block"
+                        >
+                            {panelOpen ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </motion.span>
+                    </AnimatePresence>
+                </motion.button>
+                <span className="pointer-events-none absolute right-0 top-full mt-2 whitespace-nowrap rounded-md bg-black/80 px-2 py-1 text-[11px] text-zinc-200 ring-1 ring-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {panelOpen ? 'Masquer le panneau' : 'Afficher le panneau'}
+                </span>
+            </div>
+
+            <div className="relative z-10 flex flex-1 items-center justify-end px-4 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 pt-20 pb-16 min-h-0">
+              <AnimatePresence>
+                {panelOpen && (
+                <motion.div
+                    key="login-panel"
+                    initial={{ opacity: 0, x: 40, scale: 0.96 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    exit={{ opacity: 0, x: 40, scale: 0.96 }}
+                    transition={{ duration: 0.35, ease: 'easeOut' }}
+                    className="w-full max-w-[400px] shrink-0"
+                >
                         <div className="lg:hidden mb-4">
                             <LoginBranding compact />
                         </div>
 
-                        {/* Bordure animée */}
-                        <div className="relative p-[2px] rounded-2xl login-card-border">
+                        <div className="login-card-wrapper relative p-[2px] rounded-2xl login-card-border">
                             <motion.div
                                 whileHover={{ scale: 1.01 }}
                                 transition={{ type: 'spring', stiffness: 300 }}
-                                className="relative login-card-shine login-card-glow login-panel bg-gradient-to-br from-zinc-950 via-neutral-950 to-black backdrop-blur-xl rounded-[14px] p-8 border border-zinc-800/90 overflow-hidden"
+                                className="relative login-card-shine login-card-glow login-panel bg-black/55 backdrop-blur-xl rounded-[14px] p-8 border border-white/10 overflow-hidden"
                             >
                                 {/* Reflet coin */}
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-brand-orange/15 to-transparent rounded-bl-full pointer-events-none" />
@@ -367,18 +407,21 @@ export default function Login() {
                             </motion.div>
                         </div>
                     </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
-            {/* Pied de page A2SPRO */}
-            <footer className="absolute bottom-0 inset-x-0 z-10 py-2 px-6 text-center pointer-events-none">
-                <p className="text-xs text-white/50 tracking-wide">
-                    Créé par{' '}
-                    <span className="text-brand-orange font-bold tracking-wider">A2SPRO</span>
-                    <span className="mx-2 text-white/30">—</span>
-                    <span className="text-white/70 font-semibold">A2S</span>
-                    <span className="mx-2 text-white/30">|</span>
-                    Tous droits réservés
-                </p>
+            <footer className="absolute bottom-0 inset-x-0 z-20 border-t border-white/10 bg-gradient-to-t from-black/85 via-black/60 to-black/30 backdrop-blur-sm">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-1 px-4 sm:px-8 py-2.5 text-xs text-zinc-300">
+                    <p className="tracking-wide">
+                        <span className="font-bold text-brand-orange">DECA PARTS / A2SPRO</span>
+                        <span className="ml-2 text-zinc-400">© 2026 – Tous droits réservés</span>
+                    </p>
+                    <a href="tel:+212654329362" className="flex items-center gap-2 hover:text-white transition-colors">
+                        <Phone className="w-3.5 h-3.5 text-brand-orange" />
+                        +212 6 54 32 93 62
+                    </a>
+                </div>
             </footer>
         </div>
     );
