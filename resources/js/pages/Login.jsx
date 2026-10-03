@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, User, Eye, EyeOff, ArrowRight, Shield, BadgeCheck, ChevronDown, Phone } from 'lucide-react';
@@ -19,6 +19,11 @@ function normalizeLogin(value) {
     if (!trimmed) return '';
     if (trimmed.includes('@')) return trimmed;
     return `${trimmed}${LOGIN_EMAIL_SUFFIX}`;
+}
+
+// Champs readonly jusqu'à l'interaction : empêche l'autofill des navigateurs.
+function unlockField(e) {
+    e.currentTarget.readOnly = false;
 }
 
 function PasswordField({ value, onChange, showPassword, onToggle }) {
@@ -71,15 +76,16 @@ function PasswordField({ value, onChange, showPassword, onToggle }) {
 
                     <input
                         id="password"
-                        name="decaparts-password"
                         type={showPassword ? 'text' : 'password'}
                         value={value}
                         onChange={onChange}
-                        onFocus={() => setFocused(true)}
+                        readOnly
+                        onPointerDown={unlockField}
+                        onFocus={(e) => { unlockField(e); setFocused(true); }}
                         onBlur={() => setFocused(false)}
                         placeholder="Votre mot de passe"
                         required
-                        autoComplete="off"
+                        autoComplete="new-password"
                         autoCorrect="off"
                         autoCapitalize="off"
                         spellCheck={false}
@@ -156,12 +162,27 @@ export default function Login() {
     const { login } = useAuth();
     const navigate = useNavigate();
 
+    const clearFields = () => {
+        setLoginValue('');
+        setPassword('');
+        setStatut('');
+        setShowPassword(false);
+    };
+
+    useEffect(() => {
+        clearFields();
+        const onPageShow = () => {
+            clearFields();
+            setError('');
+            setPanelOpen(false);
+        };
+        window.addEventListener('pageshow', onPageShow);
+        return () => window.removeEventListener('pageshow', onPageShow);
+    }, []);
+
     const togglePanel = () => {
         if (panelOpen) {
-            setLoginValue('');
-            setPassword('');
-            setStatut('');
-            setShowPassword(false);
+            clearFields();
             setError('');
         }
         setPanelOpen((open) => !open);
@@ -174,9 +195,11 @@ export default function Login() {
             setError('Veuillez saisir le login et le mot de passe');
             return;
         }
+        const credentials = { login: normalizeLogin(loginValue), password, statut };
+        clearFields();
         setLoading(true);
         try {
-            await login(normalizeLogin(loginValue), password, statut);
+            await login(credentials.login, credentials.password, credentials.statut);
             navigate('/dashboard');
         } catch (err) {
             const data = err.response?.data;
@@ -309,6 +332,7 @@ export default function Login() {
                                                 <BadgeCheck className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none transition-colors ${statutFocused || statut ? 'text-brand-orange' : 'text-zinc-500'}`} />
                                                 <select
                                                     id="statut"
+                                                    autoComplete="off"
                                                     value={statut}
                                                     onChange={(e) => setStatut(e.target.value)}
                                                     onFocus={() => setStatutFocused(true)}
@@ -342,12 +366,13 @@ export default function Login() {
                                                 <User className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none transition-colors ${emailFocused ? 'text-brand-orange' : 'text-zinc-500'}`} />
                                                 <input
                                                     id="login"
-                                                    name="decaparts-login"
                                                     type="text"
                                                     value={loginValue}
                                                     onChange={(e) => setLoginValue(e.target.value)}
-                                                    onFocus={() => setEmailFocused(true)}
-                                                    onBlur={() => setLoginValue((v) => normalizeLogin(v))}
+                                                    readOnly
+                                                    onPointerDown={unlockField}
+                                                    onFocus={(e) => { unlockField(e); setEmailFocused(true); }}
+                                                    onBlur={() => { setEmailFocused(false); setLoginValue((v) => normalizeLogin(v)); }}
                                                     placeholder={`identifiant${LOGIN_EMAIL_SUFFIX}`}
                                                     required
                                                     autoComplete="off"
